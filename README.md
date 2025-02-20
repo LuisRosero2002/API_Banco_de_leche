@@ -4,8 +4,8 @@
 
 **Lista de dependencias para instalacion**
 
-- npm install class-validator cors dotenv express morgan mysql2 typeorm typeorm-naming-strategies typescript reflect-metadata
-- npm install -D @types/cors @types/express @types/morgan concurrently nodemon rimraf ts-node
+- npm install class-validator cors dotenv express morgan mysql2 typeorm typeorm-naming-strategies typescript reflect-metadata bcrypt jsonwebtoken passport passport-local passport-jwt
+- npm install -D @types/cors @types/express @types/morgan concurrently nodemon rimraf ts-node @types/bcrypt @types/jsonwebtoken @types/passport @types/passport-local @types/passport-jwt
 
 **Inicializacion de Typescript**
 
