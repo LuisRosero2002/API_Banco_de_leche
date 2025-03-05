@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
     "build": "tsc --build",
+    "typeorm": "typeorm-ts-node-commonjs -d ./src/config/data-source.ts",
+    "m:gen": "npm run typeorm migration:generate",
+    "m:run": "npm run typeorm migration:run",
     "start": "npm run clean && npm run build && node dist/src/server.js",
     "start:dev": "npm run clean && npm run build && concurrently \"tsc -w\" \"nodemon dist/src/server.js\"",
     "start:prod": "npm run clean && npm run build && SET NODE_ENV=production && npm start"

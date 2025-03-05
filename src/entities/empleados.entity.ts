@@ -1,0 +1,29 @@
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { UsuariosEntity } from "./usuarios.entity"
+
+@Entity({name:"empleados"})
+export class EmpleadosEntity{
+    @PrimaryGeneratedColumn("increment",{name:"id_empleado"})
+    id!: number;
+    @Column()
+    nombre!:string
+    @Column()
+    cargo!:string
+    @Column()
+    telefono!:number
+    @Column()
+    correo!:string
+    @OneToOne(()=> UsuariosEntity,(usuario) => usuario.empleado)
+    @JoinColumn({name:"id_usuario"})
+    usuario!:UsuariosEntity
+    @CreateDateColumn({
+        name:"created_at",
+        type:"timestamp",
+    })
+    createdAt!:Date;
+    @UpdateDateColumn({
+        name:"update_at",
+        type:"timestamp",
+    })
+    updatedAt!:Date;
+}   
