@@ -16,3 +16,8 @@
 **Comando**
 
 - npm run start:dev
+
+## Migraciones
+
+- npm run m:gen -- "ruta migracion"
+- npm run m:run

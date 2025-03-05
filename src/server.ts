@@ -4,6 +4,7 @@ import cors from "cors";
 import { AuthRouter } from "./auth/auth.router";
 import { ConfigEnviroment } from "./config/config.server";
 import { DataSource } from "typeorm";
+import "reflect-metadata";
 
 class ServerBootstrap extends ConfigEnviroment {
     public app: express.Application = express();
@@ -19,7 +20,6 @@ class ServerBootstrap extends ConfigEnviroment {
         this.app.use('/api', this.routers());
         this.listen();
     }
-
     routers(): Array<express.Router> {
         return [
             // Add your routers here

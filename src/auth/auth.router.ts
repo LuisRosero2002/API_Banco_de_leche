@@ -10,5 +10,6 @@ export class AuthRouter extends BaseRouter<AuthController>{
         this.router.post("/login", (req, res) =>
          { this.controller.login(req, res)}
         );
+        
     }
 }
