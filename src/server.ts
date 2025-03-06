@@ -2,11 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { AuthRouter } from "./auth/auth.router";
-import { ConfigEnviroment } from "./config/config.server";
+import { ConfigServer } from "./config/config.server";
 import { DataSource } from "typeorm";
 import "reflect-metadata";
 
-class ServerBootstrap extends ConfigEnviroment {
+class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
     private port: number = this.getNumberEnv('PORT') || 8000;
 
