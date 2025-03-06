@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Prim
 import { EmpleadosEntity } from "./empleados.entity";
 import { RolesUsuarioEntity } from "./roles-usuario.entity";
 import { SessionEntity } from "./sessions.entity";
+import { Exclude } from "class-transformer";
 
 
 @Entity({name:"usuarios"})
@@ -10,9 +11,10 @@ export class UsuariosEntity {
     id!: number;
     @Column()
     usuario!:string
+    @Exclude()
     @Column()
     password!:string
-    @Column()
+    @Column({type:"bit"})
     activo!:number
     @OneToOne(() => EmpleadosEntity, (empleado) => empleado.usuario)
     @JoinColumn({name:"id_empleado"})
