@@ -11,10 +11,9 @@ export class EmpleadosEntity{
     cargo!:string
     @Column()
     telefono!:number
-    @Column()
+    @Column({nullable:true})
     correo!:string
     @OneToOne(()=> UsuariosEntity,(usuario) => usuario.empleado)
-    @JoinColumn({name:"id_usuario"})
     usuario!:UsuariosEntity
     @CreateDateColumn({
         name:"created_at",

@@ -5,6 +5,8 @@ import { AuthRouter } from "./auth/auth.router";
 import { ConfigServer } from "./config/config.server";
 import { DataSource } from "typeorm";
 import "reflect-metadata";
+import { UsuariosRouter } from "./router/usuarios.router";
+import { EmpleadosRouter } from "./router/empleados.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -23,7 +25,9 @@ class ServerBootstrap extends ConfigServer {
     routers(): Array<express.Router> {
         return [
             // Add your routers here
-            new AuthRouter().router
+            new AuthRouter().router,
+            new UsuariosRouter().router,
+            new EmpleadosRouter().router
         ];
     }
 
