@@ -2,12 +2,26 @@ import { Request, Response } from "express";
 import { UsuariosService } from "../services/usuarios.service";
 import { HttpResponse } from "../shared/responses/http.response";
 import { UpdateResult } from "typeorm";
-
+import { validate } from "class-validator";
+import { plainToClass } from "class-transformer";
+import { UsuariosDTO } from "../DTOs/usuarios.DTO";
 export class UsuariosController {
     constructor(
         private readonly userService:UsuariosService = new UsuariosService(),
         private readonly httpResponse:HttpResponse = new HttpResponse())
     {}
+
+    async getUsers(req:Request, res:Response): Promise<Response>{
+        try {
+            const data = await this.userService.FindAll();
+            if(data.length === 0){
+                return this.httpResponse.NoContent(res,"Data No content");
+            }
+            return this.httpResponse.Ok(res,data);
+        } catch (error) {
+            return this.httpResponse.Error(res,error);
+        }
+    }
 
     async CreateUser(req:Request, res:Response): Promise<Response>{
         try {

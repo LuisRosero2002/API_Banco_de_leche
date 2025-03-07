@@ -14,7 +14,7 @@ export class UsuariosEntity {
     @Exclude()
     @Column()
     password!:string
-    @Column({type:"bit"})
+    @Column({type:"int", default:1})
     activo!:number
     @OneToOne(() => EmpleadosEntity, (empleado) => empleado.usuario)
     @JoinColumn({name:"id_empleado"})

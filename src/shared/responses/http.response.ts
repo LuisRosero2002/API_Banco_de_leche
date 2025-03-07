@@ -3,12 +3,13 @@ import { Response } from "express";
 export enum HttpStatus{
     OK = 200,
     CREATED = 201,
+    NO_CONTENT = 204,
     BAD_REQUEST = 400,
     UNAUTHORIZED = 401,
     FORBIDDEN = 403,
     NOT_FOUND = 404,
     INTERNAL_SERVER_ERROR = 500,
-    SERVICE_UNAVAILABLE = 503
+    SERVICE_UNAVAILABLE = 503,
 }
 
 export class HttpResponse{
@@ -16,6 +17,14 @@ export class HttpResponse{
         return res.status(HttpStatus.OK).json({
             status:HttpStatus.OK,
             statusmsg:"OK",
+            data:data
+        })
+    }
+
+    NoContent(res:Response,data?:any):Response{
+        return res.status(HttpStatus.NO_CONTENT).json({
+            status:HttpStatus.NO_CONTENT,
+            statusmsg:"No Content",
             data:data
         })
     }
