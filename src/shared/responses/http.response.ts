@@ -37,6 +37,14 @@ export class HttpResponse{
         })
     }
 
+    BadRequest(res:Response,data?:any):Response{
+        return res.status(HttpStatus.NOT_FOUND).json({
+            status:HttpStatus.BAD_REQUEST,
+            statusmsg:"Data Invalid",
+            error:data
+        })
+    }
+
     Unauthorized(res:Response,data?:any):Response{
         return res.status(HttpStatus.UNAUTHORIZED).json({
             status:HttpStatus.UNAUTHORIZED,

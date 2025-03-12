@@ -24,7 +24,6 @@ class ServerBootstrap extends ConfigServer {
     }
     routers(): Array<express.Router> {
         return [
-            // Add your routers here
             new AuthRouter().router,
             new UsuariosRouter().router,
             new EmpleadosRouter().router

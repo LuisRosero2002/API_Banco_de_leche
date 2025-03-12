@@ -35,4 +35,9 @@ export class UsuariosService extends BaseService<UsuariosEntity>{
         const repository = await this.execRepository;
         return repository.find();
     }
+
+    async FindUserByID(id:number):Promise<UsuariosEntity | undefined | null>{
+        const repository = await this.execRepository;
+        return repository.findOneBy({id:id});
+    }
 }
