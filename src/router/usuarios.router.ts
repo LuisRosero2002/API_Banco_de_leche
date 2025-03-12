@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { UsuariosController } from "../controllers/usuarios.controller";
 import { BaseRouter } from "./router";
+import { ConfigMiddleware } from "../middlewares/config.middleware";
 
-export class UsuariosRouter extends BaseRouter<UsuariosController>{
+export class UsuariosRouter extends BaseRouter<UsuariosController,ConfigMiddleware>{
     constructor(){
-        super(UsuariosController)
+        super(UsuariosController,ConfigMiddleware)
     }
 
     routes(): void {
@@ -18,7 +19,7 @@ export class UsuariosRouter extends BaseRouter<UsuariosController>{
             this.controller.getUsers(req, res).catch(err => res.status(500).send(err.message));
         });
 
-        this.router.put('/UpdateUser/:id', 
+        this.router.put('/deleteUser/:id', 
             (req, res, next) => {
                 //MIDDLEWARE
             },   
