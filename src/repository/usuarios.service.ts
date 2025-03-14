@@ -22,11 +22,11 @@ export class UsuariosService extends BaseService<UsuariosEntity>{
         return repository.update(id,{activo:0});
     }
 
-    async FindUserbyUsername(username:string):Promise<UsuariosEntity | undefined | null>{
+    async FindUserbyUsername(usuario:string):Promise<UsuariosEntity | undefined | null>{
         const repository = await this.execRepository;
         const user = repository.createQueryBuilder("user")
         .addSelect("user.password")
-        .where({username})
+        .where({usuario})
         .getOne();
         return user;
     }

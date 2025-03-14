@@ -1,7 +1,9 @@
+import passport from "passport";
 import { Request, Response, NextFunction } from "express";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { HttpResponse } from "../shared/responses/http.response";
+import { UsuariosEntity } from "../entities/usuarios.entity";
 
 export class ConfigMiddleware {
     constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -24,4 +26,18 @@ export class ConfigMiddleware {
             }
         };
     }
+
+    passAuth(type:string){
+        return passport.authenticate(type,{session:false});
+    }
+
+    // PENDIENTE
+    checkAdminRole(req:Request, res:Response, next: NextFunction){
+        const user = req.user as UsuariosEntity;
+        // if(user.role != RoleType.ADMIN){
+        //     return this.httpResponse.Error(res,"No tienes permiso");
+        // }
+        return next()
+    }
+
 }

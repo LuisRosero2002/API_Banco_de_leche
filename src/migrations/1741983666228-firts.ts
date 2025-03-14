@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FirstMigration1741327297583 implements MigrationInterface {
-    name = 'FirstMigration1741327297583'
+export class Firts1741983666228 implements MigrationInterface {
+    name = 'Firts1741983666228'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`empleados\` (\`id_empleado\` int NOT NULL AUTO_INCREMENT, \`nombre\` varchar(255) NOT NULL, \`cargo\` varchar(255) NOT NULL, \`telefono\` int NOT NULL, \`correo\` varchar(255) NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`update_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), PRIMARY KEY (\`id_empleado\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`CREATE TABLE \`roles\` (\`id_rol\` int NOT NULL AUTO_INCREMENT, \`descriocion\` varchar(255) NOT NULL, \`activo\` bit NOT NULL, PRIMARY KEY (\`id_rol\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`CREATE TABLE \`roles\` (\`id_rol\` int NOT NULL AUTO_INCREMENT, \`descripcion\` varchar(255) NOT NULL, \`activo\` bit NOT NULL, PRIMARY KEY (\`id_rol\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`roles_usuario\` (\`id_rol_usuario\` int NOT NULL AUTO_INCREMENT, \`id_usuario\` int NULL, \`id_rol\` int NULL, PRIMARY KEY (\`id_rol_usuario\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`sessions\` (\`id_session\` int NOT NULL AUTO_INCREMENT, \`token\` text NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`update_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`id_usuario\` int NULL, UNIQUE INDEX \`REL_28c6203d0fc25270aee51ab355\` (\`id_usuario\`), PRIMARY KEY (\`id_session\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`usuarios\` (\`id_usuario\` int NOT NULL AUTO_INCREMENT, \`usuario\` varchar(255) NOT NULL, \`password\` varchar(255) NOT NULL, \`activo\` int NOT NULL DEFAULT '1', \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`update_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`id_empleado\` int NULL, UNIQUE INDEX \`REL_8469926fc9082fe7c3081e10cd\` (\`id_empleado\`), PRIMARY KEY (\`id_usuario\`)) ENGINE=InnoDB`);

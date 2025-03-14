@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { EmpleadosEntity } from "../entities/empleados.entity";
 
 export class UsuariosDTO {
     @IsNotEmpty()
@@ -9,6 +10,5 @@ export class UsuariosDTO {
     @IsOptional()
     activo?:number
     @IsNotEmpty()
-    @IsNumber()
-    id_empleado!:number
+    empleado!:EmpleadosEntity
 }

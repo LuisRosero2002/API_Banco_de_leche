@@ -8,7 +8,9 @@ export class AuthRouter extends BaseRouter<AuthController,ConfigMiddleware>{
     }
 
     routes(): void {
-        this.router.post("/login", (req, res) =>
+        this.router.post("/login", 
+        this.middleware.passAuth("login"),
+        (req, res) =>
          { this.controller.login(req, res)}
         );
         
