@@ -9,7 +9,6 @@ export class EmpleadosServices extends BaseService<EmpleadosEntity> {
     }
 
     async CreateEmpleado(body: EmpleadosDTO): Promise<EmpleadosEntity> {
-        console.log("Datos recibidos:", body);
         return (await this.execRepository).save(body);
     }
 

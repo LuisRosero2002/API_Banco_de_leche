@@ -7,6 +7,9 @@ import { DataSource } from "typeorm";
 import "reflect-metadata";
 import { UsuariosRouter } from "./router/usuarios.router";
 import { EmpleadosRouter } from "./router/empleados.router";
+import { JwtStrategys } from "./auth/strategies/jwt.strategy";
+import passport from "passport";
+import { LoginStrategy } from "./auth/strategies/login.strategy";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -19,6 +22,8 @@ class ServerBootstrap extends ConfigServer {
         this.dbConnect();
         this.app.use(cors());
         this.app.use(morgan("dev"));
+        this.app.use(passport.initialize());
+        this.passportUse();
         this.app.use('/api', this.routers());
         this.listen();
     }
@@ -30,7 +35,14 @@ class ServerBootstrap extends ConfigServer {
         ];
     }
 
-    public listen() {
+    passportUse(){
+        return [ 
+            new JwtStrategys().use,
+            new LoginStrategy().use
+        ]
+    }
+
+    listen() {
 
         this.app.listen(this.port, () => {
             console.log(`Server running on port ${this.port}`);

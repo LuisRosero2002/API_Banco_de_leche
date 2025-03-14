@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UsuariosController } from "../controllers/usuarios.controller";
 import { BaseRouter } from "./router";
 import { ConfigMiddleware } from "../middlewares/config.middleware";
+import { UsuariosDTO } from "../DTOs/usuarios.DTO";
 
 export class UsuariosRouter extends BaseRouter<UsuariosController,ConfigMiddleware>{
     constructor(){
@@ -9,7 +10,8 @@ export class UsuariosRouter extends BaseRouter<UsuariosController,ConfigMiddlewa
     }
 
     routes(): void {
-        this.router.post('/CreateUser',  
+        this.router.post('/CreateUser',
+            this.middleware.ValidateDTO(UsuariosDTO),  
         (req:Request,res:Response) => {
             this.controller.CreateUser(req, res)
                 .catch(err => res.status(500).send(err.message));

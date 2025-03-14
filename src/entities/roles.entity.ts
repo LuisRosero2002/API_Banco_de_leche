@@ -6,7 +6,7 @@ export class RolesEntity{
     @PrimaryGeneratedColumn("increment",{name:"id_rol"})
     id!:number
     @Column({type:"varchar",length: 255})
-    descriocion!:string
+    descripcion!:string
     @Column({type:"bit"})
     activo!:number
     @OneToMany(()=> RolesUsuarioEntity, (rolesUsuario) => rolesUsuario.rol)
