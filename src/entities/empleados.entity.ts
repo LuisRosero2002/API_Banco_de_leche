@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { UsuariosEntity } from "./usuarios.entity"
+import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 
 @Entity({name:"empleados"})
 export class EmpleadosEntity{
@@ -13,8 +14,7 @@ export class EmpleadosEntity{
     telefono!:number
     @Column({nullable:true})
     correo!:string
-    @OneToOne(()=> UsuariosEntity,(usuario) => usuario.empleado)
-    usuario!:UsuariosEntity
+    
     @CreateDateColumn({
         name:"created_at",
         type:"timestamp",
@@ -25,4 +25,9 @@ export class EmpleadosEntity{
         type:"timestamp",
     })
     updatedAt!:Date;
+  
+    @OneToOne(()=> UsuariosEntity,(usuario) => usuario.empleado)
+    usuario!:UsuariosEntity
+    @OneToMany(() => MadresPotencialesEntity, madresPotenciales => madresPotenciales.empleado)
+    madresPotenciales!:MadresPotencialesEntity[]
 }   
