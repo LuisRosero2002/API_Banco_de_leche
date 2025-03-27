@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UsuariosEntity } from "../../entities/usuarios.entity";
 import { HttpResponse } from "../../shared/responses/http.response";
 import { AuthService } from "../services/auth.service";
-import { SessionService } from "../../repository/session.service";
+import { SessionService } from "../../services/session.service";
 import { SessionDTO } from "../../DTOs/session.DTO";
 
 interface UserDTO {

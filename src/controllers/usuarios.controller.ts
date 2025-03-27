@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UsuariosService } from "../repository/usuarios.service";
+import { UsuariosService } from "../services/usuarios.service";
 import { HttpResponse } from "../shared/responses/http.response";
 import { UpdateResult } from "typeorm";
 import { validate } from "class-validator";

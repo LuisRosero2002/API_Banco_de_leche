@@ -1,5 +1,5 @@
 import { ConfigServer } from "../../config/config.server";
-import { UsuariosService } from "../../repository/usuarios.service";
+import { UsuariosService } from "../../services/usuarios.service";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import { UsuariosEntity } from "../../entities/usuarios.entity";

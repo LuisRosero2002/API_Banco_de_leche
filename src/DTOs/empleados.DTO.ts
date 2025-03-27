@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class EmpleadosDTO {
+    @IsOptional()
+    id!:number
     @IsNotEmpty()
     nombre!:string
     @IsNotEmpty()

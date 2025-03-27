@@ -10,6 +10,8 @@ import { EmpleadosRouter } from "./router/empleados.router";
 import { JwtStrategys } from "./auth/strategies/jwt.strategy";
 import passport from "passport";
 import { LoginStrategy } from "./auth/strategies/login.strategy";
+import { MadresPotencialesRouter } from "./router/madresPotenciales.router";
+import { EntidadesRouter } from "./router/entidades.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -31,7 +33,9 @@ class ServerBootstrap extends ConfigServer {
         return [
             new AuthRouter().router,
             new UsuariosRouter().router,
-            new EmpleadosRouter().router
+            new EmpleadosRouter().router,
+            new MadresPotencialesRouter().router,
+            new EntidadesRouter().router
         ];
     }
 

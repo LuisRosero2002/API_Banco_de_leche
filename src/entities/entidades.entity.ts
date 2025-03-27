@@ -7,6 +7,8 @@ export class EntidadesEntity {
     id!:number
     @Column({type:"varchar"})
     nombre!:string
+    @Column({type:"int"})
+    activo!:number
 
     @OneToMany(() => MadresPotencialesEntity, madrePotencial => madrePotencial.entidad)
     madrePotencial!:MadresPotencialesEntity[]
