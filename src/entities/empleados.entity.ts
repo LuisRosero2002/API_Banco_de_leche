@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { UsuariosEntity } from "./usuarios.entity"
 import { MadresPotencialesEntity } from "./madresPotenciales.entity";
+import { RutasRecoleccionEntity } from "./rutasRecoleccion.entity";
 
 @Entity({name:"empleados"})
 export class EmpleadosEntity{
@@ -26,8 +27,10 @@ export class EmpleadosEntity{
     })
     updatedAt!:Date;
   
-    @OneToOne(()=> UsuariosEntity,(usuario) => usuario.empleado)
+    @OneToOne(()=> UsuariosEntity, usuario => usuario.empleado)
     usuario!:UsuariosEntity
     @OneToMany(() => MadresPotencialesEntity, madresPotenciales => madresPotenciales.empleado)
     madresPotenciales!:MadresPotencialesEntity[]
+    @OneToMany(()=> RutasRecoleccionEntity, rutasRecoleccion => rutasRecoleccion.empleado)
+    ruta!:RutasRecoleccionEntity[]
 }   

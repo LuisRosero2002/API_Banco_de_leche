@@ -65,7 +65,7 @@ export class HttpResponse{
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
             status:HttpStatus.INTERNAL_SERVER_ERROR,
             statusmsg:"Internal Server Error",
-            error:data
+            error: data.message
         })
     }
 

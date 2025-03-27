@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { EmpleadosServices } from "../repository/empleados.service";
+import { EmpleadosServices } from "../services/empleados.service";
 import { HttpResponse } from "../shared/responses/http.response";
 
 export class EmpleadosController {
