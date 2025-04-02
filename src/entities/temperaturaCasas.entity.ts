@@ -12,6 +12,6 @@ export class TemperaturaCasasEntity {
 
     @ManyToOne(() => RutasRecoleccionEntity, ruta => ruta.temperaturaCasas)
     @JoinColumn({name:"id_ruta"})
-    ruta!: RutasRecoleccionEntity;
+    ruta!: RutasRecoleccionEntity;  
    
 }
