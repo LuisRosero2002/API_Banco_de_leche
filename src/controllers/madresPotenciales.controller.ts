@@ -21,6 +21,7 @@ export class MadresPotencialesController {
         try {
             const { id } = req.params;
             const data = await this.madresPotencialesServices.UpdateMadrePotencial(Number(id),req.body);
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "Error al actualizar la data");
             return this.httpResponse.Ok(res,data);
         } catch (error) {
             return this.httpResponse.Error(res,error);
