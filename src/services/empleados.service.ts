@@ -12,6 +12,10 @@ export class EmpleadosServices extends BaseService<EmpleadosEntity> {
         return (await this.execRepository).save(body);
     }
 
+    async GetEmpleados(): Promise<EmpleadosEntity[]> {
+        return (await this.execRepository).find()
+    }
+
     // async DeleteEmpleado(id: string): Promise<UpdateResult> {
     //     return (await this.execRepository).update(id, {});
     // }

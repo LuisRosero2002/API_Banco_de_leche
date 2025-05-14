@@ -16,4 +16,14 @@ export class EmpleadosController {
             return this.httpResponse.Error(res, error);
         }
     }
+
+    async GetEmpleados(req: Request, res: Response): Promise<Response> {
+        try {
+            const data = await this.empleadosServices.GetEmpleados();
+            if(data.length === 0) return this.httpResponse.NotFound(res, "No hay empleados registrados");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
 }

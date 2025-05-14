@@ -21,11 +21,11 @@ export class MadresPotencialesDTO {
     fecha_visita!: Date;
     @IsOptional()
     observacion!: number;
-    @IsNotEmpty()
+    @IsOptional()
     fecha_registro!: Date;
-    @IsNotEmpty()
+    @IsOptional()
     entidad!: EntidadesEntity;
-    @IsNotEmpty()
+    @IsOptional()
     empleado!: EmpleadosEntity;
     @IsOptional()
     infoMadre?: InfoMadresEntity;

@@ -19,13 +19,27 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
         return (await this.execRepository).save(body);
     }
 
-    async getAllRutasRecoleccion(mes:number,anio:number): Promise<RutasRecoleccionEntity[]> {
+    async getAllRutasRecoleccion(mes: number, anio: number): Promise<RutasRecoleccionEntity[]> {
         const repository = await this.execRepository;
         const queryBuilder = repository.createQueryBuilder("rr")
-            .innerJoin("rr.empleado","em")
-            .addSelect([
-                "em.id_empleado as idEmpleado",
-                "em.nombre as nombreEmpleado",
+            .innerJoin("rr.empleado", "em")
+            .select([
+                "rr.id_ruta AS id_ruta",
+                "rr.fecha_registro AS fecha_registro",
+                "rr.jornada AS jornada",
+                "rr.nombre_conductor AS nombre_conductor",
+                "rr.placa_vehiculo AS placa_vehiculo",
+                "rr.kilometraje_inicial AS kilometraje_inicial",
+                "rr.kilometraje_final AS kilometraje_final",
+                "rr.hora_salida AS hora_salida",
+                "rr.hora_llegada AS hora_llegada",
+                "rr.temperatura_llegada AS temperatura_llegada",
+                "rr.temperatura_salida AS temperatura_salida",
+                "rr.total_visitas AS total_visitas",
+                "rr.volumen_total AS volumen_total",
+                "rr.id_empleado AS id_empleado",
+                "em.nombre AS nombreEmpleado",
+                "em.cargo AS cargo"
             ])
             .where("MONTH(rr.fecha_registro) = :mes", { mes })
             .andWhere("YEAR(rr.fecha_registro) = :anio", { anio });
@@ -54,7 +68,22 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
 
     async getCasasVisitas(id: number): Promise<CasasVisitasEntity[] | null> {
         const casasVisitasRepository = AppDataSource.getRepository(CasasVisitasEntity);
-        return await casasVisitasRepository.find({ where: { ruta: { id } } });
+        return await casasVisitasRepository.createQueryBuilder("c")
+            .innerJoin("c.madreDonante", "md")
+            .innerJoin("md.madrePotencial", "mp")
+            .innerJoin("mp.infoMadre", "im")
+            .select([
+                "c.id_casa_visita AS id_casa_visita",
+                "c.id_ruta AS id_ruta",
+                "c.observacion AS observacion",
+                "im.id_info_madre AS id_info_madre",
+                "im.nombre AS nombre",
+                "im.apellido AS apellido",
+                "im.direccion AS direccion",
+                "im.celular AS celular"
+            ])
+            .where("c.id_ruta = :id", { id })
+            .getRawMany();
     }
 
     async createFrascosRecolectados(body: FrascosRecolectadosDTO): Promise<FrascosRecolectadosEntity> {
@@ -64,6 +93,19 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
 
     async getFrascosRecolectados(id: number): Promise<FrascosRecolectadosEntity[] | null> {
         const frascosRepository = AppDataSource.getRepository(FrascosRecolectadosEntity);
-        return await frascosRepository.find({ where: { casaVisita: { id } } });
+        return await frascosRepository.createQueryBuilder("fr")
+            .innerJoin("fr.congelador", "c")
+            .innerJoin("fr.casaVisita", "cv")
+            .select([
+                "fr.id_frascos_recolectados AS id_frascos_recolectados",
+                "fr.volumen AS volumen",
+                "fr.fecha_de_extraccion AS fecha_de_extraccion",
+                "fr.termo AS termo",
+                "fr.gaveta AS gaveta",
+                "c.id_congelador AS id_congelador",
+                "c.descripcion AS descripcion"
+            ])
+            .where("fr.casaVisita = :id", { id })
+            .getRawMany();
     }
 }

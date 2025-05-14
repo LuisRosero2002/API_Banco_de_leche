@@ -16,5 +16,12 @@ export class EmpleadosRouter extends BaseRouter<EmpleadosController, ConfigMiddl
                 this.controller.CreateEmpleado(req, res);
             }
         );
+
+        this.router.get(
+            "/GetEmpleados",
+            (req: Request, res: Response) => {
+                this.controller.GetEmpleados(req, res);
+            }
+        );
     }
 }
