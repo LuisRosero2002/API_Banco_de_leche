@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { RutasRecoleccionEntity } from "./rutasRecoleccion.entity";
 import { FrascosRecolectadosEntity } from "./frascosRecolectados.entity";
+import { MadresDonantesEntity } from "./madresDonantes.entity";
 
 @Entity('casas_visitas')
 export class CasasVisitasEntity {
@@ -8,13 +9,12 @@ export class CasasVisitasEntity {
     id!: number;
     @Column({ type: "text", nullable: true, name: "observacion" })
     observacion!: string;
-
     @ManyToOne(() => RutasRecoleccionEntity, ruta => ruta.casa_visita)
     @JoinColumn({ name: "id_ruta" })
     ruta!: RutasRecoleccionEntity;
-    // @OneToOne(() => MadresDonantesEntity, madreDonante => madreDonante.temperaturaSalida)
-    // @JoinColumn({name:"id_madre_donante"})
-    // madreDonante!: MadresDonantesEntity;
+    @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.casaVisita)
+    @JoinColumn({name:"id_madre_donante"})
+    madreDonante!: MadresDonantesEntity;
     @OneToMany(() => FrascosRecolectadosEntity, frascoRecolectado => frascoRecolectado.casaVisita)
     frascoRecolectado!: FrascosRecolectadosEntity[];
     

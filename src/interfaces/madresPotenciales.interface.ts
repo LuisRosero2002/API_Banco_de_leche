@@ -1,4 +1,5 @@
 export interface MadresPotencialesQueryResult {
+    idMadrePotencial: number;
     entidad: string;
     nombre: string;
     apellido: string;
@@ -16,4 +17,5 @@ export interface MadresPotencialesQueryResult {
     donanteEfectiva: number;
     fechaVisita: Date;
     observacion: string;
+    fechaRegistro: Date;
 }

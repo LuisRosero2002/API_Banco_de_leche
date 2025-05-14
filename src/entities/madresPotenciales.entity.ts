@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, One
 import { EmpleadosEntity } from "./empleados.entity";
 import { EntidadesEntity } from "./entidades.entity";
 import { InfoMadresEntity } from "./infoMadres.entity";
+import { MadresDonantesEntity } from "./madresDonantes.entity";
 
 export enum llamadaType {
     saliente = 'saliente',
@@ -41,4 +42,7 @@ export class MadresPotencialesEntity {
     @OneToOne(() => InfoMadresEntity, infoMadre => infoMadre.madrePotencial)
     @JoinColumn({ name: "id_info_madre" })
     infoMadre!: InfoMadresEntity
+    @OneToOne(() => MadresDonantesEntity, MadreDonante => MadreDonante.madrePotencial)
+    MadreDonante!:MadresDonantesEntity
+
 }
