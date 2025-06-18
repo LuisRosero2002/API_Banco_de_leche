@@ -24,6 +24,16 @@ export class MadresDonantesController {
         }
     }
 
+    async GetMadresDonantes(req:Request, res:Response):Promise<Response>{
+        try {
+            const data = await this.madresDonantesServices.GetMadresDonantes();
+            if(data.length === 0) return this.httpResponse.NoContent(res,"Data not found");
+            return this.httpResponse.Ok(res,data);
+        } catch (error) {
+            return this.httpResponse.Error(res,error);
+        }
+    }
+
     async uploadPDF(req: Request, res: Response): Promise<Response> {
         try {
             const body = req.body;

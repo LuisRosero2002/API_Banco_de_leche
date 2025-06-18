@@ -74,18 +74,51 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
         }
     }
 
+    async GetMadresDonantes() {
+        const queryRunner = AppDataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const repoMain = await this.execRepository;
+            return await repoMain.createQueryBuilder('md')
+                .innerJoin('md.madrePotencial', 'mp')
+                .innerJoin('mp.infoMadre', 'im')
+                .select([
+                    'md.id_madre_donante AS id_madre_donante',
+                    'md.donante_apta AS donante_apta',
+                    'mp.donante_efectiva AS donante_efectiva',
+                    'im.documento AS documento',
+                    'im.nombre AS nombre',
+                    'im.apellido AS apellido',
+                    'im.direccion AS direccion',
+                    'im.telefono AS telefono',
+                    'im.celular AS celular',
+                ])
+                .where('md.donante_apta = 1')
+                .andWhere('mp.donante_efectiva = 1')
+                .getRawMany();
+
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        } finally{
+            await queryRunner.release();
+        }
+
+    }
+
     async uploadPDF(file: Express.Multer.File, body: any): Promise<any> {
         const laboratoriosData = AppDataSource.getRepository(LaboratoriosEntity);
 
         const newLaboratorio = Object.assign(new LaboratoriosEntity(), {
-            resultado:body.resultado,
-            fechaVencimiento:body.fechaVencimiento,
-            madreDonante: {id:body.madreDonante},
+            resultado: body.resultado,
+            fechaVencimiento: body.fechaVencimiento,
+            madreDonante: { id: body.madreDonante },
             tipoLaboratorio: body.tipoLaboratorio,
             documento: file.filename
         });
         return await laboratoriosData.save(newLaboratorio);
-      
+
     }
 
 

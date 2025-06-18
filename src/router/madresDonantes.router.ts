@@ -5,7 +5,7 @@ import { upload } from '../uploads/multer/config_multer';
 import { Request, Response } from "express";
 import { MadreDonanteDTO } from "../DTOs/madresDonantes.DTO";
 
-export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, ConfigMiddleware>{
+export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, ConfigMiddleware> {
     constructor() {
         super(MadresDonantesController, ConfigMiddleware)
     }
@@ -20,19 +20,27 @@ export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, C
             }
         );
 
-        this.router.post('/uploadPDFs',upload.single('pdf'),
+        this.router.get(
+            '/GetMadreDonante',
+            (req: Request, res: Response) => {
+                this.controller.GetMadresDonantes(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            }
+        );
+
+        this.router.post('/uploadPDFs', upload.single('pdf'),
             (req: Request, res: Response) => {
                 this.controller.uploadPDF(req, res)
                     .catch(err => res.status(500).send(err.message));
             }
         )
 
-        this.router.get('/pdfs/:filename', 
+        this.router.get('/pdfs/:filename',
             (req: Request, res: Response) => {
                 this.controller.getPdf(req, res)
-                .catch(err => res.status(500).send(err.message));
+                    .catch(err => res.status(500).send(err.message));
             }
         );
     }
-    
+
 }

@@ -73,6 +73,7 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
             .innerJoin("md.madrePotencial", "mp")
             .innerJoin("mp.infoMadre", "im")
             .select([
+                "md.id_madre_donante AS id_madre_donante",
                 "c.id_casa_visita AS id_casa_visita",
                 "c.id_ruta AS id_ruta",
                 "c.observacion AS observacion",
