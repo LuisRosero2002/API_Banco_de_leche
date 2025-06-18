@@ -21,7 +21,7 @@ export class RutaRecoleccionController {
         try {
             const { mes, anio } = req.query;
             const data = await this.rutaRecoleccionService.getAllRutasRecoleccion(Number(mes), Number(anio));
-            if (data.length === 0) return this.httpResponse.NotFound(res, "Data not found");
+            if (data.length === 0)return this.httpResponse.NoContent(res,"Data not found");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);

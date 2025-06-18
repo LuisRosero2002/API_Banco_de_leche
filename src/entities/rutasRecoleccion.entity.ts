@@ -28,7 +28,7 @@ export class RutasRecoleccionEntity {
     horaLlegada!: string;
     @Column({ type: "double", nullable: true, name: "temperatura_llegada" })
     temperaturaLlegada!: number;
-    @Column({ type: "double", nullable: false, name: "temperatura_salida" })
+    @Column({ type: "double", nullable: true, name: "temperatura_salida" })
     temperaturaSalida!: string;
     @Column({ type: "int", nullable: true, name: "total_visitas" })
     totalVisitas!: number
