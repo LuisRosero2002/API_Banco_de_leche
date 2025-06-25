@@ -9,6 +9,7 @@ import { CasasVisitasEntity } from "../entities/casasVisitas.entity";
 import { FrascosRecolectadosDTO } from "../DTOs/frascosRecolectados.DTO";
 import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
 import { UpdateResult } from "typeorm";
+import { CongeladorEntity } from "../entities/congelador.entity";
 
 export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> {
     constructor() {
@@ -108,5 +109,10 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
             ])
             .where("fr.casaVisita = :id", { id })
             .getRawMany();
+    }
+
+    async getCongeladores(): Promise<any[]> {
+        const congeladoresRepository = AppDataSource.getRepository(CongeladorEntity);
+        return await congeladoresRepository.find();
     }
 }
