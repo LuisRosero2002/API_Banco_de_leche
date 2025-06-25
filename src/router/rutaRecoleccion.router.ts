@@ -61,5 +61,12 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                 this.controller.getFrascosRecolectadosById(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+
+        this.router.get('/getCongeladores',
+            (req, res) => {
+                this.controller.getCongeladores(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
     }
 }
