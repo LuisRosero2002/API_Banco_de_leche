@@ -62,6 +62,19 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
         return await tCasasRepository.find({ where: { ruta: { id } } });
     }
 
+    async updateTemperaturaCasas(id: number, body: TemperaturaCasasDTO): Promise<UpdateResult> {
+        const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
+        return await tCasasRepository.update(id, body);
+    }
+
+    async updateTemperaturaCasasByCasaAndRuta(numeroCasa: number, rutaId: number, temperatura: number): Promise<UpdateResult> {
+        const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
+        return await tCasasRepository.update(
+            { numeroCasa, ruta: { id: rutaId } },
+            { temperatura }
+        );
+    }
+
     async createCasasVisitas(body: CasasVisitasDTO): Promise<CasasVisitasEntity> {
         const casasVisitasRepository = AppDataSource.getRepository(CasasVisitasEntity);
         return await casasVisitasRepository.save(body);

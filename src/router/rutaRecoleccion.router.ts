@@ -38,6 +38,18 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                     .catch(err => res.status(500).send(err.message));
             });
 
+        this.router.put('/updateTemperaturaCasas/:id',
+            (req, res) => {
+                this.controller.updateTemperaturaCasas(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
+        this.router.put('/updateTemperaturaCasas',
+            (req, res) => {
+                this.controller.updateTemperaturaCasasByCasaAndRuta(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
         this.router.post('/createCasasVisitas',
             (req, res) => {
                 this.controller.createCasasVisitas(req, res)
