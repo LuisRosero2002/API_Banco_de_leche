@@ -48,6 +48,32 @@ export class RutaRecoleccionController {
         }
     }
 
+    async updateTemperaturaCasas(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.rutaRecoleccionService.updateTemperaturaCasas(Number(id), req.body);
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "Error al actualizar la temperatura");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async updateTemperaturaCasasByCasaAndRuta(req: Request, res: Response): Promise<Response> {
+        try {
+            const { numeroCasa, ruta, temperatura } = req.body;
+            const data = await this.rutaRecoleccionService.updateTemperaturaCasasByCasaAndRuta(
+                Number(numeroCasa), 
+                Number(ruta), 
+                Number(temperatura)
+            );
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "No se encontró la temperatura para actualizar");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
     async updateRutaRecoleccion(req: Request, res: Response): Promise<Response> {
         try {
             const { id } = req.params;
