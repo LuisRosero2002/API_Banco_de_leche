@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 import { HijosMadresEntity } from "./hijosMadres.entity";
 import { GestacionEntity } from "./gestacion.entity";
@@ -6,6 +6,7 @@ import { ExamenesPrenatalEntity } from "./examenesPrenatal.entity";
 import { LaboratoriosEntity } from "./laboratorios.entity";
 import { MedicamentosEntity } from "./medicamentos.entity";
 import { CasasVisitasEntity } from "./casasVisitas.entity";
+import { EmpleadosEntity } from "./empleados.entity";
 
 export enum donanteType {
     interna = 'interna',
@@ -54,5 +55,8 @@ export class MadresDonantesEntity {
     medicamento!: MedicamentosEntity;
     @OneToMany(() => CasasVisitasEntity, casasVisita => casasVisita.madreDonante)
     casaVisita!: CasasVisitasEntity[];
+    @ManyToOne(() => EmpleadosEntity, (empleado) => empleado.madreDonantes)
+    @JoinColumn({ name: "id_empleado" })
+    empleado!: EmpleadosEntity
 
 }

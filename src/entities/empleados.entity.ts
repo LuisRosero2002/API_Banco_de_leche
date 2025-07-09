@@ -2,35 +2,38 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Prim
 import { UsuariosEntity } from "./usuarios.entity"
 import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 import { RutasRecoleccionEntity } from "./rutasRecoleccion.entity";
+import { MadresDonantesEntity } from "./madresDonantes.entity";
 
-@Entity({name:"empleados"})
-export class EmpleadosEntity{
-    @PrimaryGeneratedColumn("increment",{name:"id_empleado"})
+@Entity({ name: "empleados" })
+export class EmpleadosEntity {
+    @PrimaryGeneratedColumn("increment", { name: "id_empleado" })
     id!: number;
     @Column()
-    nombre!:string
+    nombre!: string
     @Column()
-    cargo!:string
+    cargo!: string
     @Column()
-    telefono!:number
-    @Column({nullable:true})
-    correo!:string
-    
+    telefono!: number
+    @Column({ nullable: true })
+    correo!: string
+
     @CreateDateColumn({
-        name:"created_at",
-        type:"timestamp",
+        name: "created_at",
+        type: "timestamp",
     })
-    createdAt!:Date;
+    createdAt!: Date;
     @UpdateDateColumn({
-        name:"update_at",
-        type:"timestamp",
+        name: "update_at",
+        type: "timestamp",
     })
-    updatedAt!:Date;
-  
-    @OneToOne(()=> UsuariosEntity, usuario => usuario.empleado)
-    usuario!:UsuariosEntity
+    updatedAt!: Date;
+
+    @OneToOne(() => UsuariosEntity, usuario => usuario.empleado)
+    usuario!: UsuariosEntity
     @OneToMany(() => MadresPotencialesEntity, madresPotenciales => madresPotenciales.empleado)
-    madresPotenciales!:MadresPotencialesEntity[]
-    @OneToMany(()=> RutasRecoleccionEntity, rutasRecoleccion => rutasRecoleccion.empleado)
-    ruta!:RutasRecoleccionEntity[]
+    madresPotenciales!: MadresPotencialesEntity[]
+    @OneToMany(() => MadresDonantesEntity, madresDonantes => madresDonantes.empleado)
+    madreDonantes!: MadresDonantesEntity[]
+    @OneToMany(() => RutasRecoleccionEntity, rutasRecoleccion => rutasRecoleccion.empleado)
+    ruta!: RutasRecoleccionEntity[]
 }   
