@@ -6,36 +6,39 @@ import { ExamenesPrenatalEntity } from "../entities/examenesPrenatal.entity";
 import { LaboratoriosEntity } from "../entities/laboratorios.entity";
 import { MedicamentosEntity } from "../entities/medicamentos.entity";
 import { HijosMadresEntity } from "../entities/hijosMadres.entity";
+import { EmpleadosEntity } from "../entities/empleados.entity";
 
 export class MadreDonanteDTO {
     @IsOptional()
     id!: number
     @IsNotEmpty()
-    donanteExclusivo!:number;
+    donanteExclusivo!: number;
     @IsNotEmpty()
     tipoDonante!: donanteType;
     @IsNotEmpty()
     recoleccionDomicilio!: number;
     @IsNotEmpty()
-    capacitado!:string;
+    capacitado!: string;
     @IsNotEmpty()
-    recibioEducacion!:string;
+    recibioEducacion!: string;
     @IsOptional()
-    donanteApta!:number;
+    donanteApta!: number;
     @IsOptional()
-    firmaDonante!:string;
+    firmaDonante!: string;
     @IsOptional()
-    firmaProfesional!:string;
+    firmaProfesional!: string;
     @IsNotEmpty()
-    madrePotencial!:MadresPotencialesEntity;
+    madrePotencial!: MadresPotencialesEntity;
     @IsNotEmpty()
-    hijosMadre!:HijosMadresEntity[];
+    hijosMadre!: HijosMadresEntity[];
     @IsNotEmpty()
-    gestacion!:GestacionEntity;
+    gestacion!: GestacionEntity;
     @IsNotEmpty()
-    examenPrenatal!:ExamenesPrenatalEntity;
+    examenPrenatal!: ExamenesPrenatalEntity;
     @IsOptional()
-    laboratorio!:LaboratoriosEntity[];
+    laboratorio!: LaboratoriosEntity[];
     @IsNotEmpty()
-    medicamento!:MedicamentosEntity;
+    medicamento!: MedicamentosEntity;
+    @IsOptional()
+    empleado!: EmpleadosEntity;
 }
