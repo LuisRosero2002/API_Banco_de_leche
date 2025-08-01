@@ -68,14 +68,6 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
 
     }
 
-    async getMadresPotencialesADonates(): Promise<MadresPotencialesEntity[] | null> {
-        const data = (await this.execRepository).find(
-            {
-                where: { donante_efectiva: 1 }
-            })
-        return data
-    }
-
     async getAllMadrePotencial(): Promise<MadresPotencialesEntity[]> {
         const repository = await this.execRepository;
         const resultados = repository
@@ -88,16 +80,33 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
         return resultados;
     }
 
-    async getAllMadrePotencialByMadreDonante():Promise<MadresPotencialesEntity[]>{
+    async getAllMadrePotencialByMadreDonante(): Promise<MadresPotencialesEntity[]> {
         const repository = await this.execRepository;
         const resultados = repository
             .createQueryBuilder('mp')
             .innerJoinAndSelect('mp.infoMadre', 'im')
             .innerJoinAndSelect('mp.MadreDonante', 'md')
-            .innerJoinAndSelect('md.laboratorio','lab')
+            .innerJoinAndSelect('md.laboratorio', 'lab')
             .where('md.donanteApta = :valor', { valor: 1 })
             .orderBy('mp.fecha_registro', 'DESC')
             .getMany();
+
+        return resultados;
+    }
+
+    async getInfoCompleteMadrePotencial(id: number): Promise<MadresPotencialesEntity | null> {
+        const repository = await this.execRepository;
+        const resultados = repository
+            .createQueryBuilder('mp')
+            .innerJoinAndSelect('mp.infoMadre', 'im')
+            .innerJoinAndSelect('mp.MadreDonante', 'md')
+            .innerJoinAndSelect('md.laboratorio', 'lab')
+            .innerJoinAndSelect('md.gestacion', 'g')
+            .innerJoinAndSelect('md.hijosMadre', 'hm')
+            .innerJoinAndSelect('md.examenesPrenatal', 'ep')
+            .innerJoinAndSelect('md.medicamento', 'm')
+            .where('mp.id_madre_potencial = :id', { id })
+            .getOne();
 
         return resultados;
     }

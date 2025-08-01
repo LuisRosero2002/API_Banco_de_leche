@@ -38,6 +38,11 @@ export class MadresPotencialesRouter extends BaseRouter<MadresPotencialesControl
                 this.controller.getAllMadrePotencialByMadreDonante(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+        this.router.get('/getInfoCompleteMadrePotencial/:id',
+            (req: Request, res: Response) => {
+                this.controller.getInfoCompleteMadrePotencial(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
 
 
 
