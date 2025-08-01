@@ -39,4 +39,24 @@ export class MadresPotencialesController {
         }
     }
 
+    async getAllMadrePotencial(req:Request, res:Response): Promise<Response>{
+        try {
+            const data = await this.madresPotencialesServices.getAllMadrePotencial();
+            if(data.length === 0) return this.httpResponse.NoContent(res,"Data not found");
+            return this.httpResponse.Ok(res,data);
+        } catch (error) {
+            return this.httpResponse.Error(res,error);
+        }
+    }
+
+    async getAllMadrePotencialByMadreDonante(req:Request, res:Response):Promise<Response>{
+        try {
+            const data = await this.madresPotencialesServices.getAllMadrePotencialByMadreDonante();
+            if(data.length === 0) return this.httpResponse.NoContent(res,"Data not found");
+            return this.httpResponse.Ok(res,data);
+        } catch (error) {
+            return this.httpResponse.Error(res,error);
+        }
+    }
+
 }

@@ -17,7 +17,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
 
     async CreateMadrePotencial(body: MadresPotencialesDTO): Promise<MadresPotencialesEntity> {
         const newInfoMadre: InfoMadresEntity = await this._InfoMadresService.CreateInfoMadre(body.infoMadre!);
-        let madrePotencial:MadresPotencialesDTO = body;
+        let madrePotencial: MadresPotencialesDTO = body;
         madrePotencial.infoMadre = newInfoMadre;
         return (await this.execRepository).save(madrePotencial);
     }
@@ -30,7 +30,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
         return (await this.execRepository).update(id, newBody);
     }
 
-    async getMadrePotencial(mes:number,anio:number): Promise<MadresPotencialesQueryResult[]> {
+    async getMadrePotencial(mes: number, anio: number): Promise<MadresPotencialesQueryResult[]> {
         const repository = await this.execRepository;
         const queryBuilder = repository.createQueryBuilder("m")
             .innerJoin("m.infoMadre", "im")
@@ -70,9 +70,36 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
 
     async getMadresPotencialesADonates(): Promise<MadresPotencialesEntity[] | null> {
         const data = (await this.execRepository).find(
-            {where:{donante_efectiva:1}
-        })
+            {
+                where: { donante_efectiva: 1 }
+            })
         return data
+    }
+
+    async getAllMadrePotencial(): Promise<MadresPotencialesEntity[]> {
+        const repository = await this.execRepository;
+        const resultados = repository
+            .createQueryBuilder('mp')
+            .innerJoinAndSelect('mp.infoMadre', 'im')
+            .where('mp.donante_efectiva = :valor', { valor: 1 })
+            .orderBy('mp.fecha_registro', 'DESC')
+            .getMany();
+
+        return resultados;
+    }
+
+    async getAllMadrePotencialByMadreDonante():Promise<MadresPotencialesEntity[]>{
+        const repository = await this.execRepository;
+        const resultados = repository
+            .createQueryBuilder('mp')
+            .innerJoinAndSelect('mp.infoMadre', 'im')
+            .innerJoinAndSelect('mp.MadreDonante', 'md')
+            .innerJoinAndSelect('md.laboratorio','lab')
+            .where('md.donanteApta = :valor', { valor: 1 })
+            .orderBy('mp.fecha_registro', 'DESC')
+            .getMany();
+
+        return resultados;
     }
 
 

@@ -4,8 +4,10 @@ import { MadreDonanteDTO } from "../DTOs/madresDonantes.DTO";
 import { ExamenesPrenatalEntity } from "../entities/examenesPrenatal.entity";
 import { GestacionEntity } from "../entities/gestacion.entity";
 import { HijosMadresEntity } from "../entities/hijosMadres.entity";
+import { InfoMadresEntity } from "../entities/infoMadres.entity";
 import { LaboratoriosEntity } from "../entities/laboratorios.entity";
 import { MadresDonantesEntity } from "../entities/madresDonantes.entity";
+import { MadresPotencialesEntity } from "../entities/madresPotenciales.entity";
 import { MedicamentosEntity } from "../entities/medicamentos.entity";
 
 export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
@@ -20,47 +22,72 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
         await queryRunner.startTransaction();
 
         try {
+            let newMadre: MadreDonanteDTO = body;
             const repoMain = await this.execRepository;
+            const infoMadre = AppDataSource.getRepository(InfoMadresEntity);
             const hijosMadreData = AppDataSource.getRepository(HijosMadresEntity);
             const gestacionData = AppDataSource.getRepository(GestacionEntity);
             const examenesData = AppDataSource.getRepository(ExamenesPrenatalEntity);
             const medicamentosData = AppDataSource.getRepository(MedicamentosEntity);
-
-            const newMadreDonante = await repoMain.save(body);
-
-            // Hijos
-            if (body.hijosMadre.length > 0) {
-                const newHijosMadre = body.hijosMadre.map(hijo => {
-                    return Object.assign(new HijosMadresEntity(), hijo, {
-                        madreDonantes: newMadreDonante
-                    });
-                });
-                await hijosMadreData.save(newHijosMadre);
-            }
+            const madrePotencialData = AppDataSource.getRepository(MadresPotencialesEntity);
 
             // Gestación
             const newGestacion = Object.assign(new GestacionEntity(), body.gestacion, {
-                madreDonante: newMadreDonante
+                madreDonante: newMadre.madreDonante
             });
-            await gestacionData.save(newGestacion);
 
             // Exámenes
             const newExamen = Object.assign(new ExamenesPrenatalEntity(), body.examenPrenatal, {
-                madreDonante: newMadreDonante
+                madreDonante: newMadre.madreDonante
             });
-            await examenesData.save(newExamen);
 
             // Medicamentos
             const newMedicamentos = Object.assign(new MedicamentosEntity(), body.medicamento, {
-                madreDonante: newMadreDonante
+                madreDonante: newMadre.madreDonante
             });
-            await medicamentosData.save(newMedicamentos);
+
+            //Hijos madre
+            if (body.hijosMadre.length > 0) {
+                for (const hijo of body.hijosMadre) {
+                    const newHijo = Object.assign(new HijosMadresEntity(), hijo, {
+                        madreDonantes: newMadre.madreDonante
+                    });
+                    if (newHijo.id !== undefined && newHijo.id !== null) {
+                        await hijosMadreData.update(newHijo.id, newHijo);
+                    } else {
+                        await hijosMadreData.save(newHijo);
+                    }
+                }
+            }
+
+            if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
+                await repoMain.update(body.madreDonante.id, body.madreDonante);
+                await gestacionData.update(body.gestacion.id, newGestacion);
+                await examenesData.update(body.examenPrenatal.id, newExamen);
+                await medicamentosData.update(body.medicamento.id, newMedicamentos);
+            } else {
+                newMadre.madreDonante = await repoMain.save(body.madreDonante);
+                await gestacionData.save(newGestacion);
+                await examenesData.save(newExamen);
+                await medicamentosData.save(newMedicamentos);
+            }
+
+            if (body.madreDonante.donanteApta === 1) {
+                await madrePotencialData.update(body.madreDonante.madrePotencial, { donante_efectiva: 1 });
+            } else if (body.madreDonante.donanteApta === 0) {
+                await madrePotencialData.update(body.madreDonante.madrePotencial, { donante_efectiva: 0 });
+            }
+            // Info Madre
+            const newInfoMadre = Object.assign(new InfoMadresEntity(), body.infoMadre, {
+                madreDonantes: newMadre.madreDonante
+            });
+            await infoMadre.save(newInfoMadre);
 
             // Commit 
             await queryRunner.commitTransaction();
 
             const madreFinal = await repoMain.findOne({
-                where: { id: newMadreDonante.id },
+                where: { id: newMadre.madreDonante.id },
                 relations: ['hijosMadre', 'gestacion', 'examenesPrenatal', 'medicamento']
             });
             return madreFinal!;
@@ -101,7 +128,7 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw error;
-        } finally{
+        } finally {
             await queryRunner.release();
         }
 

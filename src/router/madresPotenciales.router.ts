@@ -28,6 +28,17 @@ export class MadresPotencialesRouter extends BaseRouter<MadresPotencialesControl
                 this.controller.getMadrePotencial(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+        this.router.get('/getAllMadresPotenciales',
+            (req: Request, res: Response) => {
+                this.controller.getAllMadrePotencial(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+        this.router.get('/getAllMadresPotencialesByMadreDonante',
+            (req: Request, res: Response) => {
+                this.controller.getAllMadrePotencialByMadreDonante(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
 
 
     }
