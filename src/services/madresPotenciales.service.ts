@@ -87,6 +87,9 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             .innerJoinAndSelect('mp.infoMadre', 'im')
             .innerJoinAndSelect('mp.MadreDonante', 'md')
             .innerJoinAndSelect('md.laboratorio', 'lab')
+            .innerJoinAndSelect('md.examenesPrenatal','ep')
+            .innerJoinAndSelect('md.medicamento','med')
+            .innerJoinAndSelect('md.empleado','emp')
             .where('md.donanteApta = :valor', { valor: 1 })
             .orderBy('mp.fecha_registro', 'DESC')
             .getMany();
@@ -105,6 +108,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             .innerJoinAndSelect('md.hijosMadre', 'hm')
             .innerJoinAndSelect('md.examenesPrenatal', 'ep')
             .innerJoinAndSelect('md.medicamento', 'm')
+            .innerJoinAndSelect('md.empleado','emp')
             .where('mp.id_madre_potencial = :id', { id })
             .getOne();
 
