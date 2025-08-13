@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TipoLaboratorioEntity } from "./tipoLaboratorio.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
+import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 
 @Entity({ name: "laboratorios" })
 export class LaboratoriosEntity {
@@ -21,8 +22,8 @@ export class LaboratoriosEntity {
     @ManyToOne(() => TipoLaboratorioEntity, tipoLaboratorio => tipoLaboratorio.laboratorio)
     @JoinColumn({ name: "id_tipo_laboratorio" })
     tipoLaboratorio!: TipoLaboratorioEntity;
-    @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.laboratorio)
-    @JoinColumn({ name: "id_madres_donantes" })
-    madreDonante!: MadresDonantesEntity;
+    @ManyToOne(() => MadresPotencialesEntity, madrePotencial => madrePotencial.laboratorio)
+    @JoinColumn({ name: "id_madre_potencial" })
+    madrePotencial!: MadresPotencialesEntity;
 
 }

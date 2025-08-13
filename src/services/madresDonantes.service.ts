@@ -140,7 +140,7 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
         const newLaboratorio = Object.assign(new LaboratoriosEntity(), {
             resultado: body.resultado,
             fechaVencimiento: body.fechaVencimiento,
-            madreDonante: { id: body.madreDonante },
+            madrePotencial: { id: body.madrePotencial },
             tipoLaboratorio: body.tipoLaboratorio,
             documento: file.filename
         });
