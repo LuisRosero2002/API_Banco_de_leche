@@ -22,7 +22,7 @@ export class MadreDonanteDTO {
     examenPrenatal!: ExamenesPrenatalEntity;
     @IsNotEmpty()
     medicamento!: MedicamentosEntity;
-    @IsOptional()
+    @IsNotEmpty()
     empleado!: EmpleadosEntity;
 
 }

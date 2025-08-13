@@ -46,6 +46,18 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 madreDonante: newMadre.madreDonante
             });
 
+            if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
+                await repoMain.update(body.madreDonante.id, body.madreDonante);
+                await gestacionData.update(body.gestacion.id, newGestacion);
+                await examenesData.update(body.examenPrenatal.id, newExamen);
+                await medicamentosData.update(body.medicamento.id, newMedicamentos);
+            } else {
+                newMadre.madreDonante = await repoMain.save(body.madreDonante);
+                await gestacionData.save(newGestacion);
+                await examenesData.save(newExamen);
+                await medicamentosData.save(newMedicamentos);
+            }
+
             //Hijos madre
             if (body.hijosMadre.length > 0) {
                 for (const hijo of body.hijosMadre) {
@@ -58,18 +70,6 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                         await hijosMadreData.save(newHijo);
                     }
                 }
-            }
-
-            if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
-                await repoMain.update(body.madreDonante.id, body.madreDonante);
-                await gestacionData.update(body.gestacion.id, newGestacion);
-                await examenesData.update(body.examenPrenatal.id, newExamen);
-                await medicamentosData.update(body.medicamento.id, newMedicamentos);
-            } else {
-                newMadre.madreDonante = await repoMain.save(body.madreDonante);
-                await gestacionData.save(newGestacion);
-                await examenesData.save(newExamen);
-                await medicamentosData.save(newMedicamentos);
             }
 
             if (body.madreDonante.donanteApta === 1) {
