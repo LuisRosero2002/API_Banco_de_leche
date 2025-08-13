@@ -49,8 +49,6 @@ export class MadresDonantesEntity {
     gestacion!: GestacionEntity;
     @OneToOne(() => ExamenesPrenatalEntity, examenesPrenatal => examenesPrenatal.madreDonante)
     examenesPrenatal!: ExamenesPrenatalEntity
-    @OneToMany(() => LaboratoriosEntity, laboratorio => laboratorio.madreDonante)
-    laboratorio!: LaboratoriosEntity[];
     @OneToOne(() => MedicamentosEntity, medicamento => medicamento.madreDonante)
     medicamento!: MedicamentosEntity;
     @OneToMany(() => CasasVisitasEntity, casasVisita => casasVisita.madreDonante)

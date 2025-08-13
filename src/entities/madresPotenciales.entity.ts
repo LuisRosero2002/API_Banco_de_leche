@@ -3,6 +3,7 @@ import { EmpleadosEntity } from "./empleados.entity";
 import { EntidadesEntity } from "./entidades.entity";
 import { InfoMadresEntity } from "./infoMadres.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
+import { LaboratoriosEntity } from "./laboratorios.entity";
 
 export enum llamadaType {
     saliente = 'saliente',
@@ -13,19 +14,19 @@ export enum llamadaType {
 export class MadresPotencialesEntity {
     @PrimaryGeneratedColumn("increment", { name: "id_madre_potencial" })
     id!: number;
-    @Column({ type: "int" ,nullable:true})
+    @Column({ type: "int", nullable: true })
     educacion_presencial!: number;
     @Column({ type: "date", nullable: true })
     fecha_llamada!: Date;
     @Column({ type: "enum", enum: llamadaType, nullable: true })
     llamada!: string;
-    @Column({ type: "int", nullable:true})
+    @Column({ type: "int", nullable: true })
     asesoria!: number;
-    @Column({ type: "int", nullable:true})
+    @Column({ type: "int", nullable: true })
     donante_efectiva!: number;
-    @Column({ type: "date", nullable:true})
+    @Column({ type: "date", nullable: true })
     fecha_visita!: Date;
-    @Column({ type: "text", nullable:true})
+    @Column({ type: "text", nullable: true })
     observacion!: number;
     @CreateDateColumn({
         name: "fecha_registro",
@@ -42,7 +43,9 @@ export class MadresPotencialesEntity {
     @OneToOne(() => InfoMadresEntity, infoMadre => infoMadre.madrePotencial)
     @JoinColumn({ name: "id_info_madre" })
     infoMadre!: InfoMadresEntity
+    @OneToMany(() => LaboratoriosEntity, laboratorio => laboratorio.madrePotencial)
+    laboratorio!: LaboratoriosEntity[];
     @OneToOne(() => MadresDonantesEntity, MadreDonante => MadreDonante.madrePotencial)
-    MadreDonante!:MadresDonantesEntity
+    MadreDonante!: MadresDonantesEntity
 
 }
