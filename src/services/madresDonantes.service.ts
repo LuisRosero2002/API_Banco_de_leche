@@ -77,11 +77,12 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
             } else if (body.madreDonante.donanteApta === 0) {
                 await madrePotencialData.update(body.madreDonante.madrePotencial, { donante_efectiva: 0 });
             }
-            // Info Madre
-            const newInfoMadre = Object.assign(new InfoMadresEntity(), body.infoMadre, {
-                madreDonantes: newMadre.madreDonante
-            });
-            await infoMadre.save(newInfoMadre);
+
+            if (body.infoMadre.id !== undefined && body.infoMadre.id !== null) {
+                await infoMadre.update(body.infoMadre.id, body.infoMadre);
+            } else {
+                await infoMadre.save(body.infoMadre);
+            }
 
             // Commit 
             await queryRunner.commitTransaction();

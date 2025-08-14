@@ -90,6 +90,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             .innerJoinAndSelect('md.examenesPrenatal','ep')
             .innerJoinAndSelect('md.medicamento','med')
             .innerJoinAndSelect('md.empleado','emp')
+            .innerJoinAndSelect('md.gestacion','ges')
             .where('md.donanteApta = :valor', { valor: 1 })
             .orderBy('mp.fecha_registro', 'DESC')
             .getMany();
