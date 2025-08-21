@@ -146,7 +146,6 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
             documento: file.filename
         });
         return await laboratoriosData.save(newLaboratorio);
-
     }
 
 
