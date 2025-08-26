@@ -18,6 +18,13 @@ export class VisitaMadresRouter extends BaseRouter<VisitaMadreController, Config
                     .catch(err => res.status(500).send(err.message));
             }
         )
+        this.router.get(
+            '/GetVisitaMadre/:id',
+            (req:Request, res:Response) => {
+                this.controller.getVisitaMadre(req,res)
+                    .catch(err => res.status(500).send(err.message));
+            }
+        )
         this.router.post(
             '/SaveRespuestasVisitaMadre',
             this.middleware.ValidateDTO(RespuestaVisitaDTO),

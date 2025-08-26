@@ -18,6 +18,17 @@ export class VisitaMadreController {
         }
     }
 
+    async getVisitaMadre(req:Request, res:Response): Promise<Response>{
+        try {
+            const { id } = req.params;
+            const data = await this.visitaMadreService.getVisitaMadres(Number(id));
+            if(!data) return this.httpResponse.NoContent(res,"Data not found");
+            return this.httpResponse.Ok(res,data);
+        } catch (error) {
+            return this.httpResponse.Error(res,error);
+        }
+    }
+
     async SaveRespuestasVisitaMadre(req:Request, res:Response): Promise<Response>{
         try {
             const data = await this.visitaMadreService.saveRespuestasVisitaMadre(req.body);
