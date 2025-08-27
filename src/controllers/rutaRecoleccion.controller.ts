@@ -6,7 +6,7 @@ export class RutaRecoleccionController {
     constructor(
         private readonly rutaRecoleccionService: RutaRecoleccionService = new RutaRecoleccionService(),
         private readonly httpResponse: HttpResponse = new HttpResponse()
-    ){}
+    ) { }
 
     async createRutaRecoleccion(req: Request, res: Response): Promise<Response> {
         try {
@@ -21,7 +21,7 @@ export class RutaRecoleccionController {
         try {
             const { mes, anio } = req.query;
             const data = await this.rutaRecoleccionService.getAllRutasRecoleccion(Number(mes), Number(anio));
-            if (data.length === 0)return this.httpResponse.NoContent(res,"Data not found");
+            if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
@@ -63,8 +63,8 @@ export class RutaRecoleccionController {
         try {
             const { numeroCasa, ruta, temperatura } = req.body;
             const data = await this.rutaRecoleccionService.updateTemperaturaCasasByCasaAndRuta(
-                Number(numeroCasa), 
-                Number(ruta), 
+                Number(numeroCasa),
+                Number(ruta),
                 Number(temperatura)
             );
             if (data.affected === 0) return this.httpResponse.NotFound(res, "No se encontró la temperatura para actualizar");
@@ -105,6 +105,28 @@ export class RutaRecoleccionController {
         }
     }
 
+    async updateCasas(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.rutaRecoleccionService.updateCasas(Number(id), req.body);
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "Error al actualizar la data");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async updateFrascos(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.rutaRecoleccionService.updateFrascos(Number(id), req.body);
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "Error al actualizar la data");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
     async createFrascosRecolectados(req: Request, res: Response): Promise<Response> {
         try {
             const data = await this.rutaRecoleccionService.createFrascosRecolectados(req.body);
@@ -125,7 +147,7 @@ export class RutaRecoleccionController {
         }
     }
 
-    async getCongeladores(req: Request, res: Response): Promise<Response>{
+    async getCongeladores(req: Request, res: Response): Promise<Response> {
         try {
             const data = await this.rutaRecoleccionService.getCongeladores();
             if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
