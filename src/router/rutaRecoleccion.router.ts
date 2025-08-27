@@ -2,9 +2,9 @@ import { RutaRecoleccionController } from "../controllers/rutaRecoleccion.contro
 import { ConfigMiddleware } from "../middlewares/config.middleware";
 import { BaseRouter } from "./router";
 
-export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,ConfigMiddleware>{
+export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController, ConfigMiddleware> {
     constructor() {
-        super(RutaRecoleccionController,ConfigMiddleware);
+        super(RutaRecoleccionController, ConfigMiddleware);
     }
 
     routes(): void {
@@ -55,10 +55,22 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                 this.controller.createCasasVisitas(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
-        
+
         this.router.get('/getCasasVisitas/:id',
             (req, res) => {
                 this.controller.getCasasVisitas(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
+        this.router.put('/updateCasas/:id',
+            (req, res) => {
+                this.controller.updateCasas(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
+        this.router.put('/updateFrascos/:id',
+            (req, res) => {
+                this.controller.updateFrascos(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
 
@@ -67,7 +79,7 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                 this.controller.createFrascosRecolectados(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
-        
+
         this.router.get('/getFrascosRecolectados/:id',
             (req, res) => {
                 this.controller.getFrascosRecolectadosById(req, res)
