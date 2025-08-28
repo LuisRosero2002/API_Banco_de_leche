@@ -131,11 +131,11 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
 
     async updateCasas(id: number, body: CasasVisitasDTO): Promise<UpdateResult> {
         const casasVisitasRepository = AppDataSource.getRepository(CasasVisitasEntity);
-        return await casasVisitasRepository.update(id, body);
+        return (await casasVisitasRepository).update(id, body);
     }
 
     async updateFrascos(id: number, body: FrascosRecolectadosDTO): Promise<UpdateResult> {
         const frascosRepository = AppDataSource.getRepository(FrascosRecolectadosEntity);
-        return await frascosRepository.update(id, body);
+        return (await frascosRepository).update(id, body);
     }
 }
