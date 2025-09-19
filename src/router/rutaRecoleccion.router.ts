@@ -92,5 +92,20 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                     .catch(err => res.status(500).send(err.message));
             });
 
+        this.router.post('/createTemperaturaRuta',
+            (req, res) => {
+                this.controller.createTemperaturaRuta(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+        this.router.get('/getTemperaturaRuta/:id',
+            (req, res) => {
+                this.controller.getTemperaturaRuta(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+        this.router.put('/updateTemperaturaRuta/:id',
+            (req, res) => {
+                this.controller.updateTemperaturaRuta(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
     }
 }

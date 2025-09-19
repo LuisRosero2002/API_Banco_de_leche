@@ -21,7 +21,7 @@ export class RutaRecoleccionDTO {
     @IsOptional()
     temperaturaLlegada!: number;
     @IsOptional()
-    temperaturaSalida!: string;
+    temperaturaSalida!: number;
     @IsOptional()
     totalVisitas!: number
     @IsOptional()

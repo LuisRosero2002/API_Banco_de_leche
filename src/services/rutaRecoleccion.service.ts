@@ -10,6 +10,8 @@ import { FrascosRecolectadosDTO } from "../DTOs/frascosRecolectados.DTO";
 import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
 import { UpdateResult } from "typeorm";
 import { CongeladorEntity } from "../entities/congelador.entity";
+import { TemperaturasRutasEntity } from "../entities/temperaturasRutas.entity";
+import { TemperaturasRutasDTO } from "../DTOs/temperaturasRuta.DTO";
 
 export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> {
     constructor() {
@@ -34,8 +36,6 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
                 "rr.kilometraje_final AS kilometraje_final",
                 "rr.hora_salida AS hora_salida",
                 "rr.hora_llegada AS hora_llegada",
-                "rr.temperatura_llegada AS temperatura_llegada",
-                "rr.temperatura_salida AS temperatura_salida",
                 "rr.total_visitas AS total_visitas",
                 "rr.volumen_total AS volumen_total",
                 "rr.id_empleado AS id_empleado",
@@ -52,19 +52,58 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
         return (await this.execRepository).update(id, body)
     }
 
-    async createTemperaturaCasas(body: TemperaturaCasasDTO): Promise<TemperaturaCasasEntity> {
+    async createTemperaturaCasas(body: TemperaturaCasasDTO): Promise<TemperaturaCasasEntity | UpdateResult> {
         const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
-        return (await tCasasRepository).save(body);
+        const auxBody = {
+            numeroCasa: body.numeroCasa,
+            temperatura: body.temperatura,
+            ruta: body.ruta,
+            caja: body.caja
+        };
+        const res = (await this.execRepository).update(
+            { id: body.ruta.id },
+            {
+                horaSalida: body.horaSalida || "",
+                horaLlegada: body.horaLlegada || ""
+            }
+        );
+
+        if (body.id != null) {
+            return (await tCasasRepository).save(auxBody);
+        }
+        return res;
     }
 
     async getTemperaturasCasas(id: number): Promise<TemperaturaCasasEntity[] | null> {
         const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
-        return await tCasasRepository.find({ where: { ruta: { id } } });
+        const queryBuilder = tCasasRepository.createQueryBuilder("tem")
+            .innerJoinAndSelect("tem.ruta", "rr")
+            .where("tem.ruta = :id", { id })
+            .getMany();
+        return await queryBuilder;
     }
 
     async updateTemperaturaCasas(id: number, body: TemperaturaCasasDTO): Promise<UpdateResult> {
+        const repository = await this.execRepository;
         const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
-        return await tCasasRepository.update(id, body);
+        const auxBody = {
+            numeroCasa: body.numeroCasa,
+            temperatura: body.temperatura,
+            ruta: body.ruta,
+            caja: body.caja
+        };
+        const res = await repository.update(
+            { id: body.ruta.id },
+            {
+                horaSalida: body.horaSalida || "",
+                horaLlegada: body.horaLlegada || ""
+            }
+        );
+        if (body.id != null) {
+            return await tCasasRepository.update(id, auxBody);
+        } else {
+            return res;
+        }
     }
 
     async updateTemperaturaCasasByCasaAndRuta(numeroCasa: number, rutaId: number, temperatura: number): Promise<UpdateResult> {
@@ -138,4 +177,25 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
         const frascosRepository = AppDataSource.getRepository(FrascosRecolectadosEntity);
         return (await frascosRepository).update(id, body);
     }
+
+    async createTemperaturaRuta(body: TemperaturasRutasDTO): Promise<TemperaturasRutasEntity> {
+        const temperaturasRutasRepository = AppDataSource.getRepository(TemperaturasRutasEntity);
+        return await temperaturasRutasRepository.save(body);
+    }
+
+    async getTemperaturaRuta(id: number): Promise<TemperaturasRutasEntity[] | null> {
+        const temperaturasRutasRepository = AppDataSource.getRepository(TemperaturasRutasEntity);
+        return await temperaturasRutasRepository.find({ where: { ruta: { id } } });
+    }
+
+    async updateTemperaturaRuta(id: number, body: TemperaturasRutasDTO
+    ): Promise<UpdateResult> {
+        const repo = AppDataSource.getRepository(TemperaturasRutasEntity);
+        const { opt, ...data } = body;
+        return repo.update(
+            { id },
+            data
+        );
+    }
+
 }

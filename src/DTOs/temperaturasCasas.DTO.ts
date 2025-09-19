@@ -9,5 +9,11 @@ export class TemperaturaCasasDTO {
     @IsNotEmpty()
     temperatura!: number;
     @IsNotEmpty()
+    horaSalida!: string;
+    @IsNotEmpty()
+    horaLlegada!: string;
+    @IsNotEmpty()
+    caja!: number;
+    @IsNotEmpty()
     ruta!: RutasRecoleccionEntity;
 }
