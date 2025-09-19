@@ -157,4 +157,35 @@ export class RutaRecoleccionController {
         }
     }
 
+    async createTemperaturaRuta(req: Request, res: Response): Promise<Response> {
+        try {
+            const data = await this.rutaRecoleccionService.createTemperaturaRuta(req.body);
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async getTemperaturaRuta(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.rutaRecoleccionService.getTemperaturaRuta(Number(id));
+            if (!data) return this.httpResponse.NotFound(res, "Data not found");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async updateTemperaturaRuta(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.rutaRecoleccionService.updateTemperaturaRuta(Number(id), req.body);
+            if (data.affected === 0) return this.httpResponse.NotFound(res, "Error al actualizar la temperatura");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
 }

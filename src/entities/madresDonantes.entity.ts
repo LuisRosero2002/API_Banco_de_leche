@@ -34,6 +34,8 @@ export class MadresDonantesEntity {
     firmaProfesional!: string;
     @Column({ name: "firma_acompañante", type: "text", nullable: true })
     firmaAcompañante!: string;
+    @Column({ name: "activo", type: "int", nullable: false, default: 1 })
+    activo!: number;
     @CreateDateColumn({
         name: "fecha_diligenciamiento",
         type: "timestamp",

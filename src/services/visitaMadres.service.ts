@@ -44,7 +44,11 @@ export class VisitaMadresServices extends BaseService<VisitaMadresEntity> {
             relations: {
                 evaluacionLactancia: true,
                 madrePotencial: true,
-                respuestas: true
+                respuestas: {
+                    pregunta: {
+                        clasificacion: true
+                    }
+                }
             }
         })
     }
