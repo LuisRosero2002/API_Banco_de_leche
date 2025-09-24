@@ -7,6 +7,7 @@ import { LaboratoriosEntity } from "./laboratorios.entity";
 import { MedicamentosEntity } from "./medicamentos.entity";
 import { CasasVisitasEntity } from "./casasVisitas.entity";
 import { EmpleadosEntity } from "./empleados.entity";
+import { VisitaSeguimientoMadresEntity } from "./visitaSeguimientoMadres.entity";
 
 export enum donanteType {
     interna = 'interna',
@@ -58,5 +59,7 @@ export class MadresDonantesEntity {
     @ManyToOne(() => EmpleadosEntity, (empleado) => empleado.madreDonantes)
     @JoinColumn({ name: "id_empleado" })
     empleado!: EmpleadosEntity
+    @OneToMany(() => VisitaSeguimientoMadresEntity, visitaSeguimiento => visitaSeguimiento.madreDonante)
+    visitaSeguimiento!: VisitaSeguimientoMadresEntity[];
 
 }
