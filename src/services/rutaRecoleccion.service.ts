@@ -68,7 +68,7 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
             }
         );
 
-        if (body.id != null) {
+        if (body.id === null && auxBody.temperatura != null) {
             return (await tCasasRepository).save(auxBody);
         }
         return res;

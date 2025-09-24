@@ -10,18 +10,10 @@ export class RutaRecoleccionDTO {
     nombreConductor!: string;
     @IsNotEmpty()
     placa!: string;
-    @IsNotEmpty()
-    kilometrajeInicial!: number;
-    @IsOptional()
-    kilometrajeFinal!: number;
     @IsOptional()
     horaSalida!: string;
     @IsOptional()
     horaLlegada!: string;
-    @IsOptional()
-    temperaturaLlegada!: number;
-    @IsOptional()
-    temperaturaSalida!: number;
     @IsOptional()
     totalVisitas!: number
     @IsOptional()
