@@ -19,6 +19,12 @@ export class RutaRecoleccionRouter extends BaseRouter<RutaRecoleccionController,
                 this.controller.getAllRutasRecoleccion(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+            
+        this.router.get('/getRutaRecoleccionById/:id',
+            (req, res) => {
+                this.controller.getRutaRecoleccionById(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
 
         this.router.put('/updateRutaRecoleccion/:id',
             (req, res) => {

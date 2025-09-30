@@ -52,6 +52,10 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
         return (await this.execRepository).update(id, body)
     }
 
+    async getRutaRecoleccionById(id: number): Promise<RutasRecoleccionEntity | null> {
+        return (await this.execRepository).findOne({ where: { id } });
+    }
+
     async createTemperaturaCasas(body: TemperaturaCasasDTO): Promise<TemperaturaCasasEntity | UpdateResult> {
         const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
         const auxBody = {
@@ -77,7 +81,6 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
     async getTemperaturasCasas(id: number): Promise<TemperaturaCasasEntity[] | null> {
         const tCasasRepository = AppDataSource.getRepository(TemperaturaCasasEntity);
         const queryBuilder = tCasasRepository.createQueryBuilder("tem")
-            .innerJoinAndSelect("tem.ruta", "rr")
             .where("tem.ruta = :id", { id })
             .getMany();
         return await queryBuilder;
@@ -129,6 +132,7 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
                 "md.id_madre_donante AS id_madre_donante",
                 "c.id_casa_visita AS id_casa_visita",
                 "c.id_ruta AS id_ruta",
+                "c.numero_casa AS numero_casa",
                 "c.observacion AS observacion",
                 "im.id_info_madre AS id_info_madre",
                 "im.nombre AS nombre",
