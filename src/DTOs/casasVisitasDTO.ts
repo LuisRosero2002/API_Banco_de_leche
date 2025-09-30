@@ -8,6 +8,8 @@ export class CasasVisitasDTO {
     @IsOptional()
     observacion!: string;
     @IsOptional()
+    numeroCasa!: number;
+    @IsOptional()
     madreDonante!: MadresDonantesEntity;
     @IsNotEmpty()
     ruta!: RutasRecoleccionEntity;
