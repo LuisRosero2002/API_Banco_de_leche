@@ -12,6 +12,6 @@ export class RespuestasFriam038Entity {
     @JoinColumn({ name: "id_pregunta" })
     pregunta!: PreguntasFriam038Entity;
     @ManyToOne(() => VisitaSeguimientoMadresEntity, visitaSeguimiento => visitaSeguimiento.respuestas)
-    @JoinColumn({ name: "id_visita_domiciliario" })
+    @JoinColumn({ name: "id_visita_seguimiento" })
     visitaSeguimiento!: VisitaSeguimientoMadresEntity;
 }
