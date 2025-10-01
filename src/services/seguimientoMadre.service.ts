@@ -20,7 +20,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
                 activo: 1
             },
             relations: {
-                madrePotencial: true
+                madrePotencial: {
+                    infoMadre: true
+                }
             }
         });
     }
