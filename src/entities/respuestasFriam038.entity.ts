@@ -6,8 +6,8 @@ import { VisitaSeguimientoMadresEntity } from "./visitaSeguimientoMadres.entity"
 export class RespuestasFriam038Entity {
     @PrimaryGeneratedColumn("increment", { name: "id_respuesta" })
     id!: number;
-    @Column({ name: "respuesta", type: "text", nullable: false })
-    respuesta!: string;
+    @Column({ name: "respuesta", type: "int", nullable: false })
+    respuesta!: number | null;
     @ManyToOne(() => PreguntasFriam038Entity, pregunta => pregunta.respuestas)
     @JoinColumn({ name: "id_pregunta" })
     pregunta!: PreguntasFriam038Entity;
