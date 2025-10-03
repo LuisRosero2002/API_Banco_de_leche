@@ -39,7 +39,7 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
                     madrePotencial: true
                 }
             },
-            order: { fecha: 'DESC' }
+            order: { fecha: 'ASC' }
         });
     }
 
