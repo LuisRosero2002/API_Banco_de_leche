@@ -12,13 +12,13 @@ export class SeguimientoMadreController {
     constructor(
         private readonly seguimientoMadreService: SeguimientoMadreService = new SeguimientoMadreService(),
         private readonly httpResponse: HttpResponse = new HttpResponse()
-    ) {}
+    ) { }
 
     // 1. Obtener madres donantes aptas para tabla principal
     async getMadresDonantesAptas(req: Request, res: Response) {
         try {
             const data = await this.seguimientoMadreService.getMadresDonantesPaticas();
-            
+
             if (data.length === 0) {
                 return this.httpResponse.NotFound(res, "No se encontraron madres donantes aptas");
             }
@@ -42,7 +42,7 @@ export class SeguimientoMadreController {
             }
 
             const data = await this.seguimientoMadreService.getVisitasPorMadre(consultaDTO.id);
-            
+
             if (data.length === 0) {
                 return this.httpResponse.NotFound(res, "No se encontraron visitas para esta madre");
             }
@@ -65,11 +65,16 @@ export class SeguimientoMadreController {
                 return this.httpResponse.Error(res, errors);
             }
 
-            // Convertir string fecha a Date
-            const fecha = new Date(visitaDTO.fecha);
-            
+            // ✅ CORRECCIÓN: Crear fecha sin conversión de zona horaria
+            const fechaParts = visitaDTO.fecha.split('-'); // ["2025", "01", "25"]
+            const fecha = new Date(
+                parseInt(fechaParts[0]), // año
+                parseInt(fechaParts[1]) - 1, // mes (0-indexado)
+                parseInt(fechaParts[2]) // día
+            );
+
             const data = await this.seguimientoMadreService.crearVisitaSeguimiento(
-                visitaDTO.idMadreDonante, 
+                visitaDTO.idMadreDonante,
                 fecha
             );
 
@@ -91,11 +96,16 @@ export class SeguimientoMadreController {
                 return this.httpResponse.Error(res, errors);
             }
 
-            // Convertir string fecha a Date
-            const nuevaFecha = new Date(fechaDTO.nuevaFecha);
-            
+            // ✅ CORRECCIÓN: Crear fecha sin conversión de zona horaria
+            const fechaParts = fechaDTO.nuevaFecha.split('-'); // ["2025", "01", "25"]
+            const nuevaFecha = new Date(
+                parseInt(fechaParts[0]), // año
+                parseInt(fechaParts[1]) - 1, // mes (0-indexado)
+                parseInt(fechaParts[2]) // día
+            );
+
             const data = await this.seguimientoMadreService.actualizarFechaVisita(
-                fechaDTO.idVisita, 
+                fechaDTO.idVisita,
                 nuevaFecha
             );
 
@@ -114,7 +124,7 @@ export class SeguimientoMadreController {
     async getPreguntasFriam038(req: Request, res: Response) {
         try {
             const data = await this.seguimientoMadreService.getPreguntasFriam038();
-            
+
             if (data.length === 0) {
                 return this.httpResponse.NotFound(res, "No se encontraron preguntas");
             }
@@ -165,7 +175,7 @@ export class SeguimientoMadreController {
             }
 
             const data = await this.seguimientoMadreService.getDetallesVisita(consultaDTO.id);
-            
+
             if (!data) {
                 return this.httpResponse.NotFound(res, "Visita no encontrada");
             }
