@@ -43,11 +43,12 @@ export class SeguimientoMadreController {
 
             const data = await this.seguimientoMadreService.getVisitasPorMadre(consultaDTO.id);
 
-            if (data.length === 0) {
-                return this.httpResponse.NotFound(res, "No se encontraron visitas para esta madre");
-            }
+            // if (data.length === 0) {
+            //     return this.httpResponse.NotFound(res, "No se encontraron visitas para esta madre");
+            // }
 
             return this.httpResponse.Ok(res, data);
+
         } catch (error) {
             console.error("Error al obtener visitas por madre:", error);
             return this.httpResponse.Error(res, error);
