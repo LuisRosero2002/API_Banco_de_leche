@@ -11,7 +11,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         super(VisitaSeguimientoMadresEntity);
     }
 
-    // 1. Obtener madres donantes aptas (donante_apta = 1)
+    /**
+     * Obtener madres donantes aptas para seguimiento
+     */
     async getMadresDonantesPaticas(): Promise<MadresDonantesEntity[]> {
         const repository = AppDataSource.getRepository(MadresDonantesEntity);
         return repository.find({
@@ -27,7 +29,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         });
     }
 
-    // 2. Obtener visitas de una madre específica
+    /**
+     * Obtener visitas de seguimiento de una madre específica
+     */
     async getVisitasPorMadre(idMadreDonante: number): Promise<VisitaSeguimientoMadresEntity[]> {
         const repository = await this.execRepository;
         return repository.find({
@@ -43,7 +47,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         });
     }
 
-    // 3. Crear nueva visita de seguimiento
+    /**
+     * Crear nueva visita de seguimiento
+     */
     async crearVisitaSeguimiento(idMadreDonante: number, fecha: Date): Promise<VisitaSeguimientoMadresEntity> {
         const repository = await this.execRepository;
 
@@ -55,7 +61,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         return await repository.save(nuevaVisita);
     }
 
-    // 4. Actualizar fecha de visita
+    /**
+     * Actualizar fecha de una visita existente
+     */
     async actualizarFechaVisita(idVisita: number, nuevaFecha: Date): Promise<VisitaSeguimientoMadresEntity | null> {
         const repository = await this.execRepository;
 
@@ -71,7 +79,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         });
     }
 
-    // 5. Obtener preguntas del formulario
+    /**
+     * Obtener preguntas del formulario FRIAM-038
+     */
     async getPreguntasFriam038(): Promise<PreguntasFriam038Entity[]> {
         const repository = AppDataSource.getRepository(PreguntasFriam038Entity);
         return repository.find({
@@ -79,7 +89,9 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         });
     }
 
-    // 6. Guardar respuestas y datos de visita
+    /**
+     * Guardar respuestas y datos completos de una visita
+     */
     async guardarRespuestasYDatos(data: {
         idVisitaSeguimiento: number,
         observaciones?: string,
@@ -88,14 +100,14 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         firmaEvaluador?: string,
         respuestas: Array<{
             idPregunta: number,
-            respuesta: number | null  // 0 = NO, 1 = SÍ, null = N/A
+            respuesta: number | null
         }>
     }): Promise<any> {
         const repositoryDatos = AppDataSource.getRepository(DatosVisitaSeguimientoEntity);
         const repositoryRespuestas = AppDataSource.getRepository(RespuestasFriam038Entity);
 
         try {
-            // Guardar datos de visita
+            // Guardar datos de la visita
             const datosVisita = repositoryDatos.create({
                 observaciones: data.observaciones,
                 recomendaciones: data.recomendaciones,
@@ -106,15 +118,15 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
 
             const datosSaved = await repositoryDatos.save(datosVisita);
 
-            // Eliminar respuestas anteriores si existen
+            // Limpiar respuestas anteriores
             await repositoryRespuestas.delete({
                 visitaSeguimiento: { id: data.idVisitaSeguimiento }
             });
 
-            // Guardar respuestas (manteniendo null para N/A)
+            // Guardar nuevas respuestas
             const respuestasEntities = data.respuestas.map(resp =>
                 repositoryRespuestas.create({
-                    respuesta: resp.respuesta, // Directo: 0, 1 o null
+                    respuesta: resp.respuesta,
                     pregunta: { id: resp.idPregunta },
                     visitaSeguimiento: { id: data.idVisitaSeguimiento }
                 })
@@ -132,11 +144,13 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
         }
     }
 
-    // 7. Obtener detalles completos de una visita
+    /**
+     * Obtener detalles completos de una visita específica
+     */
     async getDetallesVisita(idVisita: number): Promise<VisitaSeguimientoMadresEntity | null> {
         const repository = await this.execRepository;
-        
-        const resultado = await repository.findOne({
+
+        return await repository.findOne({
             where: { id: idVisita },
             relations: {
                 madreDonante: {
@@ -148,16 +162,5 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
                 }
             }
         });
-
-        // Log para debug
-        if (resultado) {
-            console.log('🔍 Datos encontrados para visita', idVisita, ':', {
-                tieneRespuestas: resultado.respuestas?.length || 0,
-                tieneDatos: !!resultado.datosVisitaSeguimiento,
-                datosSeguimiento: resultado.datosVisitaSeguimiento
-            });
-        }
-
-        return resultado;
     }
 }

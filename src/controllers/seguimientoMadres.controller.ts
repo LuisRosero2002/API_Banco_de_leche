@@ -14,7 +14,9 @@ export class SeguimientoMadreController {
         private readonly httpResponse: HttpResponse = new HttpResponse()
     ) { }
 
-    // 1. Obtener madres donantes aptas para tabla principal
+    /**
+     * Obtener madres donantes aptas para seguimiento
+     */
     async getMadresDonantesAptas(req: Request, res: Response) {
         try {
             const data = await this.seguimientoMadreService.getMadresDonantesPaticas();
@@ -30,10 +32,11 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 2. Obtener visitas de una madre específica
+    /**
+     * Obtener visitas de una madre específica
+     */
     async getVisitasPorMadre(req: Request, res: Response) {
         try {
-            // Validar parámetro ID
             const consultaDTO = plainToClass(ConsultaPorIdDTO, { id: parseInt(req.params.idMadre) });
             const errors = await validate(consultaDTO);
 
@@ -42,11 +45,6 @@ export class SeguimientoMadreController {
             }
 
             const data = await this.seguimientoMadreService.getVisitasPorMadre(consultaDTO.id);
-
-            // if (data.length === 0) {
-            //     return this.httpResponse.NotFound(res, "No se encontraron visitas para esta madre");
-            // }
-
             return this.httpResponse.Ok(res, data);
 
         } catch (error) {
@@ -55,10 +53,11 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 3. Crear nueva visita de seguimiento
+    /**
+     * Crear nueva visita de seguimiento
+     */
     async crearVisitaSeguimiento(req: Request, res: Response) {
         try {
-            // Validar datos de entrada
             const visitaDTO = plainToClass(VisitaSeguimientoDTO, req.body);
             const errors = await validate(visitaDTO);
 
@@ -66,12 +65,11 @@ export class SeguimientoMadreController {
                 return this.httpResponse.Error(res, errors);
             }
 
-            // ✅ CORRECCIÓN: Crear fecha sin conversión de zona horaria
-            const fechaParts = visitaDTO.fecha.split('-'); // ["2025", "01", "25"]
+            const fechaParts = visitaDTO.fecha.split('-');
             const fecha = new Date(
-                parseInt(fechaParts[0]), // año
-                parseInt(fechaParts[1]) - 1, // mes (0-indexado)
-                parseInt(fechaParts[2]) // día
+                parseInt(fechaParts[0]),
+                parseInt(fechaParts[1]) - 1,
+                parseInt(fechaParts[2])
             );
 
             const data = await this.seguimientoMadreService.crearVisitaSeguimiento(
@@ -86,10 +84,11 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 4. Actualizar fecha de visita
+    /**
+     * Actualizar fecha de visita existente
+     */
     async actualizarFechaVisita(req: Request, res: Response) {
         try {
-            // Validar datos de entrada
             const fechaDTO = plainToClass(FechaSeguimientoDTO, req.body);
             const errors = await validate(fechaDTO);
 
@@ -97,12 +96,11 @@ export class SeguimientoMadreController {
                 return this.httpResponse.Error(res, errors);
             }
 
-            // ✅ CORRECCIÓN: Crear fecha sin conversión de zona horaria
-            const fechaParts = fechaDTO.nuevaFecha.split('-'); // ["2025", "01", "25"]
+            const fechaParts = fechaDTO.nuevaFecha.split('-');
             const nuevaFecha = new Date(
-                parseInt(fechaParts[0]), // año
-                parseInt(fechaParts[1]) - 1, // mes (0-indexado)
-                parseInt(fechaParts[2]) // día
+                parseInt(fechaParts[0]),
+                parseInt(fechaParts[1]) - 1,
+                parseInt(fechaParts[2])
             );
 
             const data = await this.seguimientoMadreService.actualizarFechaVisita(
@@ -121,7 +119,9 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 5. Obtener preguntas del formulario
+    /**
+     * Obtener preguntas del formulario FRIAM-038
+     */
     async getPreguntasFriam038(req: Request, res: Response) {
         try {
             const data = await this.seguimientoMadreService.getPreguntasFriam038();
@@ -137,10 +137,11 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 6. Guardar respuestas y datos de visita
+    /**
+     * Guardar respuestas y datos de visita
+     */
     async guardarRespuestasYDatos(req: Request, res: Response) {
         try {
-            // Validar datos de entrada
             const respuestaDTO = plainToClass(RespuestaSeguimientoDTO, req.body);
             const errors = await validate(respuestaDTO);
 
@@ -164,10 +165,11 @@ export class SeguimientoMadreController {
         }
     }
 
-    // 7. Obtener detalles completos de una visita
+    /**
+     * Obtener detalles completos de una visita
+     */
     async getDetallesVisita(req: Request, res: Response) {
         try {
-            // Validar parámetro ID
             const consultaDTO = plainToClass(ConsultaPorIdDTO, { id: parseInt(req.params.idVisita) });
             const errors = await validate(consultaDTO);
 
