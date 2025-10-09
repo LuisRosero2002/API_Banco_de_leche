@@ -9,13 +9,15 @@ export class CasasVisitasEntity {
     id!: number;
     @Column({ type: "text", nullable: true, name: "observacion" })
     observacion!: string;
+    @Column({ type: "int", nullable: false, name: "numero_casa" })
+    numeroCasa!: number;
     @ManyToOne(() => RutasRecoleccionEntity, ruta => ruta.casa_visita)
     @JoinColumn({ name: "id_ruta" })
     ruta!: RutasRecoleccionEntity;
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.casaVisita)
-    @JoinColumn({name:"id_madre_donante"})
+    @JoinColumn({ name: "id_madre_donante" })
     madreDonante!: MadresDonantesEntity;
     @OneToMany(() => FrascosRecolectadosEntity, frascoRecolectado => frascoRecolectado.casaVisita)
     frascoRecolectado!: FrascosRecolectadosEntity[];
-    
+
 }
