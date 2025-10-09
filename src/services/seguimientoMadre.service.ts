@@ -111,7 +111,7 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
                 visitaSeguimiento: { id: data.idVisitaSeguimiento }
             });
 
-            // CAMBIO AQUÍ: Ya no convertimos a string, mantenemos el int/null
+            // Guardar respuestas (manteniendo null para N/A)
             const respuestasEntities = data.respuestas.map(resp =>
                 repositoryRespuestas.create({
                     respuesta: resp.respuesta, // Directo: 0, 1 o null
@@ -135,7 +135,8 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
     // 7. Obtener detalles completos de una visita
     async getDetallesVisita(idVisita: number): Promise<VisitaSeguimientoMadresEntity | null> {
         const repository = await this.execRepository;
-        return repository.findOne({
+        
+        const resultado = await repository.findOne({
             where: { id: idVisita },
             relations: {
                 madreDonante: {
@@ -147,5 +148,16 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
                 }
             }
         });
+
+        // Log para debug
+        if (resultado) {
+            console.log('🔍 Datos encontrados para visita', idVisita, ':', {
+                tieneRespuestas: resultado.respuestas?.length || 0,
+                tieneDatos: !!resultado.datosVisitaSeguimiento,
+                datosSeguimiento: resultado.datosVisitaSeguimiento
+            });
+        }
+
+        return resultado;
     }
 }
