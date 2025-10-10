@@ -5,6 +5,7 @@ import { InfoMadresEntity } from "./infoMadres.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { LaboratoriosEntity } from "./laboratorios.entity";
 import { VisitaMadresEntity } from "./visitaMadres.entity";
+import { LecheSalaExtraccionFriam016Entity } from "./lecheSalaExtraccionFriam016.entity";
 
 export enum llamadaType {
     saliente = 'saliente',
@@ -50,5 +51,7 @@ export class MadresPotencialesEntity {
     MadreDonante!: MadresDonantesEntity
     @OneToOne(() => VisitaMadresEntity, visitaMadre => visitaMadre.madrePotencial)
     visitaMadre!: VisitaMadresEntity;
+    @OneToOne(() => LecheSalaExtraccionFriam016Entity, lecheSalaExtraccion => lecheSalaExtraccion.madrePotencial)
+    lecheSalaExtraccion!: LecheSalaExtraccionFriam016Entity;
 
 }
