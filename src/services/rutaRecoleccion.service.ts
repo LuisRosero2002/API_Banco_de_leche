@@ -12,6 +12,7 @@ import { UpdateResult } from "typeorm";
 import { CongeladorEntity } from "../entities/congelador.entity";
 import { TemperaturasRutasEntity } from "../entities/temperaturasRutas.entity";
 import { TemperaturasRutasDTO } from "../DTOs/temperaturasRuta.DTO";
+import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
 
 export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> {
     constructor() {
@@ -146,7 +147,25 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
 
     async createFrascosRecolectados(body: FrascosRecolectadosDTO): Promise<FrascosRecolectadosEntity> {
         const frascosRepository = AppDataSource.getRepository(FrascosRecolectadosEntity);
-        return await frascosRepository.save(body);
+        const entradasSalidasRepository = AppDataSource.getRepository(EntradasSalidasFriam012Entity);
+
+        const resultado = await frascosRepository.save(body);
+
+        const bodyFrascosLecheCruda = {
+            madreDonante: body.madreDonante,
+            frascoRecolectado: resultado
+        };
+        const bodyEntradasSalidas = {
+            congelador: body.congelador,
+            madreDonante: body.madreDonante.id,
+            fechaVencimiento: new Date(new Date().setDate(new Date().getDate() + 30)),
+            fechaEntrada: new Date(),
+            fechaSalida: new Date(),
+            empleadoEntrada: 1,
+            empleadoSalida: 1
+            
+        }
+        return resultado;
     }
 
     async getFrascosRecolectados(id: number): Promise<FrascosRecolectadosEntity[] | null> {

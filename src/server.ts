@@ -15,6 +15,7 @@ import { EntidadesRouter } from "./router/entidades.router";
 import { RutaRecoleccionRouter } from "./router/rutaRecoleccion.router";
 import { MadresDonantesRouter } from "./router/madresDonantes.router";
 import { VisitaMadresRouter } from "./router/visitasMadres.router";
+import { EntradasSalidasFriam012Router } from "./router/entradasSalidasFriam012.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -41,7 +42,8 @@ class ServerBootstrap extends ConfigServer {
             new EntidadesRouter().router,
             new RutaRecoleccionRouter().router,
             new MadresDonantesRouter().router,
-            new VisitaMadresRouter().router
+            new VisitaMadresRouter().router,
+            new EntradasSalidasFriam012Router().router,
         ];
     }
 

@@ -3,6 +3,7 @@ import { UsuariosEntity } from "./usuarios.entity"
 import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 import { RutasRecoleccionEntity } from "./rutasRecoleccion.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
+import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
 
 @Entity({ name: "empleados" })
 export class EmpleadosEntity {
@@ -36,4 +37,6 @@ export class EmpleadosEntity {
     madreDonantes!: MadresDonantesEntity[]
     @OneToMany(() => RutasRecoleccionEntity, rutasRecoleccion => rutasRecoleccion.empleado)
     ruta!: RutasRecoleccionEntity[]
+    @OneToMany(() => EntradasSalidasFriam012Entity, entradasSalidas => entradasSalidas.empleadoEntrada)
+    entradasSalidas!: EntradasSalidasFriam012Entity[]
 }   
