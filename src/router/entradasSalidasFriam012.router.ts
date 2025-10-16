@@ -12,6 +12,15 @@ export class EntradasSalidasFriam012Router extends BaseRouter<EntradasSalidasFri
                 this.controller.getEntradasSalidaLecheCruda(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
-        }
-
+        this.router.post('/createEntradaSalidaLecheCruda',
+            (req, res) => {
+                this.controller.createEntradaSalidaLecheCruda(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+        this.router.put('/putEntradaSalidaLecheCruda/:id',
+            (req, res) => {
+                this.controller.putEntradaSalidaLecheCruda(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+    }
 }

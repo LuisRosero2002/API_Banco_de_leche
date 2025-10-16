@@ -14,6 +14,10 @@ export class FrascosRecolectadosDTO {
     termo!: number;
     @IsNotEmpty()
     gaveta!: number;
+    @IsOptional()
+    recoleccion!: number;
+    @IsOptional()
+    extraccion!: number;
     @IsNotEmpty()
     congelador!: CongeladorEntity;
     @IsNotEmpty()

@@ -120,7 +120,7 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 'im.celular AS celular',
             ])
             .where('md.donante_apta = 1')
-            .andWhere('mp.donante_efectiva = 1')
+            // .andWhere('mp.donante_efectiva = 1')
             .getRawMany();
     }
 
