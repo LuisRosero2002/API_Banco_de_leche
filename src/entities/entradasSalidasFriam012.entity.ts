@@ -21,10 +21,10 @@ export class EntradasSalidasFriam012Entity {
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.entradasSalidas)
     @JoinColumn({ name: "id_madre_donante" })
     madreDonante!: MadresDonantesEntity;
-    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidas)
+    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidas, { nullable: true })
     @JoinColumn({ name: "responsable_entrada" })
     empleadoEntrada!: EmpleadosEntity;
-    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidas)
+    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidas, { nullable: true })
     @JoinColumn({ name: "responsable_salida" })
     empleadoSalida!: EmpleadosEntity;
     @ManyToOne(() => ExtraccionFriam016Entity, extraccion => extraccion.entradasSalidas, { nullable: true })
