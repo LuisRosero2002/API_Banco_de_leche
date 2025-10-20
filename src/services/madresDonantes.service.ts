@@ -84,6 +84,8 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 await infoMadre.save(body.infoMadre);
             }
 
+            
+
             // Commit 
             await queryRunner.commitTransaction();
 

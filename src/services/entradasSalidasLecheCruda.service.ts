@@ -1,6 +1,6 @@
 import { UpdateResult } from "typeorm";
 import { BaseService } from "../config/base.service";
-import { EntradasSalidasLecheCrudaDTO } from "../DTOs/entradasSalidasLecheCrudaDTO";
+import { EntradasSalidasLecheCrudaDTO } from "../DTOs/entradasSalidasLecheCruda.DTO";
 import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
 
 export class EntradasSalidasLecheCrudaService extends BaseService<EntradasSalidasFriam012Entity> {

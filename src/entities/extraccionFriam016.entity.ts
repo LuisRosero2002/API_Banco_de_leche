@@ -15,6 +15,10 @@ export class ExtraccionFriam016Entity {
     gaveta!: number;
     @Column({ type: "date", nullable: true, name: "fecha_extraccion" })
     fechaExtraccion!: Date;
+    @Column({ type: "text", nullable: true, name: "motivo_consulta" })
+    motivoConsulta!: string;
+    @Column({ type: "text", nullable: true, name: "observaciones" })
+    observaciones!: string;
 
     @ManyToOne(() => CongeladorEntity, congelador => congelador.extracciones)
     @JoinColumn({ name: "id_congelador" })
