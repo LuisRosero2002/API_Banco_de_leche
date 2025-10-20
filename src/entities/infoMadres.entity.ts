@@ -23,9 +23,9 @@ export class InfoMadresEntity {
     departamento!:string
     @Column({name:"ciudad",type:"varchar",nullable:true})
     ciudad!:string
-    @Column({name:"barrio",type:"varchar"})
+    @Column({name:"barrio",type:"varchar",nullable:true})
     barrio!:string
-    @Column({name:"direccion",type:"varchar"})
+    @Column({name:"direccion",type:"varchar",nullable:true})
     direccion!:string
     @Column({name:"profesion",type:"varchar",nullable:true})
     profesion!:string

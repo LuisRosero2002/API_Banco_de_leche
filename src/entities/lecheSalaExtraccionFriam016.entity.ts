@@ -10,12 +10,8 @@ export class LecheSalaExtraccionFriam016Entity {
     procedencia!: string;
     @Column({ type: "int", nullable: true, name: "consejeria" })
     consejeria!: number;
-    @Column({ type: "text", nullable: true, name: "motivo_consulta" })
-    motivoConsulta!: string;
     @Column({ type: "date", nullable: true, name: "fecha_registro" })
     fechaRegistro!: Date;
-    @Column({ type: "text", nullable: true, name: "observaciones" })
-    observaciones!: string;
 
     @OneToMany(() => ExtraccionFriam016Entity, extraccion => extraccion.lecheSalaExtraccion)
     extracciones!: ExtraccionFriam016Entity[];
