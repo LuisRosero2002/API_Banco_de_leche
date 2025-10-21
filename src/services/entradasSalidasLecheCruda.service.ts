@@ -42,4 +42,7 @@ export class EntradasSalidasLecheCrudaService extends BaseService<EntradasSalida
         const repository = await this.execRepository;
         return await repository.update(id, body);
     }
+
+    //Prueba
+    
 }
