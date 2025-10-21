@@ -1,3 +1,4 @@
+import { UpdateResult } from "typeorm";
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
 import { ExtraccionFriam016DTO } from "../DTOs/extraccionFriam016.DTO";
@@ -69,6 +70,36 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
                 extracciones: true
             }
         });
+    }
+
+    async putLecheSalaExtraccion(id: number, body: lecheSalaExtraccionDTO): Promise<UpdateResult> {
+        const repository = await this.execRepository;
+        const infoMadreRepository = await this.infoMadresService.execRepository;
+
+        const entryToUpdate = await repository.findOne({ where: { id }, relations: { madrePotencial: { infoMadre: true } } });
+        if (!entryToUpdate) throw new Error("Entry not found");
+
+        const infoMadreToUpdate = await infoMadreRepository.findOneBy({ id: entryToUpdate.madrePotencial.infoMadre.id });
+        if (!infoMadreToUpdate) throw new Error("Info Madre not found");
+
+        const bodyInfoMadre = infoMadreRepository.create({
+            nombre: body.nombre,
+            apellido: body.apellido,
+            fechaNacimiento: body.fechaNacimiento,
+            documento: body.documento,
+            telefono: body.telefono,
+            eps: body.eps,
+            ciudad: body.municipio,
+        });
+
+        const bodyLecheSalaExtraccion = repository.create({
+            procedencia: body.procedencia,
+            consejeria: body.consejeria,
+            fechaRegistro: body.fechaRegistro,
+        });
+
+        await infoMadreRepository.update(infoMadreToUpdate.id, bodyInfoMadre);
+        return await repository.update(id, bodyLecheSalaExtraccion);
     }
 
 }
