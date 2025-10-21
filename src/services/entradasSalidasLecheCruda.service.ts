@@ -19,6 +19,8 @@ export class EntradasSalidasLecheCrudaService extends BaseService<EntradasSalida
             .innerJoinAndSelect("md.madrePotencial", "mp")
             .innerJoinAndSelect("mp.infoMadre", "im")
             .leftJoinAndSelect("md.gestacion", "g")
+            .leftJoinAndSelect("es.empleadoEntrada", "empEntrada")
+            .leftJoinAndSelect("es.empleadoSalida", "empSalida")
             .leftJoinAndSelect("es.frascoRecolectado", "fr")
             .leftJoinAndSelect("es.extraccion", "ex")
             .leftJoinAndSelect("fr.congelador", "frcg")
