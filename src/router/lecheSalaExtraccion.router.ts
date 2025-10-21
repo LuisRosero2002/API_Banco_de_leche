@@ -23,5 +23,10 @@ export class LecheSalaExtraccionRouter extends BaseRouter<LecheSalaExtraccionCon
                 this.controller.getAllLecheSalaExtraccion(req,res)
                 .catch(err=> res.status(500).send(err.message));
             });
+        this.router.put('/putLecheSalaExtraccion/:id',
+            (req,res)=>{
+                this.controller.putLecheSalaExtraccion(req,res)
+                .catch(err=> res.status(500).send(err.message));
+            });
     }
 }
