@@ -38,4 +38,15 @@ export class LecheSalaExtraccionController {
             return this.httpResponse.Error(res, error);
         }
     }
+
+    async putLecheSalaExtraccion(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const body = req.body;
+            const data = await this.lecheSalaExtraccionService.putLecheSalaExtraccion(Number(id), body);
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
 }
