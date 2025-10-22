@@ -102,4 +102,9 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         return await repository.update(id, bodyLecheSalaExtraccion);
     }
 
+    async putFrascosExtraccionRecolectados(id: number, body: ExtraccionFriam016DTO): Promise<UpdateResult> {
+        const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+        return await repository.update(id, body);
+    }
+
 }

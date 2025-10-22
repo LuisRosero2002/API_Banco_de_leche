@@ -6,6 +6,7 @@ import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { LaboratoriosEntity } from "./laboratorios.entity";
 import { VisitaMadresEntity } from "./visitaMadres.entity";
 import { LecheSalaExtraccionFriam016Entity } from "./lecheSalaExtraccionFriam016.entity";
+import { LecheDistribucionFrhos063Entity } from "./lecheDistribucionFrhos063.entity";
 
 export enum llamadaType {
     saliente = 'saliente',
@@ -53,5 +54,8 @@ export class MadresPotencialesEntity {
     visitaMadre!: VisitaMadresEntity;
     @OneToOne(() => LecheSalaExtraccionFriam016Entity, lecheSalaExtraccion => lecheSalaExtraccion.madrePotencial)
     lecheSalaExtraccion!: LecheSalaExtraccionFriam016Entity;
+    @OneToMany(() => LecheDistribucionFrhos063Entity, lecheDistribucion => lecheDistribucion.madrePotencial)
+    lecheDistribucion!: LecheDistribucionFrhos063Entity[]
+
 
 }
