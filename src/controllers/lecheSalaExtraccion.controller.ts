@@ -49,4 +49,15 @@ export class LecheSalaExtraccionController {
             return this.httpResponse.Error(res, error);
         }
     }
+
+    async putFrascosExtraccion(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const body = req.body;
+            const data = await this.lecheSalaExtraccionService.putFrascosExtraccionRecolectados(Number(id), body);
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
 }
