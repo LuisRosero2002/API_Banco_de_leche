@@ -6,8 +6,7 @@ export class LecheSalaExtraccionController {
     constructor(
         private readonly lecheSalaExtraccionService: LecheSaleExtraccionFriam016Service = new LecheSaleExtraccionFriam016Service(),
         private readonly httpResponse: HttpResponse = new HttpResponse()
-    )
-    {}
+    ) { }
 
     async postLecheSalaExtraccion(req: Request, res: Response): Promise<Response> {
         try {
