@@ -49,15 +49,31 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
             });
             return await repository.save(newEntry);
         } catch (error) {
-            console.log(error);
+            console.error('Error en postLecheSalaExtraccion:', error);
             throw error;
         }
     }
 
     async postFrascosExtraccionRecolectados(body: ExtraccionFriam016DTO): Promise<ExtraccionFriam016Entity> {
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
-        const newEntry = repository.create(body);
-        return await repository.save(newEntry);
+
+        try {
+            const newEntry = repository.create({
+                cantidad: body.cantidad,
+                hora: body.hora,
+                gaveta: body.gaveta || 1,
+                fechaExtraccion: body.fechaExtraccion,
+                motivoConsulta: body.motivoConsulta || '',
+                observaciones: body.observaciones || '',
+                congelador: { id: body.congelador.id },
+                lecheSalaExtraccion: { id: body.lecheSalaExtraccion.id }
+            });
+
+            return await repository.save(newEntry);
+        } catch (error) {
+            console.error('Error en postFrascosExtraccionRecolectados:', error);
+            throw error;
+        }
     }
 
     async getAllLecheSalaExtraccion(): Promise<LecheSalaExtraccionFriam016Entity[]> {
@@ -76,10 +92,15 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         const repository = await this.execRepository;
         const infoMadreRepository = await this.infoMadresService.execRepository;
 
-        const entryToUpdate = await repository.findOne({ where: { id }, relations: { madrePotencial: { infoMadre: true } } });
+        const entryToUpdate = await repository.findOne({
+            where: { id },
+            relations: { madrePotencial: { infoMadre: true } }
+        });
         if (!entryToUpdate) throw new Error("Entry not found");
 
-        const infoMadreToUpdate = await infoMadreRepository.findOneBy({ id: entryToUpdate.madrePotencial.infoMadre.id });
+        const infoMadreToUpdate = await infoMadreRepository.findOneBy({
+            id: entryToUpdate.madrePotencial.infoMadre.id
+        });
         if (!infoMadreToUpdate) throw new Error("Info Madre not found");
 
         const bodyInfoMadre = infoMadreRepository.create({
@@ -106,5 +127,4 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
         return await repository.update(id, body);
     }
-
 }

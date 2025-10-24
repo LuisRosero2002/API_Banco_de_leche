@@ -1,6 +1,4 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
-import { CongeladorEntity } from "../entities/congelador.entity";
-import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
 
 export class ExtraccionFriam016DTO {
     @IsOptional()
@@ -14,9 +12,9 @@ export class ExtraccionFriam016DTO {
     @IsNotEmpty()
     fechaExtraccion!: Date;
     @IsNotEmpty()
-    congelador!: CongeladorEntity;
+    congelador!: { id: number };
     @IsNotEmpty()
-    lecheSalaExtraccion!: LecheSalaExtraccionFriam016Entity;
+    lecheSalaExtraccion!: { id: number };
     @IsOptional()
     motivoConsulta!: string;
     @IsOptional()
