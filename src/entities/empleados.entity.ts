@@ -5,6 +5,7 @@ import { RutasRecoleccionEntity } from "./rutasRecoleccion.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
 import { LecheDistribucionFrhos063Entity } from "./lecheDistribucionFrhos063.entity";
+import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 
 @Entity({ name: "empleados" })
 export class EmpleadosEntity {
@@ -42,4 +43,6 @@ export class EmpleadosEntity {
     entradasSalidas!: EntradasSalidasFriam012Entity[]
     @OneToMany(() => LecheDistribucionFrhos063Entity, lecheDistribucion => lecheDistribucion.empleado)
     lecheDistribucion!: LecheDistribucionFrhos063Entity[]
+    @OneToMany(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.empleado)
+    controlReenvase!: ControlReenvaseFriam032Entity[]
 }   

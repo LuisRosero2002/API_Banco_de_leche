@@ -9,6 +9,7 @@ import { CasasVisitasEntity } from "./casasVisitas.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 import { VisitaSeguimientoMadresEntity } from "./visitaSeguimientoMadres.entity";
 import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
+import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 
 export enum donanteType {
     interna = 'interna',
@@ -64,5 +65,7 @@ export class MadresDonantesEntity {
     visitaSeguimiento!: VisitaSeguimientoMadresEntity[];
     @OneToMany(() => EntradasSalidasFriam012Entity, entradasSalidas => entradasSalidas.madreDonante)
     entradasSalidas!: EntradasSalidasFriam012Entity[];
+    @OneToMany(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.madreDonante)
+    controlReenvase!: ControlReenvaseFriam032Entity[];
 
 }
