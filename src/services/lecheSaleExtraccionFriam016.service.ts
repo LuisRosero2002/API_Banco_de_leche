@@ -136,6 +136,9 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
             },
             where: {
                 lecheSalaExtraccion: { id: idSalaExtraccion }
+            },
+            order: {
+                hora: "ASC"
             }
         });
 
