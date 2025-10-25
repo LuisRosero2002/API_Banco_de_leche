@@ -59,4 +59,15 @@ export class LecheSalaExtraccionController {
             return this.httpResponse.Error(res, error);
         }
     }
+
+    async getFrascosRecolectadosBySalaExtraccion(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.lecheSalaExtraccionService.getFrascosRecolectadosBySalaExtraccion(Number(id));
+            if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
 }

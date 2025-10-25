@@ -37,5 +37,10 @@ export class LecheSalaExtraccionRouter extends BaseRouter<LecheSalaExtraccionCon
                 this.controller.putFrascosExtraccion(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+        this.router.get('/getFrascosRecolectadosBySalaExtraccion/:id',
+            (req, res) => {
+                this.controller.getFrascosRecolectadosBySalaExtraccion(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
     }
 }
