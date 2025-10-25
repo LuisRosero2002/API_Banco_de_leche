@@ -127,4 +127,17 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
         return await repository.update(id, body);
     }
+
+    async getFrascosRecolectadosBySalaExtraccion(idSalaExtraccion: number): Promise<ExtraccionFriam016Entity[]> {
+        const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+        return await repository.find({
+            relations: {
+                congelador: true,
+            },
+            where: {
+                lecheSalaExtraccion: { id: idSalaExtraccion }
+            }
+        });
+
+    }
 }
