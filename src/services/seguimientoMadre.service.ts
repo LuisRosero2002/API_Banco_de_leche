@@ -126,7 +126,7 @@ export class SeguimientoMadreService extends BaseService<VisitaSeguimientoMadres
             // Guardar nuevas respuestas
             const respuestasEntities = data.respuestas.map(resp =>
                 repositoryRespuestas.create({
-                    respuesta: resp.respuesta,
+                    respuesta: resp.respuesta || undefined,
                     pregunta: { id: resp.idPregunta },
                     visitaSeguimiento: { id: data.idVisitaSeguimiento }
                 })
