@@ -22,4 +22,12 @@ export class EntradasSalidasLecheCrudaDTO {
     empleadoSalida!: EmpleadosEntity;
     @IsNotEmpty()
     extraccion!: ExtraccionFriam016Entity;
+    @IsOptional()
+    tipoDonante!: string;
+    @IsNotEmpty()
+    idFrascoLecheCruda!: number;
+    @IsOptional()
+    gaveta?: number;
+    @IsOptional()
+    congelador?: number;
 }

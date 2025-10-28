@@ -2,6 +2,9 @@ import { UpdateResult } from "typeorm";
 import { BaseService } from "../config/base.service";
 import { EntradasSalidasLecheCrudaDTO } from "../DTOs/entradasSalidasLecheCruda.DTO";
 import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
+import { AppDataSource } from "../config/data-source";
+import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
+import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
 
 export class EntradasSalidasLecheCrudaService extends BaseService<EntradasSalidasFriam012Entity> {
 
@@ -43,9 +46,33 @@ export class EntradasSalidasLecheCrudaService extends BaseService<EntradasSalida
 
     async putEntradaSalidaLecheCruda(id: number, body: EntradasSalidasLecheCrudaDTO): Promise<UpdateResult> {
         const repository = await this.execRepository;
-        return await repository.update(id, body);
-    }
+        try {
+            if(body.tipoDonante == "externa"){
+                const respositoryFrascosRuta = AppDataSource.getRepository(FrascosRecolectadosEntity);
+                await respositoryFrascosRuta.update(body.idFrascoLecheCruda, {
+                    gaveta: body.gaveta,
+                    congelador: { id: body.congelador }
+                });
+               
+            }else{
+                const respositoryExtraccion = AppDataSource.getRepository(ExtraccionFriam016Entity);
+                await respositoryExtraccion.update(body.extraccion.id, {
+                    gaveta: body.gaveta,
+                    congelador: { id: body.congelador }
+                });
+            }
+            
+        } catch (error) {
+            console.error("Error:", error);
+        }
 
-    //Prueba
-    
+        return await repository.update(id, {
+            fechaVencimiento: body.fechaVencimiento,
+            procedencia: body.procedencia,
+            fechaEntrada: body.fechaEntrada,
+            fechaSalida: body.fechaSalida,
+            empleadoEntrada: body.empleadoEntrada,
+            empleadoSalida: body.empleadoSalida,
+        });
+    }
 }
