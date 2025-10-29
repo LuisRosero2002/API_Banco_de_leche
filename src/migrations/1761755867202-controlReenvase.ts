@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ControlReenvase1761150564518 implements MigrationInterface {
-    name = 'ControlReenvase1761150564518'
+export class ControlReenvase1761755867202 implements MigrationInterface {
+    name = 'ControlReenvase1761755867202'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`frascos_pasteurizados\` (\`id_frasco_pasteurizado\` int NOT NULL AUTO_INCREMENT, \`volumen\` float NULL, \`id_control_reenvase\` int NULL, PRIMARY KEY (\`id_frasco_pasteurizado\`)) ENGINE=InnoDB`);
