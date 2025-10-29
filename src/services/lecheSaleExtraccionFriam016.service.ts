@@ -1,7 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
-import { ExtraccionFriam016DTO } from "../DTOs/extraccionFriam016.DTO";
+import { ExtraccionFriam016DTO, FrascosExtraccionPutDTO } from "../DTOs/extraccionFriam016.DTO";
 import { lecheSalaExtraccionDTO } from "../DTOs/lecheSalaExtraccion.DTO";
 import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
 import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
@@ -49,15 +49,31 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
             });
             return await repository.save(newEntry);
         } catch (error) {
-            console.log(error);
+            console.error('Error en postLecheSalaExtraccion:', error);
             throw error;
         }
     }
 
     async postFrascosExtraccionRecolectados(body: ExtraccionFriam016DTO): Promise<ExtraccionFriam016Entity> {
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
-        const newEntry = repository.create(body);
-        return await repository.save(newEntry);
+
+        try {
+            const newEntry = repository.create({
+                cantidad: body.cantidad,
+                hora: body.hora,
+                gaveta: body.gaveta || 1,
+                fechaExtraccion: body.fechaExtraccion,
+                motivoConsulta: body.motivoConsulta || '',
+                observaciones: body.observaciones || '',
+                congelador: { id: body.congelador.id },
+                lecheSalaExtraccion: { id: body.lecheSalaExtraccion.id }
+            });
+
+            return await repository.save(newEntry);
+        } catch (error) {
+            console.error('Error en postFrascosExtraccionRecolectados:', error);
+            throw error;
+        }
     }
 
     async getAllLecheSalaExtraccion(): Promise<LecheSalaExtraccionFriam016Entity[]> {
@@ -76,10 +92,15 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         const repository = await this.execRepository;
         const infoMadreRepository = await this.infoMadresService.execRepository;
 
-        const entryToUpdate = await repository.findOne({ where: { id }, relations: { madrePotencial: { infoMadre: true } } });
+        const entryToUpdate = await repository.findOne({
+            where: { id },
+            relations: { madrePotencial: { infoMadre: true } }
+        });
         if (!entryToUpdate) throw new Error("Entry not found");
 
-        const infoMadreToUpdate = await infoMadreRepository.findOneBy({ id: entryToUpdate.madrePotencial.infoMadre.id });
+        const infoMadreToUpdate = await infoMadreRepository.findOneBy({
+            id: entryToUpdate.madrePotencial.infoMadre.id
+        });
         if (!infoMadreToUpdate) throw new Error("Info Madre not found");
 
         const bodyInfoMadre = infoMadreRepository.create({
@@ -102,9 +123,60 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         return await repository.update(id, bodyLecheSalaExtraccion);
     }
 
-    async putFrascosExtraccionRecolectados(id: number, body: ExtraccionFriam016DTO): Promise<UpdateResult> {
-        const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
-        return await repository.update(id, body);
+    async putFrascosExtraccionRecolectados(
+        id: number,
+        body: FrascosExtraccionPutDTO
+    ): Promise<UpdateResult[]> {
+        const repository = AppDataSource.getRepository(ExtraccionFriam016Entity);
+        const { fecha, motivo_consulta, observaciones, extraccion_1, extraccion_2 } = body;
+        let updates: Promise<UpdateResult>[] = [];
+
+        try {
+            if (extraccion_1?.id) {
+                updates.push(
+                    repository.update(extraccion_1.id, {
+                        fechaExtraccion: fecha,
+                        cantidad: extraccion_1.ml,
+                        hora: extraccion_1.am,
+                        motivoConsulta: motivo_consulta,
+                        observaciones,
+                    }),
+                )
+            }
+            if (extraccion_2?.id) {
+                updates.push(
+                    repository.update(extraccion_2.id, {
+                        fechaExtraccion: fecha,
+                        cantidad: extraccion_2.ml,
+                        hora: extraccion_2.pm,
+                        motivoConsulta: motivo_consulta,
+                        observaciones,
+                    }),
+                )
+            }
+            if (!extraccion_1?.id && !extraccion_2?.id) {
+                throw new Error('error al actulizar datos');
+            }
+            return await Promise.all(updates);
+        } catch (error) {
+            throw error;
+        }
     }
 
+
+    async getFrascosRecolectadosBySalaExtraccion(idSalaExtraccion: number): Promise<ExtraccionFriam016Entity[]> {
+        const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+        return await repository.find({
+            relations: {
+                congelador: true,
+            },
+            where: {
+                lecheSalaExtraccion: { id: idSalaExtraccion }
+            },
+            order: {
+                hora: "ASC"
+            }
+        });
+
+    }
 }

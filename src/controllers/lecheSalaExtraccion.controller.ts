@@ -6,8 +6,7 @@ export class LecheSalaExtraccionController {
     constructor(
         private readonly lecheSalaExtraccionService: LecheSaleExtraccionFriam016Service = new LecheSaleExtraccionFriam016Service(),
         private readonly httpResponse: HttpResponse = new HttpResponse()
-    )
-    {}
+    ) { }
 
     async postLecheSalaExtraccion(req: Request, res: Response): Promise<Response> {
         try {
@@ -55,6 +54,17 @@ export class LecheSalaExtraccionController {
             const { id } = req.params;
             const body = req.body;
             const data = await this.lecheSalaExtraccionService.putFrascosExtraccionRecolectados(Number(id), body);
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async getFrascosRecolectadosBySalaExtraccion(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.lecheSalaExtraccionService.getFrascosRecolectadosBySalaExtraccion(Number(id));
+            if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
