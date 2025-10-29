@@ -31,5 +31,12 @@ export class LecheDistribucionFrhos063Router extends BaseRouter<LecheDistribucio
                 .catch(err => res.status(500).send(err.message));
             }
         );
+        this.router.get(
+            "/getMadresInternasNoDonantes",
+            (req, res) => {
+                this.controller.getMadresInternasNoDonantes(req, res)
+                .catch(err => res.status(500).send(err.message));
+            }
+        );
     }
 }
