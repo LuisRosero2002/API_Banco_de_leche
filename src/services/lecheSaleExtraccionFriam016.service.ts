@@ -1,7 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
-import { ExtraccionFriam016DTO } from "../DTOs/extraccionFriam016.DTO";
+import { ExtraccionFriam016DTO, FrascosExtraccionPutDTO } from "../DTOs/extraccionFriam016.DTO";
 import { lecheSalaExtraccionDTO } from "../DTOs/lecheSalaExtraccion.DTO";
 import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
 import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
@@ -123,10 +123,46 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
         return await repository.update(id, bodyLecheSalaExtraccion);
     }
 
-    async putFrascosExtraccionRecolectados(id: number, body: ExtraccionFriam016DTO): Promise<UpdateResult> {
-        const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
-        return await repository.update(id, body);
+    async putFrascosExtraccionRecolectados(
+        id: number,
+        body: FrascosExtraccionPutDTO
+    ): Promise<UpdateResult[]> {
+        const repository = AppDataSource.getRepository(ExtraccionFriam016Entity);
+        const { fecha, motivo_consulta, observaciones, extraccion_1, extraccion_2 } = body;
+        let updates: Promise<UpdateResult>[] = [];
+
+        try {
+            if (extraccion_1?.id) {
+                updates.push(
+                    repository.update(extraccion_1.id, {
+                        fechaExtraccion: fecha,
+                        cantidad: extraccion_1.ml,
+                        hora: extraccion_1.am,
+                        motivoConsulta: motivo_consulta,
+                        observaciones,
+                    }),
+                )
+            }
+            if (extraccion_2?.id) {
+                updates.push(
+                    repository.update(extraccion_2.id, {
+                        fechaExtraccion: fecha,
+                        cantidad: extraccion_2.ml,
+                        hora: extraccion_2.pm,
+                        motivoConsulta: motivo_consulta,
+                        observaciones,
+                    }),
+                )
+            }
+            if (!extraccion_1?.id && !extraccion_2?.id) {
+                throw new Error('error al actulizar datos');
+            }
+            return await Promise.all(updates);
+        } catch (error) {
+            throw error;
+        }
     }
+
 
     async getFrascosRecolectadosBySalaExtraccion(idSalaExtraccion: number): Promise<ExtraccionFriam016Entity[]> {
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
