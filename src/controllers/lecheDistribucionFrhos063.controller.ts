@@ -38,4 +38,14 @@ export class LecheDistribucionFrhos063Controller {
             return this.httpResponse.Error(res, error);
         }
     }
+
+    async getMadresInternasNoDonantes(req: Request, res: Response): Promise<Response> {
+        try {
+            const data = await this.lecheDistribucionService.getMadresInternasNoDonantes();
+            if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
 }

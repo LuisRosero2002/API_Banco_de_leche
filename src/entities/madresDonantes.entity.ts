@@ -45,7 +45,7 @@ export class MadresDonantesEntity {
     })
     fecha_diligenciamiento!: Date;
 
-    @OneToOne(() => MadresPotencialesEntity, MadrePotencial => MadrePotencial.MadreDonante)
+    @OneToOne(() => MadresPotencialesEntity, madrePotencial => madrePotencial.madreDonante)
     @JoinColumn({ name: "id_madre_potencial" })
     madrePotencial!: MadresPotencialesEntity;
     @OneToMany(() => HijosMadresEntity, hijosMadre => hijosMadre.madreDonantes)

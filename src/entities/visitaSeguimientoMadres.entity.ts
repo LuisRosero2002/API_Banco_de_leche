@@ -11,7 +11,7 @@ export class VisitaSeguimientoMadresEntity {
     fecha!: Date;
 
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.visitaSeguimiento)
-    @JoinColumn({ name: "id_visita_seguimiento" })
+    @JoinColumn({ name: "id_madre_donante" })
     madreDonante!: MadresDonantesEntity;
     @OneToOne(() => DatosVisitaSeguimientoEntity, datosVisitaSeguimiento => datosVisitaSeguimiento.visitaSeguimiento)
     datosVisitaSeguimiento!: DatosVisitaSeguimientoEntity;

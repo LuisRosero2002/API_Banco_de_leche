@@ -4,14 +4,15 @@ import { VisitaSeguimientoMadresEntity } from "./visitaSeguimientoMadres.entity"
 
 @Entity({ name: "respuestas_friam_038" })
 export class RespuestasFriam038Entity {
+
     @PrimaryGeneratedColumn("increment", { name: "id_respuesta" })
     id!: number;
-    @Column({ name: "respuesta", type: "int", nullable: false })
+    @Column({ name: "respuesta", type: "int", nullable: true })
     respuesta!: number;
     @ManyToOne(() => PreguntasFriam038Entity, pregunta => pregunta.respuestas)
     @JoinColumn({ name: "id_pregunta" })
     pregunta!: PreguntasFriam038Entity;
     @ManyToOne(() => VisitaSeguimientoMadresEntity, visitaSeguimiento => visitaSeguimiento.respuestas)
-    @JoinColumn({ name: "id_visita_domiciliario" })
+    @JoinColumn({ name: "id_visita_seguimiento" })
     visitaSeguimiento!: VisitaSeguimientoMadresEntity;
 }

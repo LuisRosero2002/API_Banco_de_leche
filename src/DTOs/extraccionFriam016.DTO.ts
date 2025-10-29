@@ -1,6 +1,4 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
-import { CongeladorEntity } from "../entities/congelador.entity";
-import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
 
 export class ExtraccionFriam016DTO {
     @IsOptional()
@@ -14,11 +12,52 @@ export class ExtraccionFriam016DTO {
     @IsNotEmpty()
     fechaExtraccion!: Date;
     @IsNotEmpty()
-    congelador!: CongeladorEntity;
+    congelador!: { id: number };
     @IsNotEmpty()
-    lecheSalaExtraccion!: LecheSalaExtraccionFriam016Entity;
+    lecheSalaExtraccion!: { id: number };
     @IsOptional()
     motivoConsulta!: string;
     @IsOptional()
     observaciones!: string;
+}
+
+export class FrascosExtraccionPutDTO {
+    @IsNotEmpty()
+    id_registro_extraccion!: number;
+    @IsNotEmpty()
+    fecha!: Date;
+    @IsNotEmpty()
+    fecha_display!: string;
+    @IsNotEmpty()
+    extraccion_1!: Extraccion1;
+    @IsNotEmpty()
+    extraccion_2!: Extraccion2;
+    @IsNotEmpty()
+    motivo_consulta!: string;
+    @IsNotEmpty()
+    observaciones!: string;
+    @IsNotEmpty()
+    fecha_aux!: Date;
+}
+
+export class Extraccion1 {
+    @IsOptional()
+    id!: number;
+    @IsNotEmpty()
+    am!: string;
+    @IsNotEmpty()
+    ml!: number;
+    @IsNotEmpty()
+    am_aux!: Date;
+}
+
+export class Extraccion2 {
+    @IsOptional()
+    id!: number;
+    @IsNotEmpty()
+    pm!: string;
+    @IsNotEmpty()
+    ml!: number;
+    @IsNotEmpty()
+    pm_aux!: Date;
 }

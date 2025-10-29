@@ -48,8 +48,8 @@ export class MadresPotencialesEntity {
     infoMadre!: InfoMadresEntity
     @OneToMany(() => LaboratoriosEntity, laboratorio => laboratorio.madrePotencial)
     laboratorio!: LaboratoriosEntity[];
-    @OneToOne(() => MadresDonantesEntity, MadreDonante => MadreDonante.madrePotencial)
-    MadreDonante!: MadresDonantesEntity
+    @OneToOne(() => MadresDonantesEntity, madreDonante => madreDonante.madrePotencial)
+    madreDonante!: MadresDonantesEntity
     @OneToOne(() => VisitaMadresEntity, visitaMadre => visitaMadre.madrePotencial)
     visitaMadre!: VisitaMadresEntity;
     @OneToOne(() => LecheSalaExtraccionFriam016Entity, lecheSalaExtraccion => lecheSalaExtraccion.madrePotencial)
