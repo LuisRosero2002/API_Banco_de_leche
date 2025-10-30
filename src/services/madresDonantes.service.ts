@@ -1,11 +1,14 @@
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
 import { MadreDonanteDTO } from "../DTOs/madresDonantes.DTO";
+import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
 import { ExamenesPrenatalEntity } from "../entities/examenesPrenatal.entity";
+import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
 import { GestacionEntity } from "../entities/gestacion.entity";
 import { HijosMadresEntity } from "../entities/hijosMadres.entity";
 import { InfoMadresEntity } from "../entities/infoMadres.entity";
 import { LaboratoriosEntity } from "../entities/laboratorios.entity";
+import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
 import { MadresDonantesEntity } from "../entities/madresDonantes.entity";
 import { MadresPotencialesEntity } from "../entities/madresPotenciales.entity";
 import { MedicamentosEntity } from "../entities/medicamentos.entity";
@@ -84,8 +87,6 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 await infoMadre.save(body.infoMadre);
             }
 
-            
-
             // Commit 
             await queryRunner.commitTransaction();
 
@@ -93,6 +94,50 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 where: { id: newMadre.madreDonante.id },
                 relations: ['hijosMadre', 'gestacion', 'examenesPrenatal', 'medicamento']
             });
+
+            if (madreFinal?.donanteApta === 1 && madreFinal.tipoDonante === "interna") {
+                try {
+
+                    const repositorySalaExtraccions = AppDataSource.getRepository(LecheSalaExtraccionFriam016Entity);
+                    const repositoryFrascosInternos = AppDataSource.getRepository(ExtraccionFriam016Entity);
+                    const repositoryEntradasSalidas = AppDataSource.getRepository(EntradasSalidasFriam012Entity);
+
+                    const madrePotentical = madrePotencialData.create({
+                        id: Number(newMadre.madreDonante.madrePotencial)
+                    })
+
+                    const madreInterna: LecheSalaExtraccionFriam016Entity | null = await repositorySalaExtraccions.findOne({
+                        where: {
+                            madrePotencial: madrePotentical
+                        }
+                    })
+
+                    const resgitroLecheExtraida = repositorySalaExtraccions.create({
+                        id: madreInterna?.id
+                    })
+                    const frascosInternos: ExtraccionFriam016Entity[] | [] = await repositoryFrascosInternos.find({
+                        where: {
+                            lecheSalaExtraccion: resgitroLecheExtraida
+                        }
+                    })
+
+                    frascosInternos.forEach(async (frasco) => {
+                        await repositoryEntradasSalidas.save({
+                            fechaVencimiento: undefined,
+                            procedencia: madreInterna?.procedencia,
+                            fechaEntrada: undefined,
+                            fechaSalida: undefined,
+                            madreDonante: madreFinal,
+                            empleadoEntrada: undefined,
+                            empleadoSalida: undefined,
+                            extraccion: frasco,
+                            frascoRecolectado: undefined
+                        })
+                    })
+                } catch (error) {
+                    throw error;
+                }
+            }
             return madreFinal!;
 
         } catch (error) {
