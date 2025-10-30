@@ -85,7 +85,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
         const resultados = repository
             .createQueryBuilder('mp')
             .innerJoinAndSelect('mp.infoMadre', 'im')
-            .innerJoinAndSelect('mp.MadreDonante', 'md')
+            .innerJoinAndSelect('mp.madreDonante', 'md')
             .innerJoinAndSelect('mp.laboratorio', 'lab')
             .innerJoinAndSelect('md.examenesPrenatal','ep')
             .innerJoinAndSelect('md.medicamento','med')
@@ -103,7 +103,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
         const resultados = repository
             .createQueryBuilder('mp')
             .innerJoinAndSelect('mp.infoMadre', 'im')
-            .innerJoinAndSelect('mp.MadreDonante', 'md')
+            .innerJoinAndSelect('mp.madreDonante', 'md')
             .innerJoinAndSelect('mp.laboratorio', 'lab')
             .innerJoinAndSelect('md.gestacion', 'g')
             .innerJoinAndSelect('md.hijosMadre', 'hm')

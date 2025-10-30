@@ -7,6 +7,7 @@ import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity"
 import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtraccionFriam016.entity";
 import { InformacionMadresService } from "./infoMadres.service";
 import { MadresPotencialesServices } from "./madresPotenciales.service";
+import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
 
 export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExtraccionFriam016Entity> {
 
@@ -56,6 +57,7 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
 
     async postFrascosExtraccionRecolectados(body: ExtraccionFriam016DTO): Promise<ExtraccionFriam016Entity> {
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+        const repositoryControlEntradasSalidas = await AppDataSource.getRepository(EntradasSalidasFriam012Entity);
 
         try {
             const newEntry = repository.create({
@@ -68,6 +70,13 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
                 congelador: { id: body.congelador.id },
                 lecheSalaExtraccion: { id: body.lecheSalaExtraccion.id }
             });
+
+            // const newEntryControlEntradasSalidas = repositoryControlEntradasSalidas.create({
+            //     madreDonante: idMadre,
+            //     frascoRecolectado: body.recoleccion ? resultado : undefined,
+            //     extraccion: body.extraccion ? resultado : undefined,
+            //     fechaVencimiento: fechaVencimiento,
+            // });
 
             return await repository.save(newEntry);
         } catch (error) {

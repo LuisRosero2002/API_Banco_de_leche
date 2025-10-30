@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { MadresPotencialesEntity } from "./madresPotenciales.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 import { FrascosPasteurizadosEntity } from "./frascosPasteurizados.entity";
