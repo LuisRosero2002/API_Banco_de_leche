@@ -15,7 +15,11 @@ import { EntidadesRouter } from "./router/entidades.router";
 import { RutaRecoleccionRouter } from "./router/rutaRecoleccion.router";
 import { MadresDonantesRouter } from "./router/madresDonantes.router";
 import { VisitaMadresRouter } from "./router/visitasMadres.router";
+import { EntradasSalidasFriam012Router } from "./router/entradasSalidasFriam012.router";
+import { LecheSalaExtraccionRouter } from "./router/lecheSalaExtraccion.router";
+import { LecheDistribucionFrhos063Router } from "./router/lecheDistribucionFrhos063.router";
 import { SeguimientoMadresRouter } from "./router/seguimientoMadres.router";
+import { ControlReenvaseRouter } from "./router/controlReenvase.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -43,7 +47,11 @@ class ServerBootstrap extends ConfigServer {
             new RutaRecoleccionRouter().router,
             new MadresDonantesRouter().router,
             new VisitaMadresRouter().router,
-            new SeguimientoMadresRouter().router
+            new SeguimientoMadresRouter().router,
+            new EntradasSalidasFriam012Router().router,
+            new LecheSalaExtraccionRouter().router,
+            new LecheDistribucionFrhos063Router().router,
+            new ControlReenvaseRouter().router
         ];
     }
 

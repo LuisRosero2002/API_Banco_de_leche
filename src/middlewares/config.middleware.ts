@@ -31,6 +31,11 @@ export class ConfigMiddleware {
         return passport.authenticate(type,{session:false});
     }
 
+    // Middleware para validar JWT en todas las rutas protegidas
+    checkJwtAuth(){
+        return passport.authenticate("jwt", {session: false});
+    }
+
     // PENDIENTE
     checkAdminRole(req:Request, res:Response, next: NextFunction){
         const user = req.user as UsuariosEntity;

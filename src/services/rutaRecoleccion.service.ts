@@ -12,6 +12,8 @@ import { UpdateResult } from "typeorm";
 import { CongeladorEntity } from "../entities/congelador.entity";
 import { TemperaturasRutasEntity } from "../entities/temperaturasRutas.entity";
 import { TemperaturasRutasDTO } from "../DTOs/temperaturasRuta.DTO";
+import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
+import { MadresDonantesEntity } from "../entities/madresDonantes.entity";
 
 export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> {
     constructor() {
@@ -146,7 +148,27 @@ export class RutaRecoleccionService extends BaseService<RutasRecoleccionEntity> 
 
     async createFrascosRecolectados(body: FrascosRecolectadosDTO): Promise<FrascosRecolectadosEntity> {
         const frascosRepository = AppDataSource.getRepository(FrascosRecolectadosEntity);
-        return await frascosRepository.save(body);
+        const entradasSalidasRepository = AppDataSource.getRepository(EntradasSalidasFriam012Entity);
+        const idMadre = body.madreDonante;
+        
+        const resultado = await frascosRepository.save(body);
+        const fechaVencimiento = new Date(body.fechaDeExtraccion);
+        fechaVencimiento.setDate(fechaVencimiento.getDate() + 15);
+        
+        const entrada = entradasSalidasRepository.create({
+            madreDonante: idMadre,
+            frascoRecolectado: body.recoleccion ? resultado : undefined,
+            extraccion: body.extraccion ? resultado : undefined,
+            fechaVencimiento: fechaVencimiento,
+        });
+        
+        try {
+            await entradasSalidasRepository.save(entrada);
+        } catch (error) {
+            console.log(error);
+        }
+        return resultado;
+
     }
 
     async getFrascosRecolectados(id: number): Promise<FrascosRecolectadosEntity[] | null> {
