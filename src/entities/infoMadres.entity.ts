@@ -13,7 +13,7 @@ export class InfoMadresEntity {
     documento!:string
     @Column({name:"fecha_nacimiento",type:"date"})
     fechaNacimiento!:Date
-    @Column({name:"fecha_parto",type:"date"})
+    @Column({name:"fecha_parto",type:"date",nullable:true})
     fechaParto!:Date
     @Column({name:"telefono",type:"varchar",nullable:true})
     telefono!:string
@@ -23,9 +23,9 @@ export class InfoMadresEntity {
     departamento!:string
     @Column({name:"ciudad",type:"varchar",nullable:true})
     ciudad!:string
-    @Column({name:"barrio",type:"varchar"})
+    @Column({name:"barrio",type:"varchar",nullable:true})
     barrio!:string
-    @Column({name:"direccion",type:"varchar"})
+    @Column({name:"direccion",type:"varchar",nullable:true})
     direccion!:string
     @Column({name:"profesion",type:"varchar",nullable:true})
     profesion!:string

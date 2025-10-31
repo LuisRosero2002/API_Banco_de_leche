@@ -8,6 +8,8 @@ import { MedicamentosEntity } from "./medicamentos.entity";
 import { CasasVisitasEntity } from "./casasVisitas.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 import { VisitaSeguimientoMadresEntity } from "./visitaSeguimientoMadres.entity";
+import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
+import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 
 export enum donanteType {
     interna = 'interna',
@@ -43,7 +45,7 @@ export class MadresDonantesEntity {
     })
     fecha_diligenciamiento!: Date;
 
-    @OneToOne(() => MadresPotencialesEntity, MadrePotencial => MadrePotencial.MadreDonante)
+    @OneToOne(() => MadresPotencialesEntity, madrePotencial => madrePotencial.madreDonante)
     @JoinColumn({ name: "id_madre_potencial" })
     madrePotencial!: MadresPotencialesEntity;
     @OneToMany(() => HijosMadresEntity, hijosMadre => hijosMadre.madreDonantes)
@@ -61,5 +63,9 @@ export class MadresDonantesEntity {
     empleado!: EmpleadosEntity
     @OneToMany(() => VisitaSeguimientoMadresEntity, visitaSeguimiento => visitaSeguimiento.madreDonante)
     visitaSeguimiento!: VisitaSeguimientoMadresEntity[];
+    @OneToMany(() => EntradasSalidasFriam012Entity, entradasSalidas => entradasSalidas.madreDonante)
+    entradasSalidas!: EntradasSalidasFriam012Entity[];
+    @OneToMany(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.madreDonante)
+    controlReenvase!: ControlReenvaseFriam032Entity[];
 
 }

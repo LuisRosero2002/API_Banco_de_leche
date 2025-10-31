@@ -17,7 +17,7 @@ export class VisitaMadresEntity {
     firmaUsuario!: string;
     @Column({ name: "firma_evaluador", type: "text", nullable: true })
     firmaEvaluador!: string;
-    @OneToOne(() => MadresPotencialesEntity, MadrePotencial => MadrePotencial.MadreDonante)
+    @OneToOne(() => MadresPotencialesEntity, madrePotencial => madrePotencial.madreDonante)
     @JoinColumn({ name: "id_madre_potencial" })
     madrePotencial!: MadresPotencialesEntity;
     @OneToOne(() => EvaluacionLactanciaEntity, evaluacionLactancia => evaluacionLactancia.visitaMadres)
