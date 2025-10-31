@@ -19,6 +19,10 @@ export class ExtraccionFriam016DTO {
     motivoConsulta!: string;
     @IsOptional()
     observaciones!: string;
+    @IsOptional()
+    madrePotencial!: number;
+    @IsOptional()
+    procedencia!: string;
 }
 
 export class FrascosExtraccionPutDTO {
@@ -38,6 +42,10 @@ export class FrascosExtraccionPutDTO {
     observaciones!: string;
     @IsNotEmpty()
     fecha_aux!: Date;
+    @IsOptional()
+    madrePotencial!: number;
+    @IsOptional()
+    procedencia!: string;
 }
 
 export class Extraccion1 {
