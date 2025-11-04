@@ -8,6 +8,8 @@ import { LecheSalaExtraccionFriam016Entity } from "../entities/lecheSalaExtracci
 import { InformacionMadresService } from "./infoMadres.service";
 import { MadresPotencialesServices } from "./madresPotenciales.service";
 import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam012.entity";
+import { error } from "console";
+import { MadresDonantesEntity } from "../entities/madresDonantes.entity";
 
 export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExtraccionFriam016Entity> {
 
@@ -58,6 +60,7 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
     async postFrascosExtraccionRecolectados(body: ExtraccionFriam016DTO): Promise<ExtraccionFriam016Entity> {
         const repository = await AppDataSource.getRepository(ExtraccionFriam016Entity);
         const repositoryControlEntradasSalidas = await AppDataSource.getRepository(EntradasSalidasFriam012Entity);
+        const madresDonantes = await AppDataSource.getRepository(MadresDonantesEntity);
 
         try {
             const newEntry = repository.create({
@@ -71,14 +74,22 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
                 lecheSalaExtraccion: { id: body.lecheSalaExtraccion.id }
             });
 
-            // const newEntryControlEntradasSalidas = repositoryControlEntradasSalidas.create({
-            //     madreDonante: idMadre,
-            //     frascoRecolectado: body.recoleccion ? resultado : undefined,
-            //     extraccion: body.extraccion ? resultado : undefined,
-            //     fechaVencimiento: fechaVencimiento,
-            // });
+            const response = await repository.save(newEntry);
+            const madreFlat = await madresDonantes.findOneBy({
+                madrePotencial: { id: body.madrePotencial }
+            });
 
-            return await repository.save(newEntry);
+            if (madreFlat?.id) {
+                const newEntryControlEntradasSalidas = repositoryControlEntradasSalidas.create({
+                    fechaVencimiento: undefined,
+                    madreDonante: { id: madreFlat.id },
+                    extraccion: response,
+                    procedencia: body.procedencia,
+                });
+                await repositoryControlEntradasSalidas.save(newEntryControlEntradasSalidas);
+            }
+
+            return response;
         } catch (error) {
             console.error('Error en postFrascosExtraccionRecolectados:', error);
             throw error;
@@ -138,7 +149,15 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
     ): Promise<UpdateResult[]> {
         const repository = AppDataSource.getRepository(ExtraccionFriam016Entity);
         const { fecha, motivo_consulta, observaciones, extraccion_1, extraccion_2 } = body;
+        const repositoryControlEntradasSalidas = await AppDataSource.getRepository(EntradasSalidasFriam012Entity);
+        const madresDonantes = await AppDataSource.getRepository(MadresDonantesEntity);
+
         let updates: Promise<UpdateResult>[] = [];
+        let postFrascos = [];
+
+        const madreFlat = await madresDonantes.findOneBy({
+            madrePotencial: { id: body.madrePotencial }
+        });
 
         try {
             if (extraccion_1?.id) {
@@ -151,7 +170,16 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
                         observaciones,
                     }),
                 )
+                if (madreFlat?.id) {
+                    postFrascos.push(repositoryControlEntradasSalidas.create({
+                        fechaVencimiento: undefined,
+                        madreDonante: { id: madreFlat.id },
+                        extraccion: { id: body.extraccion_1.id },
+                        procedencia: body.procedencia,
+                    }));
+                }
             }
+
             if (extraccion_2?.id) {
                 updates.push(
                     repository.update(extraccion_2.id, {
@@ -162,7 +190,25 @@ export class LecheSaleExtraccionFriam016Service extends BaseService<LecheSalaExt
                         observaciones,
                     }),
                 )
+                if (madreFlat?.id) {
+                    postFrascos.push(repositoryControlEntradasSalidas.create({
+                        fechaVencimiento: undefined,
+                        madreDonante: { id: madreFlat.id },
+                        extraccion: { id: body.extraccion_2.id },
+                        procedencia: body.procedencia,
+                    }));
+                }
             }
+
+            if (postFrascos.length > 0) {
+                postFrascos.forEach(async (frasco) => {
+                    await repositoryControlEntradasSalidas.save(frasco)
+                        .catch(error => {
+                            throw error;
+                        });
+                })
+            }
+
             if (!extraccion_1?.id && !extraccion_2?.id) {
                 throw new Error('error al actulizar datos');
             }
