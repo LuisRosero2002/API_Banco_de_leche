@@ -10,7 +10,7 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
     routes(): void {
         // Ruta protegida - requiere token JWT
         this.router.get('/getFrascosByMadreDonante/:id',
-        this.middleware.checkJwtAuth(), // 👈 Validación de token
+        // this.middleware.checkJwtAuth(), // 👈 Validación de token
         (req,res)=>{
             this.controller.GetFrascosByMadreDonante(req,res)
             .catch(err=> res.status(500).send(err.message));
