@@ -49,7 +49,7 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         return await repository.save(data);
     }
 
-    async putControlReenvase(id: number, data: ControlReenvaseDTO): Promise<UpdateResult>{
+    async putControlReenvase(data: ControlReenvaseDTO): Promise<UpdateResult>{
         if(data.madreDonante.tipoDonante === "externa"){
             const repositoryFrascosExterna = AppDataSource.getRepository(FrascosRecolectadosEntity);
             return await repositoryFrascosExterna.update(data.frascoRecolectado,{

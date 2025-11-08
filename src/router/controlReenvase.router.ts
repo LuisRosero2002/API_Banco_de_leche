@@ -33,7 +33,7 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
             .catch(err=> res.status(500).send(err.message));
         });
         
-        this.router.put('/putControlReenvase/:id',
+        this.router.put('/putControlReenvase',
         (req,res)=>{
             this.middleware.ValidateDTO(req.body);
             this.controller.PutControlReenvase(req,res)

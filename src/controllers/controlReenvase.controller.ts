@@ -39,8 +39,7 @@ export class ControlReenvaseController {
 
     async PutControlReenvase(req: Request, res: Response): Promise<Response> {
         try {
-            const {id} = req.params;
-            const data = await this.control.putControlReenvase(Number(id), req.body);
+            const data = await this.control.putControlReenvase(req.body);
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
