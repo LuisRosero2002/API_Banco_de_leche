@@ -74,4 +74,15 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         return await repository.update(id, data);
     }
 
+    async getFrascoPasteurizadoByControlReenvase(idControlReenvase: number): Promise<FrascosPasteurizadosEntity[]>{
+        const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
+        return await repository.find({
+            where:{
+                controlReenvase:{
+                    id:idControlReenvase
+                }
+            }
+        })
+    }
+
 }

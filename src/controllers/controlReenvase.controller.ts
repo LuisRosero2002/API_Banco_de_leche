@@ -66,4 +66,15 @@ export class ControlReenvaseController {
         }
     }
 
+    async GetFrascoPasteurizadoByControlReenvase(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.control.getFrascoPasteurizadoByControlReenvase(Number(id));
+            if(data.length === 0) return this.httpResponse.NoContent(res, "no hay datos");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
 }
