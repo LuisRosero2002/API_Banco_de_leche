@@ -50,20 +50,18 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
     }
 
     async putControlReenvase(id: number, data: ControlReenvaseDTO): Promise<UpdateResult>{
-        const repository = await this.execRepository;
         if(data.madreDonante.tipoDonante === "externa"){
             const repositoryFrascosExterna = AppDataSource.getRepository(FrascosRecolectadosEntity);
-            await repositoryFrascosExterna.update(data.frascoRecolectado,{
+            return await repositoryFrascosExterna.update(data.frascoRecolectado,{
                 volumen:data.volumen,
             })
         }
         else{
             const repositoryFrascosInterna = AppDataSource.getRepository(ExtraccionFriam016Entity);
-            await repositoryFrascosInterna.update(data.extraccion,{
+            return await repositoryFrascosInterna.update(data.extraccion,{
                 cantidad:data.volumen,
             })
         }
-        return await repository.update(id, data);
     }
 
     async postFrascoPasteurizado(data: FrascosPasteurizadosDTO): Promise<FrascosPasteurizadosEntity>{
