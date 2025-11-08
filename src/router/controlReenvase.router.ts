@@ -10,7 +10,7 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
     routes(): void {
         // Ruta protegida - requiere token JWT
         this.router.get('/getFrascosByMadreDonante/:id',
-        this.middleware.checkJwtAuth(), // 👈 Validación de token
+        // this.middleware.checkJwtAuth(), // 👈 Validación de token
         (req,res)=>{
             this.controller.GetFrascosByMadreDonante(req,res)
             .catch(err=> res.status(500).send(err.message));
@@ -33,7 +33,7 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
             .catch(err=> res.status(500).send(err.message));
         });
         
-        this.router.put('/putControlReenvase/:id',
+        this.router.put('/putControlReenvase',
         (req,res)=>{
             this.middleware.ValidateDTO(req.body);
             this.controller.PutControlReenvase(req,res)
@@ -51,6 +51,12 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
         (req,res)=>{
             this.middleware.ValidateDTO(req.body);
             this.controller.PostFrascoPasteurizado(req,res)
+            .catch(err=> res.status(500).send(err.message));
+        });
+
+        this.router.get('/getFrascoPasteurizadoByControlReenvase/:id',
+        (req,res)=>{
+            this.controller.GetFrascoPasteurizadoByControlReenvase(req,res)
             .catch(err=> res.status(500).send(err.message));
         });
     }

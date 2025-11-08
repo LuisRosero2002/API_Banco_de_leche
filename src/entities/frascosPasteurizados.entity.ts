@@ -7,6 +7,10 @@ export class FrascosPasteurizadosEntity {
     id!: number;
     @Column({ type: "float", nullable: true, name: "volumen" })
     volumen!: number;
+    @Column({ type: "int", nullable: true, name: "numero_frasco" })
+    numeroFrasco!: number;
+    @Column({ type: "text", nullable: true, name: "observaciones" })
+    observaciones!: string;
 
     @ManyToOne(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.frascosPasteurizados)
     @JoinColumn({ name: "id_control_reenvase" })
