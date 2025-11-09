@@ -25,61 +25,67 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         })
     }
 
-    async getAllControlReenvase(): Promise<ControlReenvaseFriam032Entity[]>{
+    async getAllControlReenvase(): Promise<ControlReenvaseFriam032Entity[]> {
         const repository = await this.execRepository;
         return await repository.find({
-            relations:{
-                madreDonante:{
-                    casaVisita:{
-                        frascoRecolectado:true
+            relations: {
+                madreDonante: {
+                    casaVisita: {
+                        frascoRecolectado: true
                     },
-                    madrePotencial:{
-                        lecheSalaExtraccion:{
-                            extracciones:true
+                    madrePotencial: {
+                        lecheSalaExtraccion: {
+                            extracciones: true
                         }
                     }
                 },
-                empleado:true,
+                empleado: true,
             }
         })
     }
 
-    async postControlReenvase(data: ControlReenvaseDTO): Promise<ControlReenvaseFriam032Entity>{
+    async postControlReenvase(data: ControlReenvaseDTO): Promise<ControlReenvaseFriam032Entity> {
         const repository = await this.execRepository;
         return await repository.save(data);
     }
 
-    async putControlReenvase(data: ControlReenvaseDTO): Promise<UpdateResult>{
-        if(data.madreDonante.tipoDonante === "externa"){
+    async putControlReenvase(data: ControlReenvaseDTO): Promise<UpdateResult> {
+        const repository = await this.execRepository;
+
+        await repository.update(data.id, {
+            empleado: { id: data.empleado.id }
+        });
+
+        if (data.madreDonante.tipoDonante === "externa") {
             const repositoryFrascosExterna = AppDataSource.getRepository(FrascosRecolectadosEntity);
-            return await repositoryFrascosExterna.update(data.frascoRecolectado,{
-                volumen:data.volumen,
+            return await repositoryFrascosExterna.update(data.frascoRecolectado, {
+                volumen: data.volumen,
             })
         }
-        else{
+        else {
             const repositoryFrascosInterna = AppDataSource.getRepository(ExtraccionFriam016Entity);
-            return await repositoryFrascosInterna.update(data.extraccion,{
-                cantidad:data.volumen,
+            return await repositoryFrascosInterna.update(data.extraccion, {
+                cantidad: data.volumen,
             })
         }
     }
 
-    async postFrascoPasteurizado(data: FrascosPasteurizadosDTO): Promise<FrascosPasteurizadosEntity>{
+    async postFrascoPasteurizado(data: FrascosPasteurizadosDTO): Promise<FrascosPasteurizadosEntity> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
         return await repository.save(data);
     }
 
-    async putFrascoPasteurizado(id: number, data: FrascosPasteurizadosDTO): Promise<UpdateResult>{
+    async putFrascoPasteurizado(id: number, data: FrascosPasteurizadosDTO): Promise<UpdateResult> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
         return await repository.update(id, data);
     }
 
-    async getFrascoPasteurizadoByControlReenvase(idControlReenvase: number): Promise<FrascosPasteurizadosEntity[]>{
+    async getFrascoPasteurizadoByControlReenvase(idControlReenvase: number): Promise<FrascosPasteurizadosEntity[]> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
         return await repository.find({
-            where:{
-                controlReenvase:{
-                    id:idControlReenvase
+            where: {
+                controlReenvase: {
+                    id: idControlReenvase
                 }
             }
         })
