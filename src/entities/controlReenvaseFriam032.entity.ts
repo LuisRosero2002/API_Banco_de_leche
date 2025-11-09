@@ -12,6 +12,7 @@ export class ControlReenvaseFriam032Entity {
     @Column({ type: "float", nullable: false, name: "frasco_crudo" })
     frascoCrudo!: number;
 
+
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.controlReenvase)
     @JoinColumn({ name: "id_madre_donante" })
     madreDonante!: MadresDonantesEntity;

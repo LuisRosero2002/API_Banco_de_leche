@@ -39,8 +39,7 @@ export class ControlReenvaseController {
 
     async PutControlReenvase(req: Request, res: Response): Promise<Response> {
         try {
-            const {id} = req.params;
-            const data = await this.control.putControlReenvase(Number(id), req.body);
+            const data = await this.control.putControlReenvase(req.body);
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
@@ -60,6 +59,17 @@ export class ControlReenvaseController {
     async PostFrascoPasteurizado(req: Request, res: Response): Promise<Response> {
         try {
             const data = await this.control.postFrascoPasteurizado(req.body);
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async GetFrascoPasteurizadoByControlReenvase(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const data = await this.control.getFrascoPasteurizadoByControlReenvase(Number(id));
+            if(data.length === 0) return this.httpResponse.NoContent(res, "no hay datos");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);

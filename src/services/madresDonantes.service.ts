@@ -26,6 +26,7 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
 
         try {
             let newMadre: MadreDonanteDTO = body;
+            let newMadreAux: MadreDonanteDTO = JSON.parse(JSON.stringify(body));
             const repoMain = await this.execRepository;
             const infoMadre = AppDataSource.getRepository(InfoMadresEntity);
             const hijosMadreData = AppDataSource.getRepository(HijosMadresEntity);
@@ -49,18 +50,30 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 madreDonante: newMadre.madreDonante
             });
 
-            //Hijos madre
-            if (body.hijosMadre.length > 0 &&  body.madreDonante.id === null) {
-                for (const hijo of body.hijosMadre) {
-                    const newHijo = Object.assign(new HijosMadresEntity(), hijo, {
-                        madreDonantes: newMadre.madreDonante
-                    });
-                    if (newHijo.id !== undefined && newHijo.id !== null) {
-                        await hijosMadreData.update(newHijo.id, newHijo);
-                    } else {
-                        await hijosMadreData.save(newHijo);
+
+            if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
+                await repoMain.update(body.madreDonante.id, body.madreDonante);
+                await gestacionData.update(body.gestacion.id, newGestacion);
+                await examenesData.update(body.examenPrenatal.id, newExamen);
+                await medicamentosData.update(body.medicamento.id, newMedicamentos);
+            } else {
+                newMadre.madreDonante = await repoMain.save(body.madreDonante);
+                //Hijos madre
+                if (body.hijosMadre.length > 0 && newMadreAux.madreDonante.id === null) {
+                    for (const hijo of body.hijosMadre) {
+                        const newHijo = Object.assign(new HijosMadresEntity(), hijo, {
+                            madreDonantes: newMadre.madreDonante
+                        });
+                        if (newHijo.id !== undefined && newHijo.id !== null) {
+                            await hijosMadreData.update(newHijo.id, newHijo);
+                        } else {
+                            await hijosMadreData.save(newHijo);
+                        }
                     }
                 }
+                await gestacionData.save(newGestacion);
+                await examenesData.save(newExamen);
+                await medicamentosData.save(newMedicamentos);
             }
 
             if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
