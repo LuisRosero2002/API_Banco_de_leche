@@ -5,12 +5,15 @@ import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity"
 export class FrascosPasteurizadosEntity {
     @PrimaryGeneratedColumn("increment", { name: "id_frasco_pasteurizado" })
     id!: number;
+
     @Column({ type: "float", nullable: true, name: "volumen" })
-    volumen!: number;
+    volumen!: number | null;
+
     @Column({ type: "int", nullable: true, name: "numero_frasco" })
-    numeroFrasco!: number;
+    numeroFrasco!: number | null;
+
     @Column({ type: "text", nullable: true, name: "observaciones" })
-    observaciones!: string;
+    observaciones!: string | null;
 
     @ManyToOne(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.frascosPasteurizados)
     @JoinColumn({ name: "id_control_reenvase" })

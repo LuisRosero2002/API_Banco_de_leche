@@ -72,17 +72,44 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
 
     async postFrascoPasteurizado(data: FrascosPasteurizadosDTO): Promise<FrascosPasteurizadosEntity> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
-        return await repository.save(data);
+
+        const frascoData = repository.create({
+            volumen: data.volumen ?? null,
+            numeroFrasco: data.numeroFrasco ?? null,
+            observaciones: data.observaciones ?? null,
+            controlReenvase: data.controlReenvase
+        });
+
+        return await repository.save(frascoData);
     }
 
     async putFrascoPasteurizado(id: number, data: FrascosPasteurizadosDTO): Promise<UpdateResult> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
-        return await repository.update(id, data);
+
+        const updateData: Partial<FrascosPasteurizadosEntity> = {};
+
+        if (data.volumen !== undefined) {
+            updateData.volumen = data.volumen ?? null;
+        }
+        if (data.numeroFrasco !== undefined) {
+            updateData.numeroFrasco = data.numeroFrasco ?? null;
+        }
+        if (data.observaciones !== undefined) {
+            updateData.observaciones = data.observaciones ?? null;
+        }
+        if (data.controlReenvase !== undefined) {
+            updateData.controlReenvase = data.controlReenvase;
+        }
+
+        return await repository.update(id, updateData);
     }
 
     async getFrascoPasteurizadoByControlReenvase(idControlReenvase: number): Promise<FrascosPasteurizadosEntity[]> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
         return await repository.find({
+            relations: {
+                controlReenvase: true
+            },
             where: {
                 controlReenvase: {
                     id: idControlReenvase
