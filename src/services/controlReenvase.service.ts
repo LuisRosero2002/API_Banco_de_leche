@@ -118,4 +118,16 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         })
     }
 
+    async getAllFrascosPasteurizados(): Promise<FrascosPasteurizadosEntity[]> {
+        const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
+        return await repository.find({
+            relations: {
+                controlReenvase: true
+            },
+            order: {
+                id: 'ASC'
+            }
+        });
+    }
+
 }

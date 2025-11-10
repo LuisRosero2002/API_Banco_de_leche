@@ -5,14 +5,13 @@ import { HttpResponse } from "../shared/responses/http.response";
 export class ControlReenvaseController {
     constructor(
         private readonly control: ControlReenvaseServices = new ControlReenvaseServices(),
-        private readonly httpResponse: HttpResponse = new HttpResponse()) 
-    {}
+        private readonly httpResponse: HttpResponse = new HttpResponse()) { }
 
     async GetFrascosByMadreDonante(req: Request, res: Response): Promise<Response> {
         try {
-            const {id} = req.params;
+            const { id } = req.params;
             const data = await this.control.getFrascosByMadreDonante(Number(id));
-            if(data.length === 0) return this.httpResponse.NoContent(res, "No hay frascos registrados para esta madre donante");
+            if (data.length === 0) return this.httpResponse.NoContent(res, "No hay frascos registrados para esta madre donante");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
@@ -21,7 +20,7 @@ export class ControlReenvaseController {
     async GetAllControlReenvase(req: Request, res: Response): Promise<Response> {
         try {
             const data = await this.control.getAllControlReenvase();
-            if(data.length === 0) return this.httpResponse.NoContent(res, "No hay registros");
+            if (data.length === 0) return this.httpResponse.NoContent(res, "No hay registros");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
@@ -48,7 +47,7 @@ export class ControlReenvaseController {
 
     async PutFrascoPasteurizado(req: Request, res: Response): Promise<Response> {
         try {
-            const {id} = req.params;
+            const { id } = req.params;
             const data = await this.control.putFrascoPasteurizado(Number(id), req.body);
             return this.httpResponse.Ok(res, data);
         } catch (error) {
@@ -69,7 +68,17 @@ export class ControlReenvaseController {
         try {
             const { id } = req.params;
             const data = await this.control.getFrascoPasteurizadoByControlReenvase(Number(id));
-            if(data.length === 0) return this.httpResponse.NoContent(res, "no hay datos");
+            if (data.length === 0) return this.httpResponse.NoContent(res, "no hay datos");
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
+    async GetAllFrascosPasteurizados(req: Request, res: Response): Promise<Response> {
+        try {
+            const data = await this.control.getAllFrascosPasteurizados();
+            if (data.length === 0) return this.httpResponse.NoContent(res, "No hay pasteurizaciones registradas");
             return this.httpResponse.Ok(res, data);
         } catch (error) {
             return this.httpResponse.Error(res, error);
