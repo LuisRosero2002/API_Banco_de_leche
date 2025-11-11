@@ -15,6 +15,8 @@ export class FrascosRecolectadosEntity {
     termo!: number;
     @Column({ type: "int", nullable: false, name: "gaveta" })
     gaveta!: number;
+    @Column({ type: "int", nullable: false, name: "activo",default:1 })
+    activo!: number;
 
     @ManyToOne(() => CongeladorEntity, congelador => congelador.frascoRecolectado)
     @JoinColumn({ name: "id_congelador" })

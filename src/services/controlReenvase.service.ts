@@ -21,8 +21,18 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
                 extraccion: true,
                 frascoRecolectado: true
             },
-            where: { madreDonante: { id: idMadreDonante } }
-        })
+            where: [
+                {
+                    madreDonante: { id: idMadreDonante },
+                    extraccion: { activo: 1 }
+                },
+                {
+                    madreDonante: { id: idMadreDonante },
+                    frascoRecolectado: { activo: 1 }
+                }
+            ]
+        });
+
     }
 
     async getAllControlReenvase(): Promise<ControlReenvaseFriam032Entity[]> {
@@ -46,6 +56,22 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
 
     async postControlReenvase(data: ControlReenvaseDTO): Promise<ControlReenvaseFriam032Entity> {
         const repository = await this.execRepository;
+        try {
+            if (data.extraccion != null) {
+                const repositoryExtraccion = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+                await repositoryExtraccion.update(data.extraccion, {
+                    activo: 0
+                })
+            } else {
+                const repositoryFrascoRecolectado = await AppDataSource.getRepository(FrascosRecolectadosEntity);
+                await repositoryFrascoRecolectado.update(data.frascoRecolectado, {
+                    activo: 0
+                })
+            }
+        } catch (error) {
+            throw error;
+        }
+
         return await repository.save(data);
     }
 

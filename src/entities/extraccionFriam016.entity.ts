@@ -19,6 +19,8 @@ export class ExtraccionFriam016Entity {
     motivoConsulta!: string;
     @Column({ type: "text", nullable: true, name: "observaciones" })
     observaciones!: string;
+    @Column({ type: "int", nullable: false, name: "activo",default:1 })
+    activo!: number;
 
     @ManyToOne(() => CongeladorEntity, congelador => congelador.extracciones)
     @JoinColumn({ name: "id_congelador" })
