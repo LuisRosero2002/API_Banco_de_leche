@@ -13,6 +13,7 @@ export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, C
     routes(): void {
         this.router.post(
             '/CreateMadreDonante',
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(MadreDonanteDTO),
             (req: Request, res: Response) => {
                 this.controller.CreateMadreDonante(req, res)
@@ -22,13 +23,16 @@ export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, C
 
         this.router.get(
             '/GetMadreDonante',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.GetMadresDonantes(req, res)
                     .catch(err => res.status(500).send(err.message));
             }
         );
 
-        this.router.post('/uploadPDFs', upload.single('pdf'),
+        this.router.post('/uploadPDFs',
+            this.middleware.checkJwtAuth(),
+            upload.single('pdf'),
             (req: Request, res: Response) => {
                 this.controller.uploadPDF(req, res)
                     .catch(err => res.status(500).send(err.message));
@@ -36,6 +40,7 @@ export class MadresDonantesRouter extends BaseRouter<MadresDonantesController, C
         )
 
         this.router.get('/pdfs/:filename',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.getPdf(req, res)
                     .catch(err => res.status(500).send(err.message));

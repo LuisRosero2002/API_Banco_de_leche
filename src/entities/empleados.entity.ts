@@ -6,6 +6,8 @@ import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
 import { LecheDistribucionFrhos063Entity } from "./lecheDistribucionFrhos063.entity";
 import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
+import { SeleccionClasificacionFriam015Entity } from "./seleccionClasificacionFriam015.entity";
+import { InfoSeleccionClasificacionEntity } from "./infoSeleccionClasificacion.entity";
 
 @Entity({ name: "empleados" })
 export class EmpleadosEntity {
@@ -45,4 +47,9 @@ export class EmpleadosEntity {
     lecheDistribucion!: LecheDistribucionFrhos063Entity[]
     @OneToMany(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.empleado)
     controlReenvase!: ControlReenvaseFriam032Entity[]
+    @OneToMany(() => InfoSeleccionClasificacionEntity, infoSeleccionClasificacion => infoSeleccionClasificacion.profesional)
+    infoSeleccionClasificacion!: InfoSeleccionClasificacionEntity[]
+    @OneToMany(() => InfoSeleccionClasificacionEntity, infoSeleccionClasificacion => infoSeleccionClasificacion.auxiliar)
+    infoSeleccionClasificacionAuxiliar!: InfoSeleccionClasificacionEntity[]
+
 }   

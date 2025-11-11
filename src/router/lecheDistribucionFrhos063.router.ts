@@ -10,6 +10,7 @@ export class LecheDistribucionFrhos063Router extends BaseRouter<LecheDistribucio
     routes(): void {
         this.router.post(
             "/postLecheDistribucion",
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(LecheDistribucionFrhos063DTO),
             (req, res) => {
                 this.controller.postLecheDistribucion(req, res)
@@ -18,6 +19,7 @@ export class LecheDistribucionFrhos063Router extends BaseRouter<LecheDistribucio
         );
         this.router.get(
             "/getLecheDistribucion",
+            this.middleware.checkJwtAuth(),
             (req, res) => {
                 this.controller.getLecheDistribucion(req, res)
                 .catch(err => res.status(500).send(err.message));
@@ -25,6 +27,7 @@ export class LecheDistribucionFrhos063Router extends BaseRouter<LecheDistribucio
         );
         this.router.put(
             "/putLecheDistribucion/:id",
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(LecheDistribucionFrhos063DTO),
             (req, res) => {
                 this.controller.putLecheDistribucion(req, res)
@@ -33,6 +36,7 @@ export class LecheDistribucionFrhos063Router extends BaseRouter<LecheDistribucio
         );
         this.router.get(
             "/getMadresInternasNoDonantes",
+            this.middleware.checkJwtAuth(),
             (req, res) => {
                 this.controller.getMadresInternasNoDonantes(req, res)
                 .catch(err => res.status(500).send(err.message));
