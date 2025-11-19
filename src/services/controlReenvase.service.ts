@@ -193,4 +193,27 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         });
     }
 
+    async getControlReenvaseById(id: number): Promise<ControlReenvaseFriam032Entity | null> {
+    const repository = await this.execRepository;
+    return await repository.findOne({
+        where: { id },
+        relations: {
+            madreDonante: {
+                casaVisita: {
+                    frascoRecolectado: true
+                },
+                madrePotencial: {
+                    lecheSalaExtraccion: {
+                        extracciones: true
+                    }
+                }
+            },
+            lote: {
+                ciclo: true
+            },
+            empleado: true,
+        }
+    });
+}
+
 }

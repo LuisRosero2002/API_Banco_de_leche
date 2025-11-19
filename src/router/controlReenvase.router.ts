@@ -69,5 +69,14 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
             this.controller.GetAllFrascosPasteurizados(req,res)
             .catch(err=> res.status(500).send(err.message));
         });
+
+        this.router.get('/getControlReenvase/:id',
+        this.middleware.checkJwtAuth(),
+        (req,res)=>{
+            this.controller.GetControlReenvaseById(req,res)
+            .catch(err=> res.status(500).send(err.message));
+    });
+
+        
     }
 }
