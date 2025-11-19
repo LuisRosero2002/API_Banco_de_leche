@@ -8,6 +8,8 @@ import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam0
 import { FrascosPasteurizadosEntity } from "../entities/frascosPasteurizados.entity";
 import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
 import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
+import { LoteEntity } from "../entities/lote.entity";
+import { CicloEntity } from "../entities/ciclo.entity";
 
 export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032Entity> {
     constructor() {
@@ -49,6 +51,9 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
                         }
                     }
                 },
+                lote: {
+                    ciclo: true
+                },
                 empleado: true,
             }
         })
@@ -56,13 +61,36 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
 
     async postControlReenvase(data: ControlReenvaseDTO): Promise<ControlReenvaseFriam032Entity> {
         const repository = await this.execRepository;
+        let res:ControlReenvaseFriam032Entity;
         try {
+            const repositoryLote = await AppDataSource.getRepository(LoteEntity);
+            const repositoryCiclo = await AppDataSource.getRepository(CicloEntity);
+
+            const resAux = await repository.save({
+                fecha: data.fecha,
+                frascoCrudo: data.frascoCrudo,
+                empleado: { id: data.empleado.id },
+                madreDonante: { id: data.madreDonante.id },
+            });
+            res = resAux;
+
+            const resCiclo = await repositoryCiclo.save({
+                numeroCiclo: data.ciclo.id
+            })
+
+            await repositoryLote.save({
+                ciclo: resCiclo,
+                numeroLote: data.lote.id,
+                frascoCrudo: data.frascoCrudo,
+                controlReenvase: resAux
+            })
+
             if (data.extraccion != null) {
                 const repositoryExtraccion = await AppDataSource.getRepository(ExtraccionFriam016Entity);
                 await repositoryExtraccion.update(data.extraccion, {
                     activo: 0
                 })
-            } else {
+            } else if(data.frascoRecolectado != null) {
                 const repositoryFrascoRecolectado = await AppDataSource.getRepository(FrascosRecolectadosEntity);
                 await repositoryFrascoRecolectado.update(data.frascoRecolectado, {
                     activo: 0
@@ -70,17 +98,27 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
             }
         } catch (error) {
             throw error;
-        }
-
-        return await repository.save(data);
+        };
+        return res
     }
 
     async putControlReenvase(data: ControlReenvaseDTO): Promise<UpdateResult> {
         const repository = await this.execRepository;
+        const repositoryLote = await AppDataSource.getRepository(LoteEntity);
+        const repositoryCiclo = await AppDataSource.getRepository(CicloEntity);
 
         await repository.update(data.id, {
             empleado: { id: data.empleado.id }
         });
+
+        await repositoryCiclo.update(data.ciclo.id, {
+            numeroCiclo: data.ciclo.id
+        })
+
+        await repositoryLote.update(data.id, {
+            ciclo: { id: data.ciclo.id },
+            numeroLote: data.lote.id,
+        })
 
         if (data.madreDonante.tipoDonante === "externa") {
             const repositoryFrascosExterna = AppDataSource.getRepository(FrascosRecolectadosEntity);

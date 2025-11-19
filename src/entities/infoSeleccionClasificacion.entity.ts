@@ -16,10 +16,6 @@ export class InfoSeleccionClasificacionEntity {
     fechaVencimiento!: Date;
     @Column({ name: "observaciones", type: "text" })
     observaciones!: string;
-    @Column({ name: "ciclo", type: "int" })
-    ciclo!: number;
-    @Column({ name: "lote", type: "int" })
-    lote!: number;
     @Column({ name: "fecha_vencimiento_cultivos", type: "date" })
     fechaVencimientoCultivos!: Date;
 
@@ -27,10 +23,10 @@ export class InfoSeleccionClasificacionEntity {
     @JoinColumn({ name: "id_seleccion_clasificacion" })
     seleccionClasificacion!: SeleccionClasificacionFriam015Entity;
     @ManyToOne(() => EmpleadosEntity, (empleado) => empleado.infoSeleccionClasificacion)
-    @JoinColumn({ name: "id_empleado" })
+    @JoinColumn({ name: "id_profesional" })
     profesional!: EmpleadosEntity
     @ManyToOne(() => EmpleadosEntity, (empleado) => empleado.infoSeleccionClasificacionAuxiliar)
-    @JoinColumn({ name: "id_empleado" })
+    @JoinColumn({ name: "id_auxiliar" })
     auxiliar!: EmpleadosEntity
 
 }
