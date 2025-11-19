@@ -112,12 +112,11 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         });
 
         await repositoryCiclo.update(data.ciclo.id, {
-            numeroCiclo: data.ciclo.id
+            numeroCiclo: data.ciclo.numeroCiclo
         })
 
-        await repositoryLote.update(data.id, {
-            ciclo: { id: data.ciclo.id },
-            numeroLote: data.lote.id,
+        await repositoryLote.update(data.lote.id, {
+            numeroLote: data.lote.numeroLote,
         })
 
         if (data.madreDonante.tipoDonante === "externa") {
