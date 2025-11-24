@@ -10,6 +10,7 @@ import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entit
 import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
 import { LoteEntity } from "../entities/lote.entity";
 import { CicloEntity } from "../entities/ciclo.entity";
+import { SeleccionClasificacionFriam015Entity } from "../entities/seleccionClasificacionFriam015.entity";
 
 export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032Entity> {
     constructor() {
@@ -65,6 +66,7 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
         try {
             const repositoryLote = await AppDataSource.getRepository(LoteEntity);
             const repositoryCiclo = await AppDataSource.getRepository(CicloEntity);
+            const repositorySeleccionClasificacion = await AppDataSource.getRepository(SeleccionClasificacionFriam015Entity);
 
             const resAux = await repository.save({
                 fecha: data.fecha,
@@ -72,6 +74,12 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
                 empleado: { id: data.empleado.id },
                 madreDonante: { id: data.madreDonante.id },
             });
+
+            await repositorySeleccionClasificacion.save({
+                fecha: data.fecha,
+                controlReenvase: resAux
+            })
+
             res = resAux;
 
             const resCiclo = await repositoryCiclo.save({

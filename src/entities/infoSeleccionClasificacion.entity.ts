@@ -6,17 +6,17 @@ import { EmpleadosEntity } from "./empleados.entity";
 export class InfoSeleccionClasificacionEntity {
     @PrimaryGeneratedColumn("increment", { name: "id_info_seleccion_clasificacion" })
     id!: number;
-    @Column({ name: "fecha", type: "date" })
-    fecha!: Date;
-    @Column({ name: "numero_frascos_pasteurizados", type: "int" })
+    @Column({ name: "numero_frascos_pasteurizados", type: "int", nullable:true })
     numeroFrascosPasteurizados!: number;
-    @Column({ name: "volumen", type: "float" })
+    @Column({ name: "volumen", type: "float",nullable:true })
     volumen!: number;
-    @Column({ name: "fecha_vencimiento", type: "date" })
+    @Column({ name: "fecha_vencimiento", type: "date", nullable:true })
     fechaVencimiento!: Date;
-    @Column({ name: "observaciones", type: "text" })
+    @Column({ name: "observaciones", type: "text", nullable:true })
     observaciones!: string;
-    @Column({ name: "fecha_vencimiento_cultivos", type: "date" })
+    @Column({ name: "lote_cultivos", type: "varchar", nullable:true })
+    loteCultivos!: string;
+    @Column({ name: "fecha_vencimiento_cultivos", type: "date", nullable:true })
     fechaVencimientoCultivos!: Date;
 
     @OneToOne(() => SeleccionClasificacionFriam015Entity, seleccionClasificacion => seleccionClasificacion.infoSeleccionClasificacion)

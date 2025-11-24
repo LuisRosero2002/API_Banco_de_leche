@@ -20,6 +20,7 @@ import { LecheSalaExtraccionRouter } from "./router/lecheSalaExtraccion.router";
 import { LecheDistribucionFrhos063Router } from "./router/lecheDistribucionFrhos063.router";
 import { SeguimientoMadresRouter } from "./router/seguimientoMadres.router";
 import { ControlReenvaseRouter } from "./router/controlReenvase.router";
+import { SeleccionClasificacionRouter } from "./router/seleccionClasificacion.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -51,7 +52,8 @@ class ServerBootstrap extends ConfigServer {
             new EntradasSalidasFriam012Router().router,
             new LecheSalaExtraccionRouter().router,
             new LecheDistribucionFrhos063Router().router,
-            new ControlReenvaseRouter().router
+            new ControlReenvaseRouter().router,
+            new SeleccionClasificacionRouter().router
         ];
     }
 
@@ -82,4 +84,3 @@ class ServerBootstrap extends ConfigServer {
 }
 
 new ServerBootstrap();
-
