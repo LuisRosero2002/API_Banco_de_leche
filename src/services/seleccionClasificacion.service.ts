@@ -37,7 +37,10 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
                         ciclo: true
                     }
                 },
-                infoSeleccionClasificacion: true,
+                infoSeleccionClasificacion: {
+                    profesional: true,
+                    auxiliar: true
+                },
             },
             where: {
                 fecha: Between(startDate, endDate)
