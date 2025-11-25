@@ -8,6 +8,9 @@ import { EntradasSalidasFriam012Entity } from "../entities/entradasSalidasFriam0
 import { FrascosPasteurizadosEntity } from "../entities/frascosPasteurizados.entity";
 import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
 import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity";
+import { LoteEntity } from "../entities/lote.entity";
+import { CicloEntity } from "../entities/ciclo.entity";
+import { SeleccionClasificacionFriam015Entity } from "../entities/seleccionClasificacionFriam015.entity";
 
 export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032Entity> {
     constructor() {
@@ -21,8 +24,18 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
                 extraccion: true,
                 frascoRecolectado: true
             },
-            where: { madreDonante: { id: idMadreDonante } }
-        })
+            where: [
+                {
+                    madreDonante: { id: idMadreDonante },
+                    extraccion: { activo: 1 }
+                },
+                {
+                    madreDonante: { id: idMadreDonante },
+                    frascoRecolectado: { activo: 1 }
+                }
+            ]
+        });
+
     }
 
     async getAllControlReenvase(): Promise<ControlReenvaseFriam032Entity[]> {
@@ -39,6 +52,9 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
                         }
                     }
                 },
+                lote: {
+                    ciclo: true
+                },
                 empleado: true,
             }
         })
@@ -46,15 +62,70 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
 
     async postControlReenvase(data: ControlReenvaseDTO): Promise<ControlReenvaseFriam032Entity> {
         const repository = await this.execRepository;
-        return await repository.save(data);
+        let res:ControlReenvaseFriam032Entity;
+        try {
+            const repositoryLote = await AppDataSource.getRepository(LoteEntity);
+            const repositoryCiclo = await AppDataSource.getRepository(CicloEntity);
+            const repositorySeleccionClasificacion = await AppDataSource.getRepository(SeleccionClasificacionFriam015Entity);
+
+            const resAux = await repository.save({
+                fecha: data.fecha,
+                frascoCrudo: data.frascoCrudo,
+                empleado: { id: data.empleado.id },
+                madreDonante: { id: data.madreDonante.id },
+            });
+
+            await repositorySeleccionClasificacion.save({
+                fecha: data.fecha,
+                controlReenvase: resAux
+            })
+
+            res = resAux;
+
+            const resCiclo = await repositoryCiclo.save({
+                numeroCiclo: data.ciclo.id
+            })
+
+            await repositoryLote.save({
+                ciclo: resCiclo,
+                numeroLote: data.lote.id,
+                frascoCrudo: data.frascoCrudo,
+                controlReenvase: resAux
+            })
+
+            if (data.extraccion != null) {
+                const repositoryExtraccion = await AppDataSource.getRepository(ExtraccionFriam016Entity);
+                await repositoryExtraccion.update(data.extraccion, {
+                    activo: 0
+                })
+            } else if(data.frascoRecolectado != null) {
+                const repositoryFrascoRecolectado = await AppDataSource.getRepository(FrascosRecolectadosEntity);
+                await repositoryFrascoRecolectado.update(data.frascoRecolectado, {
+                    activo: 0
+                })
+            }
+        } catch (error) {
+            throw error;
+        };
+        return res
     }
 
     async putControlReenvase(data: ControlReenvaseDTO): Promise<UpdateResult> {
         const repository = await this.execRepository;
+        const repositoryLote = await AppDataSource.getRepository(LoteEntity);
+        const repositoryCiclo = await AppDataSource.getRepository(CicloEntity);
 
         await repository.update(data.id, {
             empleado: { id: data.empleado.id }
         });
+
+        await repositoryCiclo.update(data.ciclo.id, {
+            numeroCiclo: data.ciclo.numeroCiclo
+        })
+
+        await repositoryLote.update(data.lote.id, {
+            numeroLote: data.lote.numeroLote,
+        })
 
         if (data.madreDonante.tipoDonante === "externa") {
             const repositoryFrascosExterna = AppDataSource.getRepository(FrascosRecolectadosEntity);
@@ -129,5 +200,28 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
             }
         });
     }
+
+    async getControlReenvaseById(id: number): Promise<ControlReenvaseFriam032Entity | null> {
+    const repository = await this.execRepository;
+    return await repository.findOne({
+        where: { id },
+        relations: {
+            madreDonante: {
+                casaVisita: {
+                    frascoRecolectado: true
+                },
+                madrePotencial: {
+                    lecheSalaExtraccion: {
+                        extracciones: true
+                    }
+                }
+            },
+            lote: {
+                ciclo: true
+            },
+            empleado: true,
+        }
+    });
+}
 
 }

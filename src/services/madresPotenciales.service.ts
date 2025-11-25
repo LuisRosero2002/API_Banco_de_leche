@@ -62,7 +62,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             ])
             .where("MONTH(m.fecha_registro) = :mes", { mes })
             .andWhere("YEAR(m.fecha_registro) = :anio", { anio })
-            .orderBy("m.fecha_registro", "DESC");
+            .orderBy("m.fecha_registro", "ASC");
 
         return await queryBuilder.getRawMany();
 

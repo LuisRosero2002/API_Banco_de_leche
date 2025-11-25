@@ -11,7 +11,9 @@ export class EmpleadosRouter extends BaseRouter<EmpleadosController, ConfigMiddl
 
     routes(): void {
         this.router.post(
-            "/CreateEmpleado",this.middleware.ValidateDTO(EmpleadosDTO),
+            "/CreateEmpleado",
+            this.middleware.checkJwtAuth(),
+            this.middleware.ValidateDTO(EmpleadosDTO),
             (req: Request, res: Response) => {
                 this.controller.CreateEmpleado(req, res);
             }
@@ -19,6 +21,7 @@ export class EmpleadosRouter extends BaseRouter<EmpleadosController, ConfigMiddl
 
         this.router.get(
             "/GetEmpleados",
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.GetEmpleados(req, res);
             }

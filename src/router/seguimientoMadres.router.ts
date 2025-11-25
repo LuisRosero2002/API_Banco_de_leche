@@ -14,6 +14,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
     routes(): void {
         // 1. GET - Obtener madres donantes aptas para tabla principal
         this.router.get('/getMadresDonantesAptas',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.getMadresDonantesAptas(req, res)
                     .catch(err => res.status(500).send(err.message));
@@ -22,6 +23,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 2. GET - Obtener visitas de una madre específica
         this.router.get('/getVisitasPorMadre/:idMadre',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.getVisitasPorMadre(req, res)
                     .catch(err => res.status(500).send(err.message));
@@ -30,6 +32,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 3. POST - Crear nueva visita de seguimiento
         this.router.post('/crearVisitaSeguimiento',
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(VisitaSeguimientoDTO),
             (req: Request, res: Response) => {
                 this.controller.crearVisitaSeguimiento(req, res)
@@ -39,6 +42,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 4. PUT - Actualizar fecha de visita
         this.router.put('/actualizarFechaVisita',
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(FechaSeguimientoDTO),
             (req: Request, res: Response) => {
                 this.controller.actualizarFechaVisita(req, res)
@@ -48,6 +52,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 5. GET - Obtener preguntas del formulario
         this.router.get('/getPreguntasFriam038',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.getPreguntasFriam038(req, res)
                     .catch(err => res.status(500).send(err.message));
@@ -56,6 +61,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 6. POST - Guardar respuestas y datos de visita
         this.router.post('/guardarRespuestasYDatos',
+            this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(RespuestaSeguimientoDTO),
             (req: Request, res: Response) => {
                 this.controller.guardarRespuestasYDatos(req, res)
@@ -65,6 +71,7 @@ export class SeguimientoMadresRouter extends BaseRouter<SeguimientoMadreControll
 
         // 7. GET - Obtener detalles completos de una visita
         this.router.get('/getDetallesVisita/:idVisita',
+            this.middleware.checkJwtAuth(),
             (req: Request, res: Response) => {
                 this.controller.getDetallesVisita(req, res)
                     .catch(err => res.status(500).send(err.message));

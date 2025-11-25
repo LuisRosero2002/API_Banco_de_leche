@@ -1,7 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 import { FrascosPasteurizadosEntity } from "./frascosPasteurizados.entity";
+import { LoteEntity } from "./lote.entity";
+import { SeleccionClasificacionFriam015Entity } from "./seleccionClasificacionFriam015.entity";
 
 @Entity('control_reenvase_friam_032')
 export class ControlReenvaseFriam032Entity {
@@ -21,5 +23,9 @@ export class ControlReenvaseFriam032Entity {
     empleado!: EmpleadosEntity;
     @OneToMany(() => FrascosPasteurizadosEntity, frascoPasteurizado => frascoPasteurizado.controlReenvase)
     frascosPasteurizados!: FrascosPasteurizadosEntity[];
+    @OneToOne(() => LoteEntity, lote => lote.controlReenvase)
+    lote!: LoteEntity;
+    @OneToOne(() => SeleccionClasificacionFriam015Entity, seleccionClasificacion => seleccionClasificacion.controlReenvase)
+    seleccionClasificacion!: SeleccionClasificacionFriam015Entity;
 
 }

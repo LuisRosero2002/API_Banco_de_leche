@@ -25,6 +25,28 @@ export class ExtraccionFriam016DTO {
     procedencia!: string;
 }
 
+export class Extraccion1 {
+    @IsOptional()
+    id!: number;
+    @IsNotEmpty()
+    am!: string;
+    @IsNotEmpty()
+    ml!: number;
+    @IsNotEmpty()
+    am_aux!: Date;
+}
+
+export class Extraccion2 {
+    @IsOptional()
+    id!: number;
+    @IsNotEmpty()
+    pm!: string;
+    @IsNotEmpty()
+    ml!: number;
+    @IsNotEmpty()
+    pm_aux!: Date;
+}
+
 export class FrascosExtraccionPutDTO {
     @IsNotEmpty()
     id_registro_extraccion!: number;
@@ -48,24 +70,4 @@ export class FrascosExtraccionPutDTO {
     procedencia!: string;
 }
 
-export class Extraccion1 {
-    @IsOptional()
-    id!: number;
-    @IsNotEmpty()
-    am!: string;
-    @IsNotEmpty()
-    ml!: number;
-    @IsNotEmpty()
-    am_aux!: Date;
-}
 
-export class Extraccion2 {
-    @IsOptional()
-    id!: number;
-    @IsNotEmpty()
-    pm!: string;
-    @IsNotEmpty()
-    ml!: number;
-    @IsNotEmpty()
-    pm_aux!: Date;
-}

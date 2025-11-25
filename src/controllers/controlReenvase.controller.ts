@@ -85,4 +85,15 @@ export class ControlReenvaseController {
         }
     }
 
+    async GetControlReenvaseById(req: Request, res: Response): Promise<Response> {
+    try {
+        const { id } = req.params;
+        const data = await this.control.getControlReenvaseById(Number(id));
+        if (!data) return this.httpResponse.NotFound(res, "Registro no encontrado");
+        return this.httpResponse.Ok(res, data);
+    } catch (error) {
+        return this.httpResponse.Error(res, error);
+    }
+}
+
 }
