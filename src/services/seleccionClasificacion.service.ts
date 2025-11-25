@@ -151,5 +151,20 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
         }
     }
 
+    async updateAcidezDornic(id: number, data: AcidezDornicDTO): Promise<UpdateResult> {
+        const repository = AppDataSource.getRepository(AcidezDornicEntity);
+        return await repository.update(id, data);
+    }
+
+    async updateAnalisisSensorial(id: number, data: AnalisisSensorialDTO): Promise<UpdateResult> {
+        const repository = AppDataSource.getRepository(AnalisisSensorialEntity);
+        return await repository.update(id, data);
+    }
+
+    async updateCrematocrito(id: number, data: CrematocritoDTO): Promise<UpdateResult> {
+        const repository = AppDataSource.getRepository(CrematocritoEntity);
+        return await repository.update(id, data);
+    }
+
 
 }

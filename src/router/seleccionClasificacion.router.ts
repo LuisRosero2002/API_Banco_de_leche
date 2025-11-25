@@ -71,5 +71,29 @@ export class SeleccionClasificacionRouter extends BaseRouter<SeleccionClasificac
                 this.controller.PutSeleccionClasificacion(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+
+        this.router.put('/putAcidezDornic/:id',
+            this.middleware.checkJwtAuth(),
+            this.middleware.ValidateDTO(AcidezDornicDTO),
+            (req, res) => {
+                this.controller.PutAcidezDornic(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
+        this.router.put('/putAnalisisSensorial/:id',
+            this.middleware.checkJwtAuth(),
+            this.middleware.ValidateDTO(AnalisisSensorialDTO),
+            (req, res) => {
+                this.controller.PutAnalisisSensorial(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
+        this.router.put('/putCrematocrito/:id',
+            this.middleware.checkJwtAuth(),
+            this.middleware.ValidateDTO(CrematocritoDTO),
+            (req, res) => {
+                this.controller.PutCrematocrito(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
     }
 }
