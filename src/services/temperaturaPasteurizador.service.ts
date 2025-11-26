@@ -64,8 +64,8 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
                 "lote",
                 "ciclo",
                 "responsable",
-                "calentamiento",
-                "enfriamiento"
+                "calentamientos",
+                "enfriamientos"
             ]
         });
     }
