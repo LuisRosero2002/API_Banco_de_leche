@@ -35,7 +35,8 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
                     },
                     lote: {
                         ciclo: true
-                    }
+                    },
+                    frascosPasteurizados: true
                 },
                 infoSeleccionClasificacion: {
                     profesional: true,
