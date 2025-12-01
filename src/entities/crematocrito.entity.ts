@@ -7,17 +7,23 @@ export class CrematocritoEntity {
     id!: number;
     
     @Column({ name: "ct1", type: "float", nullable: true })
-    ct1!: number;  
+    ct1!: number | null;
+    
     @Column({ name: "ct2", type: "float", nullable: true })
-    ct2!: number; 
+    ct2!: number | null;
+    
     @Column({ name: "ct3", type: "float", nullable: true })
-    ct3!: number;
+    ct3!: number | null;
+    
     @Column({ name: "cc1", type: "float", nullable: true })
-    cc1!: number;   
+    cc1!: number | null;
+    
     @Column({ name: "cc2", type: "float", nullable: true })
-    cc2!: number;   
+    cc2!: number | null;
+    
     @Column({ name: "cc3", type: "float", nullable: true })
-    cc3!: number;
+    cc3!: number | null;
+    
     @Column({ name: "kcal", type: "float" })
     kcal!: number;
 

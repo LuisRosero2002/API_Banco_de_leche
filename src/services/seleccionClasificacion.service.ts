@@ -11,7 +11,6 @@ import { CrematocritoDTO } from "../DTOs/crematocrito.DTO";
 import { UpdateSeleccionClasificacionDTO } from "../DTOs/seleccionClasificacion.DTO";
 import { InfoSeleccionClasificacionEntity } from "../entities/infoSeleccionClasificacion.entity";
 
-
 export class SeleccionClasificacionServices extends BaseService<SeleccionClasificacionFriam015Entity> {
     constructor() {
         super(SeleccionClasificacionFriam015Entity);
@@ -87,7 +86,7 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
             tercera: data.tercera,
             resultado: data.resultado,
             seleccionClasificacion: { id: data.seleccionClasificacion.id }
-        })
+        });
     }
 
     async postAnalisisSensorial(data: AnalisisSensorialDTO): Promise<AnalisisSensorialEntity> {
@@ -103,19 +102,21 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
     }
 
     async postCrematocrito(data: CrematocritoDTO): Promise<CrematocritoEntity> {
-        const repository = AppDataSource.getRepository(CrematocritoEntity);
-        const entity = repository.create({
-            ct1: data.ct1,
-            ct2: data.ct2,
-            ct3: data.ct3,
-            cc1: data.cc1,
-            cc2: data.cc2,
-            cc3: data.cc3,
-            kcal: data.kcal,
-            seleccionClasificacion: { id: data.seleccionClasificacion.id }
-        });
-        return await repository.save(entity);
-    }
+    const repository = AppDataSource.getRepository(CrematocritoEntity);
+    
+    const crematocrito = {
+        ct1: data.ct1 ?? null,
+        ct2: data.ct2 ?? null,
+        ct3: data.ct3 ?? null,
+        cc1: data.cc1 ?? null,
+        cc2: data.cc2 ?? null,
+        cc3: data.cc3 ?? null,
+        kcal: data.kcal,
+        seleccionClasificacion: { id: data.seleccionClasificacion.id }
+    };
+    
+    return await repository.save(crematocrito);
+}
 
     async updateSeleccionClasificacion(id: number, data: UpdateSeleccionClasificacionDTO): Promise<UpdateResult> {
         const seleccionRepository = await this.execRepository;
@@ -163,9 +164,19 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
     }
 
     async updateCrematocrito(id: number, data: CrematocritoDTO): Promise<UpdateResult> {
-        const repository = AppDataSource.getRepository(CrematocritoEntity);
-        return await repository.update(id, data);
-    }
-
+    const repository = AppDataSource.getRepository(CrematocritoEntity);
+    
+    const updateData = {
+        ct1: data.ct1 ?? null,
+        ct2: data.ct2 ?? null,
+        ct3: data.ct3 ?? null,
+        cc1: data.cc1 ?? null,
+        cc2: data.cc2 ?? null,
+        cc3: data.cc3 ?? null,
+        kcal: data.kcal
+    };
+        
+    return await repository.update(id, updateData);
+}
 
 }
