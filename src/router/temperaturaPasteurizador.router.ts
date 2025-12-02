@@ -82,5 +82,13 @@ export class TemperaturaPasteurizadorRouter extends BaseRouter<TemperaturaPasteu
                     .catch(err => res.status(500).send(err.message));
             }
         );
+
+        this.router.get(
+            "/lotes-disponibles",
+            this.middleware.checkJwtAuth(),
+            (req: Request, res: Response) => {
+                this.controller.getAllLotesDisponibles(req, res);
+            }
+        );
     }
 }

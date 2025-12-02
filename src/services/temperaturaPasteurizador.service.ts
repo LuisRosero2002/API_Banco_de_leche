@@ -7,6 +7,7 @@ import { CalentamientoPasteurizadorEntity } from "../entities/calentamientoPaste
 import { EnfriamientoTemperaturaEntity } from "../entities/enfriamientoTemperatura.entity";
 import { TemperaturaPasteurizadorFriam036Entity } from "../entities/temperaturaPasteurizadorFriam036.entity";
 import { UpdateResult } from "typeorm";
+import { LoteEntity } from "../entities/lote.entity";
 
 export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPasteurizadorFriam036Entity> {
     constructor() {
@@ -100,7 +101,7 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
         return {
             generatedMaps: results.flatMap(res => res.generatedMaps),
             raw: results.flatMap(res => res.raw),
-            affected: totalAffected 
+            affected: totalAffected
         };
     }
 
@@ -119,7 +120,28 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
         return {
             generatedMaps: results.flatMap(res => res.generatedMaps),
             raw: results.flatMap(res => res.raw),
-            affected: totalAffected 
+            affected: totalAffected
         };
+    }
+
+    async getAllLotesDisponibles(): Promise<{ numeroLote: number; numeroCiclo: number }[]> {
+        const loteRepository = AppDataSource.getRepository(LoteEntity);
+
+        const result = await loteRepository
+            .createQueryBuilder('l')
+            .innerJoin('l.ciclo', 'c')
+            .select([
+                'l.numero_lote as numeroLote',
+                'c.numero_ciclo as numeroCiclo'
+            ])
+            .groupBy('l.numero_lote, c.numero_ciclo')
+            .orderBy('l.numero_lote', 'ASC')
+            .addOrderBy('c.numero_ciclo', 'ASC')
+            .getRawMany();
+
+        return result.map(item => ({
+            numeroLote: item.numeroLote,
+            numeroCiclo: item.numeroCiclo
+        }));
     }
 }

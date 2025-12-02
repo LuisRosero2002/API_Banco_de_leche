@@ -85,4 +85,17 @@ export class TemperaturaPasteurizadorController {
             return this.httpResponse.Error(res, e);
         }
     }
+
+    async getAllLotesDisponibles(req: Request, res: Response): Promise<Response> {
+        try {
+            const data = await this.temperaturaService.getAllLotesDisponibles();
+            if (data.length === 0) {
+                return this.httpResponse.NoContent(res, "No se encontraron lotes disponibles");
+            }
+            return this.httpResponse.Ok(res, data);
+        } catch (e) {
+            console.error('Error al obtener lotes disponibles:', e);
+            return this.httpResponse.Error(res, e);
+        }
+    }
 }
