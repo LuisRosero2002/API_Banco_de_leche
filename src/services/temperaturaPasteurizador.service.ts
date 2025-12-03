@@ -124,7 +124,7 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
         };
     }
 
-    async getAllLotesDisponibles(): Promise<{ numeroLote: number; numeroCiclo: number }[]> {
+    async getAllLotesDisponibles(): Promise<{ numeroLote: number; numeroCiclo: number; loteId: number; cicloId: number }[]> {
         const loteRepository = AppDataSource.getRepository(LoteEntity);
 
         const result = await loteRepository
@@ -132,16 +132,31 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
             .innerJoin('l.ciclo', 'c')
             .select([
                 'l.numero_lote as numeroLote',
-                'c.numero_ciclo as numeroCiclo'
+                'c.numero_ciclo as numeroCiclo',
+                'l.id as loteId',
+                'c.id as cicloId'
             ])
-            .groupBy('l.numero_lote, c.numero_ciclo')
             .orderBy('l.numero_lote', 'ASC')
             .addOrderBy('c.numero_ciclo', 'ASC')
             .getRawMany();
 
-        return result.map(item => ({
+        // Eliminar duplicados usando Map
+        const lotesUnicos = new Map<string, any>();
+
+        result.forEach(item => {
+            const key = `${item.numeroLote}-${item.numeroCiclo}`;
+            if (!lotesUnicos.has(key)) {
+                lotesUnicos.set(key, item);
+            }
+        });
+
+        console.log('Lotes únicos encontrados:', Array.from(lotesUnicos.values())); // Para debug
+
+        return Array.from(lotesUnicos.values()).map(item => ({
             numeroLote: item.numeroLote,
-            numeroCiclo: item.numeroCiclo
+            numeroCiclo: item.numeroCiclo,
+            loteId: item.loteId,
+            cicloId: item.cicloId
         }));
     }
 }

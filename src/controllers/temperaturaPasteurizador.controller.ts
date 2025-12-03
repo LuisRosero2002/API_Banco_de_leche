@@ -21,13 +21,22 @@ export class TemperaturaPasteurizadorController {
     }
 
     async createTemperaturaPasteurizador(req: Request, res: Response): Promise<Response> {
-        try {
-            const data = await this.temperaturaService.createTemperaturaPasteurizador(req.body);
-            return this.httpResponse.Ok(res, data);
-        } catch (e) {
-            return this.httpResponse.Error(res, e);
+    try {
+        const data = await this.temperaturaService.createTemperaturaPasteurizador(req.body);
+        return this.httpResponse.Ok(res, data);
+    } catch (e: any) {
+        console.error('Error al crear temperatura pasteurizador:', e);
+        
+        if (e.message?.includes('Duplicate entry')) {
+            return this.httpResponse.Error(res, {
+                message: 'Este lote ya está siendo utilizado en otro registro. Seleccione un lote diferente.',
+                details: e.message
+            });
         }
+        
+        return this.httpResponse.Error(res, e);
     }
+}
 
     async createCalentamiento(req: Request, res: Response): Promise<Response> {
         try {
