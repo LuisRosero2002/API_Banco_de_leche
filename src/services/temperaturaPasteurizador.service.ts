@@ -88,19 +88,46 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
 
     async updateCalentamiento(data: CalentamientoDTO[]): Promise<UpdateResult> {
         const calentamientoRepository = AppDataSource.getRepository(CalentamientoPasteurizadorEntity);
-        const updatePromises = data.map((c) => {
-            return calentamientoRepository.update(c.id, {
-                minuto: c.minuto,
-                valor: c.valor,
-                temperaturaPasteurizador: { id: c.temperaturaPasteurizadorId }
-            });
-        });
 
-        const results = await Promise.all(updatePromises);
-        const totalAffected = results.reduce((sum, res) => sum + (res.affected || 0), 0);
+        // Separar registros con ID (actualizar) de registros sin ID (crear)
+        const registrosParaActualizar = data.filter(c => c.id !== undefined && c.id !== null);
+        const registrosParaCrear = data.filter(c => !c.id);
+
+        const resultados: any[] = [];
+
+        // Actualizar registros existentes
+        if (registrosParaActualizar.length > 0) {
+            const updatePromises = registrosParaActualizar.map((c) => {
+                return calentamientoRepository.update(c.id!, {
+                    minuto: c.minuto,
+                    valor: c.valor,
+                    temperaturaPasteurizador: { id: c.temperaturaPasteurizadorId }
+                });
+            });
+
+            const updateResults = await Promise.all(updatePromises);
+            resultados.push(...updateResults);
+        }
+
+        // Crear registros nuevos
+        if (registrosParaCrear.length > 0) {
+            const nuevosRegistros = registrosParaCrear.map(c => {
+                return calentamientoRepository.create({
+                    minuto: c.minuto,
+                    valor: c.valor,
+                    temperaturaPasteurizador: { id: c.temperaturaPasteurizadorId }
+                });
+            });
+
+            const createResults = await calentamientoRepository.save(nuevosRegistros);
+            // Convertir resultados de create a formato UpdateResult
+            resultados.push({ affected: createResults.length, generatedMaps: [], raw: createResults });
+        }
+
+        const totalAffected = resultados.reduce((sum, res) => sum + (res.affected || 0), 0);
         return {
-            generatedMaps: results.flatMap(res => res.generatedMaps),
-            raw: results.flatMap(res => res.raw),
+            generatedMaps: resultados.flatMap(res => res.generatedMaps || []),
+            raw: resultados.flatMap(res => res.raw || []),
             affected: totalAffected
         };
     }
