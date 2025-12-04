@@ -28,7 +28,7 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
         })
     }
 
-    async getFrascosByLote(lote: number, fecha:string): Promise<any[]> {
+    async getFrascosByLote(lote: number, fecha: string): Promise<any[]> {
         const loteRepository = AppDataSource.getRepository(LoteEntity);
         const controlReenvaseRepository = AppDataSource.getRepository(ControlReenvaseFriam032Entity);
         const seleccionClasificacionRepository = AppDataSource.getRepository(SeleccionClasificacionFriam015Entity);
@@ -52,17 +52,22 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
                     relations: {
                         acidezDornic: true,
                         analisisSensorial: true,
-                        controlReenvase:true
+                        controlReenvase: {
+                            frascoCrudo: true
+                        }
                     },
                     where: {
-                        controlReenvase: { id: element.id_control_reenvase }
+                        controlReenvase: {
+                            id: element.id_control_reenvase,
+                            frascoCrudo: { fechaSalida: fecha as any }
+                        },
                     },
                     order: {
                         fecha: "ASC",
                     },
                 })
             )
-        )).filter(result => result.length > 0);
+        )).filter(result => result.length > 0)
 
         return responseSeleccion
     }
