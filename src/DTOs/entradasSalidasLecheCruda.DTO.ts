@@ -20,7 +20,7 @@ export class EntradasSalidasLecheCrudaDTO {
     empleadoEntrada!: EmpleadosEntity;
     @IsOptional()
     empleadoSalida!: EmpleadosEntity;
-    @IsNotEmpty()
+    @IsOptional()
     extraccion!: ExtraccionFriam016Entity;
     @IsOptional()
     tipoDonante!: string;
