@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CongeladorEntity } from "./congelador.entity";
 import { MadresDonantesEntity } from "./madresDonantes.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 import { ExtraccionFriam016Entity } from "./extraccionFriam016.entity";
 import { FrascosRecolectadosEntity } from "./frascosRecolectados.entity";
+import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 
 @Entity('entradas_salidas_friam_012')
 export class EntradasSalidasFriam012Entity {
@@ -33,5 +34,7 @@ export class EntradasSalidasFriam012Entity {
     @ManyToOne(() => FrascosRecolectadosEntity, frasco => frasco.entradasSalidas, { nullable: true })
     @JoinColumn({ name: 'id_frasco_recolectado' })
     frascoRecolectado!: FrascosRecolectadosEntity;
+    @OneToOne(() => ControlReenvaseFriam032Entity, controlReenvase => controlReenvase.frascoCrudo)
+    frascoCrudo!: ControlReenvaseFriam032Entity;
 
 }

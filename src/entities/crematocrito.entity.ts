@@ -5,18 +5,25 @@ import { SeleccionClasificacionFriam015Entity } from "./seleccionClasificacionFr
 export class CrematocritoEntity {
     @PrimaryGeneratedColumn("increment", { name: "id_crematocrito" })
     id!: number;
-    @Column({ name: "ct1", type: "float" })
-    ct1!: number;
-    @Column({ name: "ct2", type: "float" })
-    ct2!: number;
-    @Column({ name: "ct3", type: "float" })
-    ct3!: number;
-    @Column({ name: "cc1", type: "float" })
-    cc1!: number;
-    @Column({ name: "cc2", type: "float" })
-    cc2!: number;
-    @Column({ name: "cc3", type: "float" })
-    cc3!: number;
+    
+    @Column({ name: "ct1", type: "float", nullable: true })
+    ct1!: number | null;
+    
+    @Column({ name: "ct2", type: "float", nullable: true })
+    ct2!: number | null;
+    
+    @Column({ name: "ct3", type: "float", nullable: true })
+    ct3!: number | null;
+    
+    @Column({ name: "cc1", type: "float", nullable: true })
+    cc1!: number | null;
+    
+    @Column({ name: "cc2", type: "float", nullable: true })
+    cc2!: number | null;
+    
+    @Column({ name: "cc3", type: "float", nullable: true })
+    cc3!: number | null;
+    
     @Column({ name: "kcal", type: "float" })
     kcal!: number;
 
