@@ -134,19 +134,42 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
 
     async updateEnfriamiento(data: EnfriamientoDTO[]): Promise<UpdateResult> {
         const enfriamientoRepository = AppDataSource.getRepository(EnfriamientoTemperaturaEntity);
-        const updatePromises = data.map((e) => {
-            return enfriamientoRepository.update(e.id, {
-                minuto: e.minuto,
-                valor: e.valor,
-                temperaturaPasteurizador: { id: e.temperaturaPasteurizadorId }
-            });
-        });
 
-        const results = await Promise.all(updatePromises);
-        const totalAffected = results.reduce((sum, res) => sum + (res.affected || 0), 0);
+        const registrosParaActualizar = data.filter(e => e.id !== undefined && e.id !== null);
+        const registrosParaCrear = data.filter(e => !e.id);
+
+        const resultados: any[] = [];
+
+        if (registrosParaActualizar.length > 0) {
+            const updatePromises = registrosParaActualizar.map((e) => {
+                return enfriamientoRepository.update(e.id!, {
+                    minuto: e.minuto,
+                    valor: e.valor,
+                    temperaturaPasteurizador: { id: e.temperaturaPasteurizadorId }
+                });
+            });
+
+            const updateResults = await Promise.all(updatePromises);
+            resultados.push(...updateResults);
+        }
+
+        if (registrosParaCrear.length > 0) {
+            const nuevosRegistros = registrosParaCrear.map(e => {
+                return enfriamientoRepository.create({
+                    minuto: e.minuto,
+                    valor: e.valor,
+                    temperaturaPasteurizador: { id: e.temperaturaPasteurizadorId }
+                });
+            });
+
+            const createResults = await enfriamientoRepository.save(nuevosRegistros);
+            resultados.push({ affected: createResults.length, generatedMaps: [], raw: createResults });
+        }
+
+        const totalAffected = resultados.reduce((sum, res) => sum + (res.affected || 0), 0);
         return {
-            generatedMaps: results.flatMap(res => res.generatedMaps),
-            raw: results.flatMap(res => res.raw),
+            generatedMaps: resultados.flatMap(res => res.generatedMaps || []),
+            raw: resultados.flatMap(res => res.raw || []),
             affected: totalAffected
         };
     }
