@@ -150,8 +150,6 @@ export class TemperaturaPasteurizadorService extends BaseService<TemperaturaPast
             }
         });
 
-        console.log('Lotes únicos encontrados:', Array.from(lotesUnicos.values())); // Para debug
-
         return Array.from(lotesUnicos.values()).map(item => ({
             numeroLote: item.numeroLote,
             numeroCiclo: item.numeroCiclo,
