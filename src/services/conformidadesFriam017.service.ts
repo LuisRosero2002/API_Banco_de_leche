@@ -28,7 +28,7 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
         })
     }
 
-    async getFrascosByLote(lote: number, fecha: string): Promise<any[]> {
+    async getFrascosByLote(lote: number, fecha: string): Promise<any> {
         const loteRepository = AppDataSource.getRepository(LoteEntity);
         const controlReenvaseRepository = AppDataSource.getRepository(ControlReenvaseFriam032Entity);
         const seleccionClasificacionRepository = AppDataSource.getRepository(SeleccionClasificacionFriam015Entity);
@@ -43,6 +43,7 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
             color: 0,
             flavor: 0,
             suciedad: 0,
+            acidez: 0,
             muestrasTesteadas: 0,
             muestrasReprobadas: 0
         }
@@ -69,7 +70,40 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
             )
         )).filter(result => result.length > 0)
 
-        return responseSeleccion
+        const flatResponse = responseSeleccion.flat();
+        contadores.muestrasTesteadas = flatResponse.length;
+
+        flatResponse.forEach(item => {
+            let reprobado = false;
+
+            if (item.analisisSensorial) {
+                if (item.analisisSensorial.embalaje === 1) {
+                    contadores.envase++;
+                    reprobado = true;
+                }
+                if (item.analisisSensorial.suciedad === 1) {
+                    contadores.suciedad++;
+                    reprobado = true;
+                }
+                if (item.analisisSensorial.color === 1) {
+                    contadores.color++;
+                    reprobado = true;
+                }
+                if (item.analisisSensorial.flavor === 1) {
+                    contadores.flavor++;
+                    reprobado = true;
+                }
+            }
+
+            if (item.acidezDornic && (item.acidezDornic.resultado || 0) > 8) {
+                contadores.acidez++;
+                reprobado = true;
+            }
+        });
+
+        contadores.muestrasReprobadas = contadores.envase + contadores.suciedad + contadores.color + contadores.flavor + contadores.acidez;
+
+        return contadores;
     }
 
 }
