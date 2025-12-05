@@ -4,6 +4,7 @@ import { EmpleadosEntity } from "./empleados.entity";
 import { FrascosPasteurizadosEntity } from "./frascosPasteurizados.entity";
 import { LoteEntity } from "./lote.entity";
 import { SeleccionClasificacionFriam015Entity } from "./seleccionClasificacionFriam015.entity";
+import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
 
 @Entity('control_reenvase_friam_032')
 export class ControlReenvaseFriam032Entity {
@@ -11,13 +12,16 @@ export class ControlReenvaseFriam032Entity {
     id!: number;
     @Column({ type: "date", nullable: false, name: "fecha" })
     fecha!: Date;
-    @Column({ type: "float", nullable: false, name: "frasco_crudo" })
-    frascoCrudo!: number;
+    // @Column({ type: "float", nullable: false, name: "frasco_crudo" })
+    // frascoCrudo!: number;
 
 
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.controlReenvase)
     @JoinColumn({ name: "id_madre_donante" })
     madreDonante!: MadresDonantesEntity;
+    @OneToOne(() => EntradasSalidasFriam012Entity, entradasSalidas => entradasSalidas.frascoCrudo)
+    @JoinColumn({ name: "id_frasco_crudo" })
+    frascoCrudo!: EntradasSalidasFriam012Entity;
     @ManyToOne(() => EmpleadosEntity, empleado => empleado.controlReenvase)
     @JoinColumn({ name: "id_empleado" })
     empleado!: EmpleadosEntity;

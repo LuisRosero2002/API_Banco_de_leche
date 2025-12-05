@@ -24,37 +24,37 @@ export class SeleccionClasificacionController {
     }
 
     async GetAcidezDornicPorSeleccionId(req: Request, res: Response): Promise<Response> {
-        try {
-            const { id } = req.params;
-            const data = await this.service.getAcidezDornicPorSeleccionId(Number(id));
-            if (!data) return this.httpResponse.NotFound(res, "No se encontró el registro de acidez dornic");
-            return this.httpResponse.Ok(res, data);
-        } catch (error) {
-            return this.httpResponse.Error(res, error);
-        }
+    try {
+        const { id } = req.params;
+        const data = await this.service.getAcidezDornicPorSeleccionId(Number(id));
+        if (!data) return this.httpResponse.NoContent(res, "No hay registro de acidez dornic para este ID");
+        return this.httpResponse.Ok(res, data);
+    } catch (error) {
+        return this.httpResponse.Error(res, error);
     }
+}
 
-    async GetAnalisisSensorialPorSeleccionId(req: Request, res: Response): Promise<Response> {
-        try {
-            const { id } = req.params;
-            const data = await this.service.getAnalisisSensorialPorSeleccionId(Number(id));
-            if (!data) return this.httpResponse.NotFound(res, "No se encontró el registro de análisis sensorial");
-            return this.httpResponse.Ok(res, data);
-        } catch (error) {
-            return this.httpResponse.Error(res, error);
-        }
+async GetAnalisisSensorialPorSeleccionId(req: Request, res: Response): Promise<Response> {
+    try {
+        const { id } = req.params;
+        const data = await this.service.getAnalisisSensorialPorSeleccionId(Number(id));
+        if (!data) return this.httpResponse.NoContent(res, "No hay registro de análisis sensorial para este ID");
+        return this.httpResponse.Ok(res, data);
+    } catch (error) {
+        return this.httpResponse.Error(res, error);
     }
+}
 
-    async GetCrematocritoPorSeleccionId(req: Request, res: Response): Promise<Response> {
-        try {
-            const { id } = req.params;
-            const data = await this.service.getCrematocritoPorSeleccionId(Number(id));
-            if (!data) return this.httpResponse.NotFound(res, "No se encontró el registro de crematocrito");
-            return this.httpResponse.Ok(res, data);
-        } catch (error) {
-            return this.httpResponse.Error(res, error);
-        }
+async GetCrematocritoPorSeleccionId(req: Request, res: Response): Promise<Response> {
+    try {
+        const { id } = req.params;
+        const data = await this.service.getCrematocritoPorSeleccionId(Number(id));
+        if (!data) return this.httpResponse.NoContent(res, "No hay registro de crematocrito para este ID");
+        return this.httpResponse.Ok(res, data);
+    } catch (error) {
+        return this.httpResponse.Error(res, error);
     }
+}
 
     async PostAcidezDornic(req: Request, res: Response): Promise<Response> {
         try {

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { IsNumber, IsOptional, IsNotEmpty } from "class-validator";
 import { SeleccionClasificacionFriam015Entity } from "../entities/seleccionClasificacionFriam015.entity";
 
 export class CrematocritoDTO {
@@ -6,29 +6,29 @@ export class CrematocritoDTO {
     @IsNumber()
     id?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    ct1!: number;
+    ct1?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    ct2!: number;
+    ct2?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    ct3!: number;
+    ct3?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    cc1!: number;
+    cc1?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    cc2!: number;
+    cc2?: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
-    cc3!: number;
+    cc3?: number;
 
     @IsNotEmpty()
     @IsNumber()
