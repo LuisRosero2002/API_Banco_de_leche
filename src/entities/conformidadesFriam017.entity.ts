@@ -5,20 +5,22 @@ import { LoteEntity } from "./lote.entity";
 export class ConformidadesFriam017Entity {
     @PrimaryGeneratedColumn("increment", { name: "id_conformidades" })
     id!: number;
-    @Column({ name: "fecha", type: "date",nullable:true })
+    @Column({ name: "fecha", type: "date", nullable: true })
     fecha!: Date;
-    @Column({ name: "envase", type: "int",nullable:true })
+    @Column({ name: "envase", type: "int", nullable: true })
     envase!: number
-    @Column({ name: "suciedad", type: "int",nullable:true })
+    @Column({ name: "suciedad", type: "int", nullable: true })
     suciedad!: number
-    @Column({ name: "color", type: "int",nullable:true })
+    @Column({ name: "color", type: "int", nullable: true })
     color!: number
-    @Column({ name: "flavor", type: "int",nullable:true })
+    @Column({ name: "flavor", type: "int", nullable: true })
     flavor!: number
     @Column({ name: "muestras_testeadas", type: "int" })
     muestrasTesteadas!: number
     @Column({ name: "muestras_reprobadas", type: "int" })
     muestrasReprobadas!: number
+    @Column({ name: "acidez", type: "int", nullable: true })
+    acidez!: number;
 
     @OneToOne(() => LoteEntity, lote => lote.conformidades)
     @JoinColumn({ name: "id_lote" })

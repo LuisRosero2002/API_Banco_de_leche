@@ -5,6 +5,7 @@ import { AppDataSource } from "../config/data-source";
 import { LoteEntity } from "../entities/lote.entity";
 import { ControlReenvaseFriam032Entity } from "../entities/controlReenvaseFriam032.entity";
 import { SeleccionClasificacionFriam015Entity } from "../entities/seleccionClasificacionFriam015.entity";
+import { ConformidadesFriam017DTO } from "../DTOs/conformidadesFriam017.DTO";
 
 export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam017Entity> {
     constructor() {
@@ -26,6 +27,14 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
                 id: 'ASC'
             }
         })
+    }
+
+    async createConformidad(body: ConformidadesFriam017DTO): Promise<ConformidadesFriam017Entity> {
+        const repository = await this.execRepository;
+        return await repository.save({
+            ...body,
+            lote: { id: body.lote }
+        });
     }
 
     async getFrascosByLote(lote: number, fecha: string): Promise<any> {
@@ -105,5 +114,7 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
 
         return contadores;
     }
+
+
 
 }
