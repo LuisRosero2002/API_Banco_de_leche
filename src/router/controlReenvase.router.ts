@@ -25,7 +25,7 @@ export class ControlReenvaseRouter extends BaseRouter<ControlReenvaseController,
         });
 
         this.router.post('/postControlReenvase',
-        // this.middleware.checkJwtAuth(),
+        this.middleware.checkJwtAuth(),
         this.middleware.ValidateDTO(ControlReenvaseDTO),
         (req,res)=>{
             this.controller.PostControlReenvase(req,res)
