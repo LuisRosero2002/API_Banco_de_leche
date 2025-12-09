@@ -12,15 +12,30 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
     }
 
     /**
-     * Get frascos pasteurizados by lote and ciclo with their control microbiologico records
+     * Get frascos pasteurizados by lote and ciclo with their control microbiologico data
+     * Returns InfoControlMicrobiologico once (shared for all records) and frascos with their control data
      * @param idLote - ID of the lote
      * @param idCiclo - ID of the ciclo
-     * @returns Array of frascos pasteurizados with control microbiologico data
+     * @returns Object with shared infoControl and array of frascos with their control data (or null)
      */
-    async getFrascosPasteurizadosByLoteAndCiclo(idLote: number, idCiclo: number): Promise<FrascosPasteurizadosEntity[]> {
+    async getControlMicrobiologicoByLoteAndCiclo(idLote: number, idCiclo: number): Promise<{
+        infoControl: InfoControlMicrobiologicoEntity | null;
+        frascos: Array<{
+            frascoPasteurizado: FrascosPasteurizadosEntity;
+            controlMicrobiologico: {
+                id: number;
+                fecha: Date;
+                coliformes: number | null;
+                conformidad: number | null;
+                pruebaConfirmatoria: number | null;
+                liberacion: number | null;
+                observaciones: string | null;
+            } | null;
+        }>;
+    }> {
         const repositoryFrascos = AppDataSource.getRepository(FrascosPasteurizadosEntity);
 
-        return await repositoryFrascos.find({
+        const frascos = await repositoryFrascos.find({
             relations: {
                 controlReenvase: {
                     lote: {
@@ -51,11 +66,36 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
                 id: 'ASC'
             }
         });
+
+        let sharedInfoControl: InfoControlMicrobiologicoEntity | null = null;
+        for (const frasco of frascos) {
+            if (frasco.controlMicrobiologico?.infoControl) {
+                sharedInfoControl = frasco.controlMicrobiologico.infoControl;
+                break;
+            }
+        }
+        const frascosResponse = frascos.map(frasco => ({
+            frascoPasteurizado: frasco,
+            controlMicrobiologico: frasco.controlMicrobiologico ? {
+                id: frasco.controlMicrobiologico.id,
+                fecha: frasco.controlMicrobiologico.fecha,
+                coliformes: frasco.controlMicrobiologico.coliformes ?? null,
+                conformidad: frasco.controlMicrobiologico.conformidad ?? null,
+                pruebaConfirmatoria: frasco.controlMicrobiologico.pruebaConfirmatoria ?? null,
+                liberacion: frasco.controlMicrobiologico.liberacion ?? null,
+                observaciones: frasco.controlMicrobiologico.observaciones ?? null
+            } : null
+        }));
+
+        return {
+            infoControl: sharedInfoControl,
+            frascos: frascosResponse
+        };
     }
 
     /**
      * Create control microbiologico records for multiple frascos pasteurizados
-     * @param data - ControlMicrobiologicoDTO with array of frasco IDs and shared info
+     * @param data - ControlMicrobiologicoDTO with array of control records and shared info
      * @returns Array of created control microbiologico records
      */
     async postControlMicrobiologico(data: ControlMicrobiologicoDTO): Promise<ControlMicrobilogicoFriam014Entity[]> {
@@ -63,7 +103,7 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
         const repositoryInfo = AppDataSource.getRepository(InfoControlMicrobiologicoEntity);
 
         try {
-            // First, save the InfoControlMicrobiologico
+            // First, save the InfoControlMicrobiologico (información compartida)
             const infoControl = await repositoryInfo.save({
                 fechaSiembre: data.infoControl.fechaSiembre,
                 primeraLectura: data.infoControl.primeraLectura,
@@ -73,18 +113,18 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
                 coordinador: { id: data.infoControl.coordinador.id }
             });
 
-            // Then, create control microbiologico records for each frasco pasteurizado
+            // Then, create control microbiologico records for each item in the array
             const controlRecords: ControlMicrobilogicoFriam014Entity[] = [];
 
-            for (const idFrasco of data.frascosPasteurizados) {
+            for (const controlItem of data.controles) {
                 const control = await repository.save({
-                    fecha: new Date(data.fecha),
-                    coliformes: data.coliformes,
-                    conformidad: data.conformidad,
-                    pruebaConfirmatoria: data.pruebaConfirmatoria,
-                    liberacion: data.liberacion,
-                    observaciones: data.observaciones,
-                    frascoPasteurizado: { id: idFrasco } as any,
+                    fecha: new Date(controlItem.fecha),
+                    coliformes: controlItem.coliformes,
+                    conformidad: controlItem.conformidad,
+                    pruebaConfirmatoria: controlItem.pruebaConfirmatoria,
+                    liberacion: controlItem.liberacion,
+                    observaciones: controlItem.observaciones,
+                    frascoPasteurizado: { id: controlItem.idFrascoPasteurizado } as any,
                     infoControl: infoControl as any
                 });
 
@@ -99,7 +139,7 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
 
     /**
      * Update control microbiologico records for multiple frascos pasteurizados
-     * @param data - ControlMicrobiologicoDTO with array of frasco IDs and updated info
+     * @param data - ControlMicrobiologicoDTO with array of control records and updated info
      * @returns Update result
      */
     async putControlMicrobiologico(data: ControlMicrobiologicoDTO): Promise<{ info: UpdateResult, controls: UpdateResult[] }> {
@@ -121,30 +161,35 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
                 });
             }
 
-            // Update control microbiologico records for each frasco
+            // Update control microbiologico records for each item in the array
             const controlUpdateResults: UpdateResult[] = [];
 
-            for (const idFrasco of data.frascosPasteurizados) {
-                // Find the control record for this frasco
-                const existingControl = await repository.findOne({
-                    where: {
-                        frascoPasteurizado: { id: idFrasco }
-                    }
-                });
+            for (const controlItem of data.controles) {
+                // If the item has an ID, update it; otherwise, find by frasco pasteurizado
+                let controlId: number | undefined = controlItem.id;
 
-                if (existingControl) {
+                if (!controlId) {
+                    const existingControl = await repository.findOne({
+                        where: {
+                            frascoPasteurizado: { id: controlItem.idFrascoPasteurizado }
+                        }
+                    });
+                    controlId = existingControl?.id;
+                }
+
+                if (controlId) {
                     const updateData: any = {
-                        fecha: data.fecha
+                        fecha: controlItem.fecha
                     };
 
                     // Only include properties if they are defined
-                    if (data.coliformes !== undefined) updateData.coliformes = data.coliformes;
-                    if (data.conformidad !== undefined) updateData.conformidad = data.conformidad;
-                    if (data.pruebaConfirmatoria !== undefined) updateData.pruebaConfirmatoria = data.pruebaConfirmatoria;
-                    if (data.liberacion !== undefined) updateData.liberacion = data.liberacion;
-                    if (data.observaciones !== undefined) updateData.observaciones = data.observaciones;
+                    if (controlItem.coliformes !== undefined) updateData.coliformes = controlItem.coliformes;
+                    if (controlItem.conformidad !== undefined) updateData.conformidad = controlItem.conformidad;
+                    if (controlItem.pruebaConfirmatoria !== undefined) updateData.pruebaConfirmatoria = controlItem.pruebaConfirmatoria;
+                    if (controlItem.liberacion !== undefined) updateData.liberacion = controlItem.liberacion;
+                    if (controlItem.observaciones !== undefined) updateData.observaciones = controlItem.observaciones;
 
-                    const updateResult = await repository.update(existingControl.id, updateData);
+                    const updateResult = await repository.update(controlId, updateData);
 
                     controlUpdateResults.push(updateResult);
                 }
@@ -159,57 +204,6 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
         }
     }
 
-    /**
-     * Get all control microbiologico records with relations
-     * @returns Array of all control microbiologico records
-     */
-    async getAllControlMicrobiologico(): Promise<ControlMicrobilogicoFriam014Entity[]> {
-        const repository = await this.execRepository;
 
-        return await repository.find({
-            relations: {
-                frascoPasteurizado: {
-                    controlReenvase: {
-                        lote: {
-                            ciclo: true
-                        },
-                        madreDonante: true
-                    }
-                },
-                infoControl: {
-                    responsableSiembre: true,
-                    responsableLectura: true,
-                    responsableProcesamiento: true,
-                    coordinador: true
-                }
-            },
-            order: {
-                id: 'ASC'
-            }
-        });
-    }
 
-    /**
-     * Get control microbiologico by frasco pasteurizado ID
-     * @param idFrasco - ID of the frasco pasteurizado
-     * @returns Control microbiologico record or null
-     */
-    async getControlByFrascoPasteurizado(idFrasco: number): Promise<ControlMicrobilogicoFriam014Entity | null> {
-        const repository = await this.execRepository;
-
-        return await repository.findOne({
-            where: {
-                frascoPasteurizado: { id: idFrasco }
-            },
-            relations: {
-                frascoPasteurizado: true,
-                infoControl: {
-                    responsableSiembre: true,
-                    responsableLectura: true,
-                    responsableProcesamiento: true,
-                    coordinador: true
-                }
-            }
-        });
-    }
 }

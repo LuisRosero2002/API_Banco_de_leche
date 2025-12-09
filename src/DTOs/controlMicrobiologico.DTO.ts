@@ -1,15 +1,18 @@
-import { IsNotEmpty, IsOptional, IsNumber, IsString, IsArray, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsNumber, IsString, IsArray, IsDateString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { InfoControlMicrobiologicoDTO } from './infoControlMicrobiologico.DTO';
 
-export class ControlMicrobiologicoDTO {
+/**
+ * Sub-DTO para cada registro individual de ControlMicrobilogicoFriam014Entity
+ */
+export class ControlMicrobiologicoItemDTO {
     @IsOptional()
     @IsNumber()
     id?: number;
 
     @IsNotEmpty()
-    @IsArray()
-    @IsNumber({}, { each: true })
-    frascosPasteurizados!: number[];
+    @IsNumber()
+    idFrascoPasteurizado!: number;
 
     @IsNotEmpty()
     @IsDateString()
@@ -34,7 +37,20 @@ export class ControlMicrobiologicoDTO {
     @IsOptional()
     @IsString()
     observaciones?: string;
+}
+
+/**
+ * DTO General que contiene la información compartida y el array de registros
+ */
+export class ControlMicrobiologicoDTO {
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(() => InfoControlMicrobiologicoDTO)
+    infoControl!: InfoControlMicrobiologicoDTO;
 
     @IsNotEmpty()
-    infoControl!: InfoControlMicrobiologicoDTO;
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ControlMicrobiologicoItemDTO)
+    controles!: ControlMicrobiologicoItemDTO[];
 }
