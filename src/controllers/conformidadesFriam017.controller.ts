@@ -36,7 +36,16 @@ export class ConfomidadesFriam016Controller {
         try {
             const data = await this.conformidades.createConformidad(req.body);
             return this.httpResponse.Ok(res, data);
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Error al crear conformidad:', error);
+
+            if (error.message?.includes('Duplicate entry') || error.code === 'ER_DUP_ENTRY') {
+                return this.httpResponse.Error(res, {
+                    message: 'Este lote ya tiene un registro de no conformidades. No es posible crear un duplicado.',
+                    details: error.message
+                });
+            }
+
             return this.httpResponse.Error(res, error);
         }
     }
