@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FrascosPasteurizadosEntity } from "./frascosPasteurizados.entity";
 import { InfoControlMicrobiologicoEntity } from "./infoControlMicrobilogico.entity";
 
@@ -29,7 +29,7 @@ export class ControlMicrobilogicoFriam014Entity {
     @JoinColumn({ name: "id_frasco_pasteurizado" })
     frascoPasteurizado!: FrascosPasteurizadosEntity;
 
-    @OneToOne(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.controlMicrobiologico)
+    @ManyToOne(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.controlMicrobiologico)
     @JoinColumn({ name: "id_info_control" })
     infoControl!: InfoControlMicrobiologicoEntity;
 }

@@ -13,7 +13,7 @@ export class ControlMicrobiologicoRouter extends BaseRouter<ControlMicrobiologic
          * GET - Get control microbiologico by lote and ciclo
          * Returns frascos with their control data and shared InfoControlMicrobiologico
          */
-        this.router.get('/getControlMicrobiologicoByLoteAndCiclo/:idLote/:idCiclo',
+        this.router.get('/getControlMicrobiologico/:idLote/:idCiclo',
             this.middleware.checkJwtAuth(),
             (req, res) => {
                 this.controller.GetControlMicrobiologicoByLoteAndCiclo(req, res)

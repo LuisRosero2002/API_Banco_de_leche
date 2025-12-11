@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsOptional, IsNumber, IsString, IsArray, IsDateString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { InfoControlMicrobiologicoDTO } from './infoControlMicrobiologico.DTO';
+import { FrascosPasteurizadosEntity } from '../entities/frascosPasteurizados.entity';
 
 /**
  * Sub-DTO para cada registro individual de ControlMicrobilogicoFriam014Entity
@@ -53,4 +54,8 @@ export class ControlMicrobiologicoDTO {
     @ValidateNested({ each: true })
     @Type(() => ControlMicrobiologicoItemDTO)
     controles!: ControlMicrobiologicoItemDTO[];
+
+    @IsOptional()
+    @IsArray()
+    frascos!: FrascosPasteurizadosEntity[]
 }

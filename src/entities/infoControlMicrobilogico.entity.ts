@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ControlMicrobilogicoFriam014Entity } from "./controlMicrobilogicoFriam014.entity";
 import { EmpleadosEntity } from "./empleados.entity";
 
@@ -29,6 +29,6 @@ export class InfoControlMicrobiologicoEntity {
     @JoinColumn({ name: "coordinador" })
     coordinador!: EmpleadosEntity;
 
-    @OneToOne(() => ControlMicrobilogicoFriam014Entity, controlMicrobiologico => controlMicrobiologico.infoControl)
+    @OneToMany(() => ControlMicrobilogicoFriam014Entity, controlMicrobiologico => controlMicrobiologico.infoControl)
     controlMicrobiologico!: ControlMicrobilogicoFriam014Entity;
 }
