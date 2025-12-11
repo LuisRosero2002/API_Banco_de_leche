@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { CicloEntity } from "./ciclo.entity";
 import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 import { TemperaturaPasteurizadorFriam036Entity } from "./temperaturaPasteurizadorFriam036.entity";
-
+import { ConformidadesFriam017Entity } from "./conformidadesFriam017.entity";
 
 @Entity({ name: "lote" })
 export class LoteEntity {
@@ -19,4 +19,6 @@ export class LoteEntity {
     controlReenvase!: ControlReenvaseFriam032Entity;
     @OneToOne(() => TemperaturaPasteurizadorFriam036Entity, temperaturaPasteurizador => temperaturaPasteurizador.lote)
     temperaturaPasteurizador!: TemperaturaPasteurizadorFriam036Entity;
+    @OneToOne(() => ConformidadesFriam017Entity, conformidades => conformidades.lote)
+    conformidades!: ConformidadesFriam017Entity;
 }
