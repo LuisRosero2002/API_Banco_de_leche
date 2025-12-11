@@ -26,17 +26,20 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
             relations: {
                 controlReenvase: {
                     madreDonante: {
-                        entradasSalidas: {
-                            frascoRecolectado: true,
-                            extraccion: true
-                        },
+                        // entradasSalidas: {
+                        //     frascoRecolectado: true,
+                        //     extraccion: true
+                        // },
                         gestacion: true
                     },
                     lote: {
                         ciclo: true
                     },
                     frascosPasteurizados: true,
-                    frascoCrudo: true
+                    frascoCrudo: {
+                        extraccion: true,
+                        frascoRecolectado: true
+                    }
                 },
                 infoSeleccionClasificacion: {
                     profesional: true,
