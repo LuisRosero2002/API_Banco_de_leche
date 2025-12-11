@@ -22,6 +22,7 @@ import { SeguimientoMadresRouter } from "./router/seguimientoMadres.router";
 import { ControlReenvaseRouter } from "./router/controlReenvase.router";
 import { SeleccionClasificacionRouter } from "./router/seleccionClasificacion.router";
 import { TemperaturaPasteurizadorRouter } from "./router/temperaturaPasteurizador.router";
+import { ConformidadFriam017Router } from "./router/conformidadFriam017.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -55,12 +56,13 @@ class ServerBootstrap extends ConfigServer {
             new LecheDistribucionFrhos063Router().router,
             new ControlReenvaseRouter().router,
             new SeleccionClasificacionRouter().router,
-            new TemperaturaPasteurizadorRouter().router
+            new TemperaturaPasteurizadorRouter().router,
+            new ConformidadFriam017Router().router
         ];
     }
 
-    passportUse(){
-        return [ 
+    passportUse() {
+        return [
             new JwtStrategys().use,
             new LoginStrategy().use
         ]
