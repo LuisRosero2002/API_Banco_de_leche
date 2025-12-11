@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FixConformidades1765300267441 implements MigrationInterface {
-    name = 'FixConformidades1765300267441'
+export class FixControlMicrobiologico1765426773761 implements MigrationInterface {
+    name = 'FixControlMicrobiologico1765426773761'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` DROP COLUMN \`muestra_testeadas\``);
-        await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`muestras_testeadas\` int NOT NULL`);
-        await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`acidez\` int NULL`);
-        await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`id_lote\` int NULL`);
-        await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD UNIQUE INDEX \`IDX_54231f185108fd44de4f3e4663\` (\`id_lote\`)`);
+        // await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` DROP COLUMN \`muestra_testeadas\``);
+        // await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`muestras_testeadas\` int NOT NULL`);
+        // await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`acidez\` int NULL`);
+        // await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD \`id_lote\` int NULL`);
+        // await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` ADD UNIQUE INDEX \`IDX_54231f185108fd44de4f3e4663\` (\`id_lote\`)`);
         await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` CHANGE \`fecha\` \`fecha\` date NULL`);
         await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` CHANGE \`envase\` \`envase\` int NULL`);
         await queryRunner.query(`ALTER TABLE \`conformidades_friam_017\` CHANGE \`suciedad\` \`suciedad\` int NULL`);
