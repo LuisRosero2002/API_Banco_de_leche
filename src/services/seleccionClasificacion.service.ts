@@ -24,9 +24,9 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
 
         return await repository.find({
             relations: {
-                controlReenvase:{
+                controlReenvase: {
                     madreDonante: {
-                        entradasSalidas:{
+                        entradasSalidas: {
                             frascoRecolectado: true,
                             extraccion: true
                         },
@@ -35,7 +35,8 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
                     lote: {
                         ciclo: true
                     },
-                    frascosPasteurizados: true
+                    frascosPasteurizados: true,
+                    frascoCrudo: true
                 },
                 infoSeleccionClasificacion: {
                     profesional: true,
@@ -102,21 +103,21 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
     }
 
     async postCrematocrito(data: CrematocritoDTO): Promise<CrematocritoEntity> {
-    const repository = AppDataSource.getRepository(CrematocritoEntity);
-    
-    const crematocrito = {
-        ct1: data.ct1 ?? null,
-        ct2: data.ct2 ?? null,
-        ct3: data.ct3 ?? null,
-        cc1: data.cc1 ?? null,
-        cc2: data.cc2 ?? null,
-        cc3: data.cc3 ?? null,
-        kcal: data.kcal,
-        seleccionClasificacion: { id: data.seleccionClasificacion.id }
-    };
-    
-    return await repository.save(crematocrito);
-}
+        const repository = AppDataSource.getRepository(CrematocritoEntity);
+
+        const crematocrito = {
+            ct1: data.ct1 ?? null,
+            ct2: data.ct2 ?? null,
+            ct3: data.ct3 ?? null,
+            cc1: data.cc1 ?? null,
+            cc2: data.cc2 ?? null,
+            cc3: data.cc3 ?? null,
+            kcal: data.kcal,
+            seleccionClasificacion: { id: data.seleccionClasificacion.id }
+        };
+
+        return await repository.save(crematocrito);
+    }
 
     async updateSeleccionClasificacion(id: number, data: UpdateSeleccionClasificacionDTO): Promise<UpdateResult> {
         const seleccionRepository = await this.execRepository;
@@ -164,19 +165,19 @@ export class SeleccionClasificacionServices extends BaseService<SeleccionClasifi
     }
 
     async updateCrematocrito(id: number, data: CrematocritoDTO): Promise<UpdateResult> {
-    const repository = AppDataSource.getRepository(CrematocritoEntity);
-    
-    const updateData = {
-        ct1: data.ct1 ?? null,
-        ct2: data.ct2 ?? null,
-        ct3: data.ct3 ?? null,
-        cc1: data.cc1 ?? null,
-        cc2: data.cc2 ?? null,
-        cc3: data.cc3 ?? null,
-        kcal: data.kcal
-    };
-        
-    return await repository.update(id, updateData);
-}
+        const repository = AppDataSource.getRepository(CrematocritoEntity);
+
+        const updateData = {
+            ct1: data.ct1 ?? null,
+            ct2: data.ct2 ?? null,
+            ct3: data.ct3 ?? null,
+            cc1: data.cc1 ?? null,
+            cc2: data.cc2 ?? null,
+            cc3: data.cc3 ?? null,
+            kcal: data.kcal
+        };
+
+        return await repository.update(id, updateData);
+    }
 
 }

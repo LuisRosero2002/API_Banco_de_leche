@@ -32,7 +32,9 @@ export class ControlMicrobiologicoService extends BaseService<ControlMicrobilogi
                         ciclo: true
                     }
                 },
-                controlMicrobiologico: true
+                controlMicrobiologico: {
+                    infoControl: true
+                },
             },
             where: {
                 controlReenvase: {
