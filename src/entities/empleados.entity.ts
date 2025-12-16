@@ -8,6 +8,7 @@ import { LecheDistribucionFrhos063Entity } from "./lecheDistribucionFrhos063.ent
 import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity";
 import { InfoSeleccionClasificacionEntity } from "./infoSeleccionClasificacion.entity";
 import { TemperaturaPasteurizadorFriam036Entity } from "./temperaturaPasteurizadorFriam036.entity";
+import { InfoControlMicrobiologicoEntity } from "./infoControlMicrobilogico.entity";
 
 
 @Entity({ name: "empleados" })
@@ -54,4 +55,12 @@ export class EmpleadosEntity {
     infoSeleccionClasificacionAuxiliar!: InfoSeleccionClasificacionEntity[]
     @OneToMany(() => TemperaturaPasteurizadorFriam036Entity, temperaturaPasteurizador => temperaturaPasteurizador.responsable)
     temperaturaPasteurizador!: TemperaturaPasteurizadorFriam036Entity[];
+    @OneToMany(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.responsableSiembre)
+    infoControlMicrobiologicoSiembre!: InfoControlMicrobiologicoEntity[]
+    @OneToMany(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.responsableLectura)
+    infoControlMicrobiologicoLectura!: InfoControlMicrobiologicoEntity[]
+    @OneToMany(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.responsableProcesamiento)
+    infoControlMicrobiologicoProcesamiento!: InfoControlMicrobiologicoEntity[]
+    @OneToMany(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.coordinador)
+    infoControlMicrobiologicoCoordinador!: InfoControlMicrobiologicoEntity[]
 }
