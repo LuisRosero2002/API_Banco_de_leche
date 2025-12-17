@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { CongeladorEntity } from "./congelador.entity";
 import { CasasVisitasEntity } from "./casasVisitas.entity";
 import { EntradasSalidasFriam012Entity } from "./entradasSalidasFriam012.entity";
+import { InfoDistribucionLecheProcesadaEntity } from "./infoDistribucionLecheProcesada.entity";
 
 @Entity({ name: "frascos_recolectados" })
 export class FrascosRecolectadosEntity {
@@ -15,7 +16,7 @@ export class FrascosRecolectadosEntity {
     termo!: number;
     @Column({ type: "int", nullable: false, name: "gaveta" })
     gaveta!: number;
-    @Column({ type: "int", nullable: false, name: "activo",default:1 })
+    @Column({ type: "int", nullable: false, name: "activo", default: 1 })
     activo!: number;
 
     @ManyToOne(() => CongeladorEntity, congelador => congelador.frascoRecolectado)
@@ -26,4 +27,6 @@ export class FrascosRecolectadosEntity {
     casaVisita!: CasasVisitasEntity;
     @OneToMany(() => EntradasSalidasFriam012Entity, entrada => entrada.frascoRecolectado)
     entradasSalidas!: EntradasSalidasFriam012Entity[];
+    @OneToMany(() => InfoDistribucionLecheProcesadaEntity, info => info.frascoPasteurizado)
+    infoDistribucion!: InfoDistribucionLecheProcesadaEntity[];
 }
