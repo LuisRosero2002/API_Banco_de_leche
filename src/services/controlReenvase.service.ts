@@ -11,6 +11,7 @@ import { ExtraccionFriam016Entity } from "../entities/extraccionFriam016.entity"
 import { LoteEntity } from "../entities/lote.entity";
 import { CicloEntity } from "../entities/ciclo.entity";
 import { SeleccionClasificacionFriam015Entity } from "../entities/seleccionClasificacionFriam015.entity";
+import { EntradasSalidasPasteurizadaFriam013Entity } from "../entities/entradasSalidasPasteurizadaFriam013.entity";
 
 export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032Entity> {
     constructor() {
@@ -139,6 +140,8 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
 
     async postFrascoPasteurizado(data: FrascosPasteurizadosDTO): Promise<FrascosPasteurizadosEntity> {
         const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
+        const repositoryControlReenvase = AppDataSource.getRepository(EntradasSalidasPasteurizadaFriam013Entity);
+
 
         const frascoData = repository.create({
             volumen: data.volumen ?? null,
@@ -147,7 +150,21 @@ export class ControlReenvaseServices extends BaseService<ControlReenvaseFriam032
             controlReenvase: data.controlReenvase
         });
 
-        return await repository.save(frascoData);
+        const res = await repository.save(frascoData);
+
+        try {
+            const controlReenvaseData = repositoryControlReenvase.create({
+                frascoPasteurizado: res
+            });
+
+            await repositoryControlReenvase.save(controlReenvaseData);
+        } catch (error) {
+            throw error;
+        }
+
+        return res;
+
+
     }
 
     async putFrascoPasteurizado(id: number, data: FrascosPasteurizadosDTO): Promise<UpdateResult> {

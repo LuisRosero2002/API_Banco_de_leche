@@ -13,11 +13,11 @@ export class EntradasSalidasPasteurizadaFriam013Entity {
     @Column({ name: "fecha_salida", type: "date", nullable: true })
     fechaSalida!: Date;
 
-    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidasPasteurizadaEntrada)
+    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidasPasteurizadaEntrada, { nullable: true })
     @JoinColumn({ name: "id_responsable_entrada" })
     responsableEntrada!: EmpleadosEntity;
 
-    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidasPasteurizadaSalida)
+    @ManyToOne(() => EmpleadosEntity, empleado => empleado.entradasSalidasPasteurizadaSalida, { nullable: true })
     @JoinColumn({ name: "id_responsable_salida" })
     responsableSalida!: EmpleadosEntity;
 
