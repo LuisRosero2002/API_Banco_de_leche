@@ -24,6 +24,7 @@ import { SeleccionClasificacionRouter } from "./router/seleccionClasificacion.ro
 import { TemperaturaPasteurizadorRouter } from "./router/temperaturaPasteurizador.router";
 import { ControlMicrobiologicoRouter } from "./router/controlMicrobiologico.router";
 import { ConformidadFriam017Router } from "./router/conformidadFriam017.router";
+import { EntradasSalidasFriam013Router } from "./router/entradasSalidasFriam013.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -59,7 +60,8 @@ class ServerBootstrap extends ConfigServer {
             new SeleccionClasificacionRouter().router,
             new TemperaturaPasteurizadorRouter().router,
             new ConformidadFriam017Router().router,
-            new ControlMicrobiologicoRouter().router
+            new ControlMicrobiologicoRouter().router,
+            new EntradasSalidasFriam013Router().router
         ];
     }
 

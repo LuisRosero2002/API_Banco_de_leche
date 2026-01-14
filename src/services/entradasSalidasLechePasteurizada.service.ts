@@ -1,4 +1,5 @@
 import { BaseService } from "../config/base.service";
+import { EntradasSalidasPasteurizadaDTO } from "../DTOs/entradasSalidasPasteurizada.DTO";
 import { EntradasSalidasPasteurizadaFriam013Entity } from "../entities/entradasSalidasPasteurizadaFriam013.entity";
 
 export class EntradasSalidasLechePasteurizadaService extends BaseService<EntradasSalidasPasteurizadaFriam013Entity> {
@@ -42,5 +43,13 @@ export class EntradasSalidasLechePasteurizadaService extends BaseService<Entrada
     }
 
 
-
+    async putEntradaSalidaLechePasteurizada(id: number, entradaSalida: EntradasSalidasPasteurizadaDTO) {
+        const repository = await this.execRepository;
+        return await repository.update(id, {
+            gaveta: entradaSalida.gaveta,
+            fechaSalida: entradaSalida.fechaSalida,
+            responsableEntrada: entradaSalida.responsableEntrada,
+            responsableSalida: entradaSalida.responsableSalida
+        });
+    }
 }   
