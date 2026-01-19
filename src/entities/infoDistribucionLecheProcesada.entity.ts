@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FrascosRecolectadosEntity } from "./frascosRecolectados.entity";
 import { DistribucionLecheProcesadaFriam031Entity } from "./distribucionLecheProcesadaFriam031.entity";
+import { FrascosPasteurizadosEntity } from "./frascosPasteurizados.entity";
 
 @Entity({ name: "info_distribucion_leche_procesada" })
 export class InfoDistribucionLecheProcesadaEntity {
@@ -9,9 +10,6 @@ export class InfoDistribucionLecheProcesadaEntity {
 
     @Column({ name: "fecha", type: "date", nullable: true })
     fecha!: Date;
-
-    @Column({ name: "peso", type: "float", nullable: true })
-    peso!: number;
 
     @Column({ name: "volumen_distribuido", type: "float", nullable: true })
     volumenDistribuido!: number;
@@ -22,9 +20,9 @@ export class InfoDistribucionLecheProcesadaEntity {
     @Column({ name: "exclusiva", type: "int", nullable: true })
     exclusiva!: number;
 
-    @ManyToOne(() => FrascosRecolectadosEntity, frasco => frasco.infoDistribucion)
+    @ManyToOne(() => FrascosPasteurizadosEntity, frasco => frasco.infoDistribucion)
     @JoinColumn({ name: "id_frasco_pasteurizado" })
-    frascoPasteurizado!: FrascosRecolectadosEntity;
+    frascoPasteurizado!: FrascosPasteurizadosEntity;
 
     @ManyToOne(() => DistribucionLecheProcesadaFriam031Entity, distribucion => distribucion.infoDistribucion)
     @JoinColumn({ name: "id_distribucion" })

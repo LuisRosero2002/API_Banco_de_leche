@@ -1,13 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { InfoDistribucionLecheProcesadaEntity } from "./infoDistribucionLecheProcesada.entity";
+import { EmpleadosEntity } from "./empleados.entity";
 
 @Entity({ name: "distribucion_leche_procesada_friam_031" })
 export class DistribucionLecheProcesadaFriam031Entity {
     @PrimaryGeneratedColumn("increment", { name: "id_distribucion" })
     id!: number;
-
-    @Column({ name: "responsable", type: "varchar", length: 255, nullable: true })
-    responsable!: string;
 
     @Column({ name: "nombre_beneficiario", type: "varchar", length: 255, nullable: true })
     nombreBeneficiario!: string;
@@ -20,6 +18,10 @@ export class DistribucionLecheProcesadaFriam031Entity {
 
     @Column({ name: "eps", type: "varchar", length: 255, nullable: true })
     eps!: string;
+
+    @ManyToOne(() => EmpleadosEntity, responsable => responsable.distribuciones)
+    @JoinColumn({ name: "id_responsable" })
+    responsable!: EmpleadosEntity;
 
     @OneToMany(() => InfoDistribucionLecheProcesadaEntity, info => info.distribucion)
     infoDistribucion!: InfoDistribucionLecheProcesadaEntity[];

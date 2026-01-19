@@ -27,6 +27,6 @@ export class FrascosRecolectadosEntity {
     casaVisita!: CasasVisitasEntity;
     @OneToMany(() => EntradasSalidasFriam012Entity, entrada => entrada.frascoRecolectado)
     entradasSalidas!: EntradasSalidasFriam012Entity[];
-    @OneToMany(() => InfoDistribucionLecheProcesadaEntity, info => info.frascoPasteurizado)
-    infoDistribucion!: InfoDistribucionLecheProcesadaEntity[];
+
+
 }

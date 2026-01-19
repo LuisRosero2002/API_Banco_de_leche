@@ -3,6 +3,7 @@ import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity"
 import { ControlMicrobilogicoFriam014Entity } from "./controlMicrobilogicoFriam014.entity";
 import { EntradasSalidasPasteurizadaFriam013Entity } from "./entradasSalidasPasteurizadaFriam013.entity";
 import { IngresoLechePasteurizadaFriam013Entity } from "./ingresoLechePasteurizadaFriam013.entity";
+import { InfoDistribucionLecheProcesadaEntity } from "./infoDistribucionLecheProcesada.entity";
 
 @Entity('frascos_pasteurizados')
 export class FrascosPasteurizadosEntity {
@@ -33,4 +34,7 @@ export class FrascosPasteurizadosEntity {
 
     @OneToMany(() => IngresoLechePasteurizadaFriam013Entity, ingreso => ingreso.frascoPasteurizado)
     ingresoLechePasteurizada!: IngresoLechePasteurizadaFriam013Entity[];
+
+    @OneToMany(() => InfoDistribucionLecheProcesadaEntity, info => info.frascoPasteurizado)
+    infoDistribucion!: InfoDistribucionLecheProcesadaEntity[];
 }
