@@ -79,6 +79,4 @@ export class EmpleadosEntity {
     @OneToMany(() => CurvaPenetracionEntity, curvaPenetracion => curvaPenetracion.responsableTwo)
     curvaPenetracionResponsableTwo!: CurvaPenetracionEntity[];
 
-    @OneToMany(() => DistribucionLecheProcesadaFriam031Entity, distribucion => distribucion.responsable)
-    distribuciones!: DistribucionLecheProcesadaFriam031Entity[];
 }

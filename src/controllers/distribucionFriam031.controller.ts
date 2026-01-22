@@ -11,8 +11,8 @@ export class DistribucionFriam031Controller {
 
     async GetDistribucionPorMes(req: Request, res: Response): Promise<Response> {
         try {
-            const { mes } = req.query;
-            const data = await this.service.getDistribucionPorMes(Number(mes));
+            const { mes, anio } = req.params;
+            const data = await this.service.getDistribucionPorMes(Number(mes), Number(anio));
             if (data.length === 0) return this.httpResponse.NoContent(res, "No hay registros para el mes especificado");
             return this.httpResponse.Ok(res, data);
         } catch (error) {

@@ -11,7 +11,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
         super(DistribucionLecheProcesadaFriam031Entity);
     }
 
-    async getDistribucionPorMes(mes: number): Promise<DistribucionLecheProcesadaFriam031Entity[]> {
+    async getDistribucionPorMes(mes: number, anio: number): Promise<DistribucionLecheProcesadaFriam031Entity[]> {
         const repository = await this.execRepository;
         const resultados = repository
             .createQueryBuilder("d")
@@ -21,7 +21,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                 "d.nombreBeneficiario",
                 "d.identificacion"
             ])
-            .where("MONTH(i.fecha) = :mes", { mes })
+            .where("MONTH(i.fecha) = :mes AND YEAR(i.fecha) = :anio", { mes, anio })
             .getMany();
 
         return resultados;
@@ -41,8 +41,9 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                                 crematocrito: true
                             }
                         }
-                    }
-                }
+                    },
+
+                },
             }
         });
     }

@@ -21,7 +21,7 @@ export class DistribucionFriam031DTO {
 
     // Distribucion Friam 031 fields
     @IsOptional()
-    responsable!: EmpleadosEntity;
+    responsable!: string;
 
     @IsOptional()
     nombreBeneficiario!: string;

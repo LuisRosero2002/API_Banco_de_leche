@@ -19,9 +19,8 @@ export class DistribucionLecheProcesadaFriam031Entity {
     @Column({ name: "eps", type: "varchar", length: 255, nullable: true })
     eps!: string;
 
-    @ManyToOne(() => EmpleadosEntity, responsable => responsable.distribuciones)
-    @JoinColumn({ name: "id_responsable" })
-    responsable!: EmpleadosEntity;
+    @Column({ name: "responsable", type: "varchar", length: 255, nullable: true })
+    responsable!: string;
 
     @OneToMany(() => InfoDistribucionLecheProcesadaEntity, info => info.distribucion)
     infoDistribucion!: InfoDistribucionLecheProcesadaEntity[];
