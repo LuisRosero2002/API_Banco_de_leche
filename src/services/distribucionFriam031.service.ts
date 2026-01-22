@@ -50,7 +50,6 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
     async putDistribucion(id: number, body: DistribucionFriam031DTO): Promise<UpdateResult> {
         const repository = await this.execRepository;
 
-        // Update InfoDistribucionLecheProcesadaEntity
         if (body.idInfoDistribucion) {
             const infoRepository = AppDataSource.getRepository(InfoDistribucionLecheProcesadaEntity);
             await infoRepository.update(body.idInfoDistribucion, {
@@ -61,7 +60,6 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             });
         }
 
-        // Update DistribucionLecheProcesadaFriam031Entity
         return await repository.update(id, {
             responsable: body.responsable,
             nombreBeneficiario: body.nombreBeneficiario,
@@ -76,7 +74,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
         const infoRepository = AppDataSource.getRepository(InfoDistribucionLecheProcesadaEntity);
 
         try {
-            // 1. Create and Save Distribucion Entity
+
             const newDistribucion = repository.create({
                 responsable: body.responsable,
                 nombreBeneficiario: body.nombreBeneficiario,
@@ -86,7 +84,6 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             });
             const savedDistribucion = await repository.save(newDistribucion);
 
-            // 2. Create and Save Info Entity linked to Distribucion
             const newInfo = infoRepository.create({
                 fecha: body.fecha,
                 volumenDistribuido: body.volumenDistribuido,
