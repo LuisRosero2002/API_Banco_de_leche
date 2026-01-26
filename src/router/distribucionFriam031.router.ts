@@ -9,7 +9,7 @@ export class DistribucionFriam031Router extends BaseRouter<DistribucionFriam031C
     }
 
     routes(): void {
-        this.router.get('/distribucion',
+        this.router.get('/distribucion/:mes/:anio',
             this.middleware.checkJwtAuth(),
             (req, res) => {
                 this.controller.GetDistribucionPorMes(req, res)

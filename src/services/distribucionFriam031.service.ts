@@ -57,7 +57,8 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                 fecha: body.fecha,
                 volumenDistribuido: body.volumenDistribuido,
                 frascoPasteurizado: body.frascoPasteurizado ? { id: body.frascoPasteurizado.id } : undefined,
-                tipo: body.tipo
+                tipo: body.tipo,
+                exclusiva: body.exclusiva
             });
         }
 

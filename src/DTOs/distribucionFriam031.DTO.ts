@@ -19,6 +19,9 @@ export class DistribucionFriam031DTO {
     @IsOptional()
     tipo!: string;
 
+    @IsOptional()
+    exclusiva!: number;
+
     // Distribucion Friam 031 fields
     @IsOptional()
     responsable!: string;
