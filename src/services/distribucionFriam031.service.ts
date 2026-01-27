@@ -13,7 +13,8 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
 
     async getDistribucionPorMes(mes: number, anio: number): Promise<DistribucionLecheProcesadaFriam031Entity[]> {
         const repository = await this.execRepository;
-        const resultados = repository
+        
+        const resultados = await repository
             .createQueryBuilder("d")
             .innerJoin("d.infoDistribucion", "i")
             .select([
@@ -21,7 +22,8 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                 "d.nombreBeneficiario",
                 "d.identificacion"
             ])
-            .where("MONTH(i.fecha) = :mes AND YEAR(i.fecha) = :anio", { mes, anio })
+            .where("MONTH(i.fecha) = :mes", { mes })
+            .andWhere("YEAR(i.fecha) = :anio", { anio })
             .getMany();
 
         return resultados;
