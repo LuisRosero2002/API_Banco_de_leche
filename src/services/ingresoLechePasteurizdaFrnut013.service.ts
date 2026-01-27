@@ -1,6 +1,6 @@
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
-import { IngresoLechePasteurizadaFriam013DTO } from "../DTOs/IngresoLechePasteurizadaFriam013.DTO";
+import { IngresoLechePasteurizadaFriam013DTO } from "../DTOs/ingresoLechePasteurizadaFriam013.DTO";
 import { LactarioDTO } from "../DTOs/Lactario.DTO";
 import { IngresoLechePasteurizadaFriam013Entity } from "../entities/ingresoLechePasteurizadaFriam013.entity";
 import { LactarioEntity } from "../entities/lactario.entity";
