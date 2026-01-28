@@ -94,6 +94,13 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                     eps: body.eps
                 });
                 distribucion = await repository.save(newDistribucion);
+            } else {
+                await repository.update(distribucion.id, {
+                    responsable: body.responsable,
+                    nombreBeneficiario: body.nombreBeneficiario,
+                    semanasGestacion: body.semanasGestacion,
+                    eps: body.eps
+                });
             }
 
             const newInfo = infoRepository.create({
@@ -106,7 +113,22 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             });
             await infoRepository.save(newInfo);
 
-            return distribucion;
+            return await repository.findOne({
+                where: { id: distribucion.id },
+                relations: {
+                    infoDistribucion: {
+                        frascoPasteurizado: {
+                            entradasSalidasPasteurizada: true,
+                            controlReenvase: {
+                                seleccionClasificacion: {
+                                    acidezDornic: true,
+                                    crematocrito: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }) as DistribucionLecheProcesadaFriam031Entity;
         } catch (error) {
             throw new Error("Error creating distribution: " + (error as Error).message);
         }
