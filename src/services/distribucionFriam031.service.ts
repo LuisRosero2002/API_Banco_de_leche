@@ -24,6 +24,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             ])
             .where("MONTH(i.fecha) = :mes", { mes })
             .andWhere("YEAR(i.fecha) = :anio", { anio })
+            .groupBy("d.id")
             .getMany();
 
         return resultados;
@@ -78,26 +79,34 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
         const infoRepository = AppDataSource.getRepository(InfoDistribucionLecheProcesadaEntity);
 
         try {
-
-            const newDistribucion = repository.create({
-                responsable: body.responsable,
-                nombreBeneficiario: body.nombreBeneficiario,
-                identificacion: body.identificacion,
-                semanasGestacion: body.semanasGestacion,
-                eps: body.eps
+            let distribucion = await repository.findOne({
+                where: {
+                    identificacion: body.identificacion
+                }
             });
-            const savedDistribucion = await repository.save(newDistribucion);
+
+            if (!distribucion) {
+                const newDistribucion = repository.create({
+                    responsable: body.responsable,
+                    nombreBeneficiario: body.nombreBeneficiario,
+                    identificacion: body.identificacion,
+                    semanasGestacion: body.semanasGestacion,
+                    eps: body.eps
+                });
+                distribucion = await repository.save(newDistribucion);
+            }
 
             const newInfo = infoRepository.create({
                 fecha: body.fecha,
                 volumenDistribuido: body.volumenDistribuido,
                 frascoPasteurizado: body.frascoPasteurizado ? { id: body.frascoPasteurizado.id } : undefined,
                 tipo: body.tipo,
-                distribucion: savedDistribucion
+                exclusiva: body.exclusiva,
+                distribucion: distribucion
             });
             await infoRepository.save(newInfo);
 
-            return savedDistribucion;
+            return distribucion;
         } catch (error) {
             throw new Error("Error creating distribution: " + (error as Error).message);
         }
