@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { FrascosRecolectadosEntity } from "../entities/frascosRecolectados.entity";
 import { EmpleadosEntity } from "../entities/empleados.entity";
+import { EntidadesEntity } from "../entities/entidades.entity";
 
 export class DistribucionFriam031DTO {
-    // Info Distribucion fields
     @IsOptional()
     idInfoDistribucion!: number;
 
@@ -22,7 +22,6 @@ export class DistribucionFriam031DTO {
     @IsOptional()
     exclusiva!: number;
 
-    // Distribucion Friam 031 fields
     @IsOptional()
     responsable!: string;
 
@@ -36,5 +35,5 @@ export class DistribucionFriam031DTO {
     semanasGestacion!: number;
 
     @IsOptional()
-    eps!: string;
+    eps!: EntidadesEntity;
 }

@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { InfoDistribucionLecheProcesadaEntity } from "./infoDistribucionLecheProcesada.entity";
 import { EmpleadosEntity } from "./empleados.entity";
+import { EntidadesEntity } from "./entidades.entity";
 
 @Entity({ name: "distribucion_leche_procesada_friam_031" })
 export class DistribucionLecheProcesadaFriam031Entity {
@@ -16,8 +17,9 @@ export class DistribucionLecheProcesadaFriam031Entity {
     @Column({ name: "semanas_gestacion", type: "int", nullable: true })
     semanasGestacion!: number;
 
-    @Column({ name: "eps", type: "varchar", length: 255, nullable: true })
-    eps!: string;
+    @ManyToOne(() => EntidadesEntity, { nullable: true })
+    @JoinColumn({ name: "eps" })
+    eps!: EntidadesEntity;
 
     @Column({ name: "responsable", type: "varchar", length: 255, nullable: true })
     responsable!: string;

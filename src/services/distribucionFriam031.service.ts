@@ -35,6 +35,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
         return await repository.findOne({
             where: { id: id },
             relations: {
+                eps: true,
                 infoDistribucion: {
                     frascoPasteurizado: {
                         entradasSalidasPasteurizada: true,
@@ -45,7 +46,6 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                             }
                         }
                     },
-
                 },
             }
         });
@@ -70,7 +70,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             nombreBeneficiario: body.nombreBeneficiario,
             identificacion: body.identificacion,
             semanasGestacion: body.semanasGestacion,
-            eps: body.eps
+            eps: body.eps ? { id: body.eps.id } : undefined
         });
     }
 
@@ -91,7 +91,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                     nombreBeneficiario: body.nombreBeneficiario,
                     identificacion: body.identificacion,
                     semanasGestacion: body.semanasGestacion,
-                    eps: body.eps
+                    eps: body.eps ? { id: body.eps.id } : undefined
                 });
                 distribucion = await repository.save(newDistribucion);
             } else {
@@ -99,7 +99,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
                     responsable: body.responsable,
                     nombreBeneficiario: body.nombreBeneficiario,
                     semanasGestacion: body.semanasGestacion,
-                    eps: body.eps
+                    eps: body.eps ? { id: body.eps.id } : undefined
                 });
             }
 
@@ -116,6 +116,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
             return await repository.findOne({
                 where: { id: distribucion.id },
                 relations: {
+                    eps: true,
                     infoDistribucion: {
                         frascoPasteurizado: {
                             entradasSalidasPasteurizada: true,
