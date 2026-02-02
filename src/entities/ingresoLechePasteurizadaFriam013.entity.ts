@@ -8,8 +8,8 @@ export class IngresoLechePasteurizadaFriam013Entity {
     @PrimaryGeneratedColumn("increment", { name: "id_ingreso_leche" })
     id!: number;
 
-    @Column({ name: "fecha_dispensacion", type: "int", nullable: true })
-    fechaDispensacion!: number;
+    @Column({ name: "fecha_dispensacion", type: "date", nullable: true })
+    fechaDispensacion!: Date;
 
     @Column({ name: "tipo", type: "varchar", length: 255, nullable: true })
     tipo!: string;

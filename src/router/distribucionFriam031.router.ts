@@ -38,5 +38,12 @@ export class DistribucionFriam031Router extends BaseRouter<DistribucionFriam031C
                 this.controller.PostDistribucion(req, res)
                     .catch(err => res.status(500).send(err.message));
             });
+
+        this.router.get('/frascos-pasteurizados-distribucion',
+            this.middleware.checkJwtAuth(),
+            (req, res) => {
+                this.controller.GetAllFrascosPasteurizados(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
     }
 }

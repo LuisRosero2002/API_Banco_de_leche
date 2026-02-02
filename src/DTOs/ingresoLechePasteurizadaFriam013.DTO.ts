@@ -8,7 +8,7 @@ export class IngresoLechePasteurizadaFriam013DTO {
     id!: number;
 
     @IsNotEmpty()
-    fechaDispensacion!: number;
+    fechaDispensacion!: Date;
 
     @IsOptional()
     tipo!: string;

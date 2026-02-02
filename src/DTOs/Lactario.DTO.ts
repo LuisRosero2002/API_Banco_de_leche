@@ -13,4 +13,6 @@ export class LactarioDTO {
     medico!: string;
     @IsNotEmpty()
     dosificador!: string;
+    @IsNotEmpty()
+    ingresoLechePasteurizada!: number;
 }

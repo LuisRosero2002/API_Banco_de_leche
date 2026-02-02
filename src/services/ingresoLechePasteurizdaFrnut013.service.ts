@@ -2,6 +2,7 @@ import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
 import { IngresoLechePasteurizadaFriam013DTO } from "../DTOs/ingresoLechePasteurizadaFriam013.DTO";
 import { LactarioDTO } from "../DTOs/Lactario.DTO";
+import { FrascosPasteurizadosEntity } from "../entities/frascosPasteurizados.entity";
 import { IngresoLechePasteurizadaFriam013Entity } from "../entities/ingresoLechePasteurizadaFriam013.entity";
 import { LactarioEntity } from "../entities/lactario.entity";
 
@@ -20,10 +21,10 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
                         seleccionClasificacion: {
                             acidezDornic: true,
                             crematocrito: true
-                        }
+                        },
+                        lote: true
                     }
                 },
-                lactarios: true,
                 madreDonante: true
             }
         });
@@ -41,31 +42,40 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
 
     async putIngresoLechePasteurizadaFrnut013(id: number, ingresoLechePasteurizada: IngresoLechePasteurizadaFriam013DTO) {
         const repository = await this.execRepository;
-        return await repository.update(id, {
+        // Verificar si el registro existe
+        const existe = await repository.findOne({ where: { id } });
+        if (!existe) {
+            return { affected: 0 };
+        }
+        // save() con ID existente hace UPDATE y maneja las relaciones correctamente
+        const resultado = await repository.save({
+            id: id,
             fechaDispensacion: ingresoLechePasteurizada.fechaDispensacion,
             tipo: ingresoLechePasteurizada.tipo,
             frascoPasteurizado: { id: ingresoLechePasteurizada.frascoPasteurizado.id },
             madreDonante: { id: ingresoLechePasteurizada.madreDonante.id }
         });
+        return { affected: 1, data: resultado };
     }
 
     async getLactariosByIngresoLechePasteurizada(id: number) {
         const repository = AppDataSource.getRepository(LactarioEntity);
         return await repository.find({
             where: {
-                id: id
+                ingresoLeche: { id: id }
             }
         });
     }
 
-    async postLactarioByIngresoLechePasteurizada(id: number, lactario: LactarioDTO) {
+    async postLactarioByIngresoLechePasteurizada(lactario: LactarioDTO) {
         const repository = AppDataSource.getRepository(LactarioEntity);
         return await repository.save({
             nombre: lactario.nombre,
             cama: lactario.cama,
             volumenDosificado: lactario.volumenDosificado,
             medico: lactario.medico,
-            dosificador: lactario.dosificador
+            dosificador: lactario.dosificador,
+            ingresoLeche: { id: lactario.ingresoLechePasteurizada }
         });
     }
 
@@ -79,4 +89,27 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
             dosificador: lactario.dosificador
         });
     }
+
+    async getAllFrascosPasteurizados(): Promise<FrascosPasteurizadosEntity[]> {
+        const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
+        return await repository.find({
+            relations: {
+                controlReenvase: {
+                    seleccionClasificacion: {
+                        acidezDornic: true,
+                        crematocrito: true
+                    },
+                    lote: true
+                },
+                entradasSalidasPasteurizada: true
+            },
+            where: {
+                activo: true
+            },
+            order: {
+                numeroFrasco: 'ASC'
+            }
+        });
+    }
+
 }

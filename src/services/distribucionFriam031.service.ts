@@ -4,6 +4,7 @@ import { UpdateResult } from "typeorm";
 import { DistribucionFriam031DTO } from "../DTOs/distribucionFriam031.DTO";
 import { AppDataSource } from "../config/data-source";
 import { InfoDistribucionLecheProcesadaEntity } from "../entities/infoDistribucionLecheProcesada.entity";
+import { FrascosPasteurizadosEntity } from "../entities/frascosPasteurizados.entity";
 
 export class DistribucionFriam031Service extends BaseService<DistribucionLecheProcesadaFriam031Entity> {
 
@@ -13,7 +14,7 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
 
     async getDistribucionPorMes(mes: number, anio: number): Promise<DistribucionLecheProcesadaFriam031Entity[]> {
         const repository = await this.execRepository;
-        
+
         const resultados = await repository
             .createQueryBuilder("d")
             .innerJoin("d.infoDistribucion", "i")
@@ -133,5 +134,26 @@ export class DistribucionFriam031Service extends BaseService<DistribucionLechePr
         } catch (error) {
             throw new Error("Error creating distribution: " + (error as Error).message);
         }
+    }
+
+    async getAllFrascosPasteurizados(): Promise<FrascosPasteurizadosEntity[]> {
+        const repository = AppDataSource.getRepository(FrascosPasteurizadosEntity);
+        return await repository.find({
+            relations: {
+                controlReenvase: {
+                    seleccionClasificacion: {
+                        acidezDornic: true,
+                        crematocrito: true
+                    }
+                },
+                entradasSalidasPasteurizada: true
+            },
+            where: {
+                activo: true
+            },
+            order: {
+                numeroFrasco: 'ASC'
+            }
+        });
     }
 }
