@@ -10,7 +10,8 @@ export class IngresoPasteurizadaFrnut013Controller {
 
     async getIngresoLechePasteurizadaFrnut013(req: Request, res: Response): Promise<Response> {
         try {
-            const data = await this.ingresoPasteurizadaService.getIngresoLechePasteurizadaFrnut013();
+            const { mes, anio } = req.params;
+            const data = await this.ingresoPasteurizadaService.getIngresoLechePasteurizadaFrnut013(Number(mes), Number(anio));
             if (data.length === 0) return this.httpResponse.NoContent(res, "Data not found");
             return this.httpResponse.Ok(res, data);
         } catch (error) {

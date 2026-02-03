@@ -29,7 +29,7 @@ export class DistribucionFriam031DTO {
     nombreBeneficiario!: string;
 
     @IsOptional()
-    identificacion!: number;
+    identificacion!: string;
 
     @IsOptional()
     semanasGestacion!: number;

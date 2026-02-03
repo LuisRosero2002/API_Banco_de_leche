@@ -10,7 +10,7 @@ export class IngresoPasteurizadaFrnut013Router extends BaseRouter<IngresoPasteur
     }
 
     routes(): void {
-        this.router.get('/ingresos',
+        this.router.get('/ingresos/:mes/:anio',
             this.middleware.checkJwtAuth(),
             (req, res) => {
                 this.controller.getIngresoLechePasteurizadaFrnut013(req, res)

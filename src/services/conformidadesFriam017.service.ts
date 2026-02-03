@@ -86,19 +86,19 @@ export class ConformidadesFriam017Service extends BaseService<ConformidadesFriam
             let reprobado = false;
 
             if (item.analisisSensorial) {
-                if (item.analisisSensorial.embalaje === 1) {
+                if (item.analisisSensorial.embalaje === 0) {
                     contadores.envase++;
                     reprobado = true;
                 }
-                if (item.analisisSensorial.suciedad === 1) {
+                if (item.analisisSensorial.suciedad === 0) {
                     contadores.suciedad++;
                     reprobado = true;
                 }
-                if (item.analisisSensorial.color === 1) {
+                if (item.analisisSensorial.color === 0) {
                     contadores.color++;
                     reprobado = true;
                 }
-                if (item.analisisSensorial.flavor === 1) {
+                if (item.analisisSensorial.flavor === 0) {
                     contadores.flavor++;
                     reprobado = true;
                 }

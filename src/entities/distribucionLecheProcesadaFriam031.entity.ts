@@ -11,8 +11,8 @@ export class DistribucionLecheProcesadaFriam031Entity {
     @Column({ name: "nombre_beneficiario", type: "varchar", length: 255, nullable: true })
     nombreBeneficiario!: string;
 
-    @Column({ name: "identificacion", type: "int", nullable: true })
-    identificacion!: number;
+    @Column({ name: "identificacion", type: "varchar", length: 255, nullable: true })
+    identificacion!: string;
 
     @Column({ name: "semanas_gestacion", type: "int", nullable: true })
     semanasGestacion!: number;

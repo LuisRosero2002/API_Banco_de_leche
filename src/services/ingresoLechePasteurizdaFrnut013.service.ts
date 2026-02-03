@@ -1,3 +1,4 @@
+import { Between } from "typeorm";
 import { BaseService } from "../config/base.service";
 import { AppDataSource } from "../config/data-source";
 import { IngresoLechePasteurizadaFriam013DTO } from "../DTOs/ingresoLechePasteurizadaFriam013.DTO";
@@ -11,8 +12,10 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
         super(IngresoLechePasteurizadaFriam013Entity)
     }
 
-    async getIngresoLechePasteurizadaFrnut013() {
+    async getIngresoLechePasteurizadaFrnut013(mes: number, anio: number) {
         const repository = await this.execRepository;
+        const fechaInicio = new Date(anio, mes - 1, 1, 0, 0, 0);
+        const fechaFin = new Date(anio, mes, 0, 23, 59, 59);
         return await repository.find({
             relations: {
                 frascoPasteurizado: {
@@ -26,6 +29,9 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
                     }
                 },
                 madreDonante: true
+            },
+            where: {
+                fechaDispensacion: Between(fechaInicio, fechaFin)
             }
         });
     }
@@ -99,7 +105,8 @@ export class IngresoLechePasteurizadaFrnut013Service extends BaseService<Ingreso
                         acidezDornic: true,
                         crematocrito: true
                     },
-                    lote: true
+                    lote: true,
+                    madreDonante: true
                 },
                 entradasSalidasPasteurizada: true
             },
