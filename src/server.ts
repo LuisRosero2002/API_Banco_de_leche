@@ -27,6 +27,7 @@ import { ConformidadFriam017Router } from "./router/conformidadFriam017.router";
 import { EntradasSalidasFriam013Router } from "./router/entradasSalidasFriam013.router";
 import { DistribucionFriam031Router } from "./router/distribucionFriam031.router";
 import { IngresoPasteurizadaFrnut013Router } from "./router/ingresoPasteurizadaFrnut013.router";
+import { CurvaPenetracionRouter } from "./router/curvaPenetracion.router";
 
 class ServerBootstrap extends ConfigServer {
     public app: express.Application = express();
@@ -66,7 +67,8 @@ class ServerBootstrap extends ConfigServer {
             new ControlMicrobiologicoRouter().router,
             new EntradasSalidasFriam013Router().router,
             new DistribucionFriam031Router().router,
-            new IngresoPasteurizadaFrnut013Router().router
+            new IngresoPasteurizadaFrnut013Router().router,
+            new CurvaPenetracionRouter().router
         ];
     }
 
