@@ -19,7 +19,14 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
         const newInfoMadre: InfoMadresEntity = await this._InfoMadresService.CreateInfoMadre(body.infoMadre!);
         let madrePotencial: MadresPotencialesDTO = body;
         madrePotencial.infoMadre = newInfoMadre;
-        return (await this.execRepository).save(madrePotencial);
+        return (await this.execRepository).save({
+            ...madrePotencial,
+            id: madrePotencial.id,
+            infoMadre: {
+                ...newInfoMadre,
+                id: newInfoMadre.id
+            }
+        });
     }
 
     async UpdateMadrePotencial(id: number, body: MadresPotencialesDTO): Promise<UpdateResult> {
@@ -87,10 +94,10 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             .innerJoinAndSelect('mp.infoMadre', 'im')
             .innerJoinAndSelect('mp.madreDonante', 'md')
             .innerJoinAndSelect('mp.laboratorio', 'lab')
-            .innerJoinAndSelect('md.examenesPrenatal','ep')
-            .innerJoinAndSelect('md.medicamento','med')
-            .innerJoinAndSelect('md.empleado','emp')
-            .innerJoinAndSelect('md.gestacion','ges')
+            .innerJoinAndSelect('md.examenesPrenatal', 'ep')
+            .innerJoinAndSelect('md.medicamento', 'med')
+            .innerJoinAndSelect('md.empleado', 'emp')
+            .innerJoinAndSelect('md.gestacion', 'ges')
             .where('md.donanteApta = :valor', { valor: 1 })
             .orderBy('mp.fecha_registro', 'DESC')
             .getMany();
@@ -109,7 +116,7 @@ export class MadresPotencialesServices extends BaseService<MadresPotencialesEnti
             .innerJoinAndSelect('md.hijosMadre', 'hm')
             .innerJoinAndSelect('md.examenesPrenatal', 'ep')
             .innerJoinAndSelect('md.medicamento', 'm')
-            .innerJoinAndSelect('md.empleado','emp')
+            .innerJoinAndSelect('md.empleado', 'emp')
             .where('mp.id_madre_potencial = :id', { id })
             .getOne();
 

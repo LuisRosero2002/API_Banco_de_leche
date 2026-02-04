@@ -6,11 +6,11 @@ export class TemperaturaCasasDTO {
     id!: number;
     @IsNotEmpty()
     numeroCasa!: number;
-    @IsNotEmpty()
+    @IsOptional()
     temperatura!: number;
     @IsNotEmpty()
     horaSalida!: string;
-    @IsNotEmpty()
+    @IsOptional()
     horaLlegada!: string;
     @IsNotEmpty()
     caja!: number;

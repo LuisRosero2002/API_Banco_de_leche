@@ -8,7 +8,7 @@ export class TemperaturaCasasEntity {
     id!: number;
     @Column({ type: "int", nullable: false, name: "numero_casa" })
     numeroCasa!: number;
-    @Column({ type: "double", nullable: false, name: "temperatura" })
+    @Column({ type: "double", nullable: true, name: "temperatura" })
     temperatura!: number;
     @Column({ type: "int", nullable: false, name: "caja" })
     caja!: number;
