@@ -30,6 +30,19 @@ export class CurvaPenetracionController {
         }
     }
 
+    async getCurvaPenetracionById(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const data = await this.curvaPenetracionService.getCurvaPenetracionById(Number(id));
+            if (data.length === 0) {
+                return this.httpResponse.NoContent(res, "No hay curvas de penetración registradas para este volumen");
+            }
+            return this.httpResponse.Ok(res, data);
+        } catch (error) {
+            return this.httpResponse.Error(res, error);
+        }
+    }
+
     async updateCurvaPenetracion(req: Request, res: Response) {
         try {
             const { id } = req.params;

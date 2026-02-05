@@ -17,6 +17,13 @@ export class CurvaPenetracionRouter extends BaseRouter<CurvaPenetracionControlle
                     .catch(err => res.status(500).send(err.message));
             });
 
+        this.router.get('/curva-id/:id',
+            this.middleware.checkJwtAuth(),
+            (req, res) => {
+                this.controller.getCurvaPenetracionById(req, res)
+                    .catch(err => res.status(500).send(err.message));
+            });
+
         this.router.post('/curva',
             this.middleware.checkJwtAuth(),
             this.middleware.ValidateDTO(CurvaPenetracionDTO),

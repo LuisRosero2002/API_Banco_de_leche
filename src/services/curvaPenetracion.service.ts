@@ -10,6 +10,7 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
         super(CurvaPenetracionEntity)
     }
 
+
     async createCurvaPenetracion(data: CurvaPenetracionDTO): Promise<CurvaPenetracionEntity> {
         const repository = await this.execRepository;
         const repositoryPasteurizador = AppDataSource.getRepository(PasteurizadorEntity);
@@ -61,6 +62,20 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
     async getCurvaPenetracion(volumen: number): Promise<CurvaPenetracionEntity[]> {
         const repository = await this.execRepository;
         return await repository.find({
+            select: {
+                id: true,
+                fecha: true,
+                volumen: true
+            },
+            where: {
+                volumen: volumen
+            }
+        });
+    }
+
+    async getCurvaPenetracionById(id: number): Promise<CurvaPenetracionEntity[]> {
+        const repository = await this.execRepository;
+        return await repository.find({
             relations: {
                 pasteurizadores: true,
                 enfriadores: true,
@@ -68,10 +83,11 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
                 responsableTwo: true
             },
             where: {
-                volumen: volumen
+                id: id
             }
         });
     }
+
 
     async updateCurvaPenetracion(id: number, data: CurvaPenetracionDTO): Promise<CurvaPenetracionEntity> {
         const repository = await this.execRepository;

@@ -49,7 +49,7 @@ export class EnfriadorDTO {
     muestra!: number;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsOptional()
     curvaPenetracion!: number;
 }
 
