@@ -8,7 +8,7 @@ export class TemperaturaPasteurizadorDTO {
     @IsNotEmpty() loteId!: LoteEntity;
     @IsNotEmpty() cicloId!: CicloEntity;
     @IsString() @IsNotEmpty() hora_inicio!: string;
-    @IsString() @IsNotEmpty() hora_finalizacio!: string;
+    @IsString() @IsOptional() hora_finalizacio?: string;
     @IsNotEmpty() responsableId!: EmpleadosEntity;
     @IsString() @IsOptional() observaciones?: string;
 }

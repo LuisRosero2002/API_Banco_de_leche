@@ -17,7 +17,7 @@ export class EntradasSalidasFriam012Entity {
     @Column({ type: "date", nullable: true, name: "fecha_entrada" })
     fechaEntrada!: Date;
     @Column({ type: "date", nullable: true, name: "fecha_salida" })
-    fechaSalida!: Date;
+    fechaSalida!: Date
 
     @ManyToOne(() => MadresDonantesEntity, madreDonante => madreDonante.entradasSalidas)
     @JoinColumn({ name: "id_madre_donante" })

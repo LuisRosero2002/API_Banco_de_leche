@@ -9,6 +9,9 @@ import { ControlReenvaseFriam032Entity } from "./controlReenvaseFriam032.entity"
 import { InfoSeleccionClasificacionEntity } from "./infoSeleccionClasificacion.entity";
 import { TemperaturaPasteurizadorFriam036Entity } from "./temperaturaPasteurizadorFriam036.entity";
 import { InfoControlMicrobiologicoEntity } from "./infoControlMicrobilogico.entity";
+import { EntradasSalidasPasteurizadaFriam013Entity } from "./entradasSalidasPasteurizadaFriam013.entity";
+import { CurvaPenetracionEntity } from "./curvaPenetracion.entity";
+import { DistribucionLecheProcesadaFriam031Entity } from "./distribucionLecheProcesadaFriam031.entity";
 
 
 @Entity({ name: "empleados" })
@@ -63,4 +66,17 @@ export class EmpleadosEntity {
     infoControlMicrobiologicoProcesamiento!: InfoControlMicrobiologicoEntity[]
     @OneToMany(() => InfoControlMicrobiologicoEntity, infoControl => infoControl.coordinador)
     infoControlMicrobiologicoCoordinador!: InfoControlMicrobiologicoEntity[]
+
+    @OneToMany(() => EntradasSalidasPasteurizadaFriam013Entity, entradasSalidas => entradasSalidas.responsableEntrada)
+    entradasSalidasPasteurizadaEntrada!: EntradasSalidasPasteurizadaFriam013Entity[];
+
+    @OneToMany(() => EntradasSalidasPasteurizadaFriam013Entity, entradasSalidas => entradasSalidas.responsableSalida)
+    entradasSalidasPasteurizadaSalida!: EntradasSalidasPasteurizadaFriam013Entity[];
+
+    @OneToMany(() => CurvaPenetracionEntity, curvaPenetracion => curvaPenetracion.responsableOne)
+    curvaPenetracionResponsableOne!: CurvaPenetracionEntity[];
+
+    @OneToMany(() => CurvaPenetracionEntity, curvaPenetracion => curvaPenetracion.responsableTwo)
+    curvaPenetracionResponsableTwo!: CurvaPenetracionEntity[];
+
 }

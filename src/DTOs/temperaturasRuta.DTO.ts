@@ -9,7 +9,7 @@ export class TemperaturasRutasDTO {
     ruta!: RutasRecoleccionEntity;
     @IsNotEmpty()
     numeroCaja!: number;
-    @IsNotEmpty()
+    @IsOptional()
     temperaturaLlegada!: number;
     @IsNotEmpty()
     temperaturaSalida!: number;
