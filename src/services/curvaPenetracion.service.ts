@@ -10,7 +10,6 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
         super(CurvaPenetracionEntity)
     }
 
-
     async createCurvaPenetracion(data: CurvaPenetracionDTO): Promise<CurvaPenetracionEntity> {
         const repository = await this.execRepository;
         const repositoryPasteurizador = AppDataSource.getRepository(PasteurizadorEntity);
@@ -34,7 +33,10 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
 
         for (const item of pasteurizadores) {
             const savedItem = await repositoryPasteurizador.save({
-                ...item,
+                tiempo: item.tiempo,
+                frascoTestigo: item.frascoTestigo,
+                agua: item.agua,
+                muestra: item.muestra,
                 curva: {
                     id: response.id
                 }
@@ -44,7 +46,10 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
 
         for (const item of enfriadores) {
             const savedItem = await repositoryEnfriador.save({
-                ...item,
+                tiempo: item.tiempo,
+                frascoTestigo: item.frascoTestigo,
+                agua: item.agua,
+                muestra: item.muestra,
                 curva: {
                     id: response.id
                 }
@@ -88,14 +93,10 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
         });
     }
 
-
     async updateCurvaPenetracion(id: number, data: CurvaPenetracionDTO): Promise<CurvaPenetracionEntity> {
         const repository = await this.execRepository;
         const repositoryPasteurizador = AppDataSource.getRepository(PasteurizadorEntity);
         const repositoryEnfriador = AppDataSource.getRepository(EnfriadorEntity);
-
-        const responsePasteurizador: PasteurizadorEntity[] = [];
-        const responseEnfriador: EnfriadorEntity[] = [];
 
         const { pasteurizadores, enfriadores, numeroFrasco, ...curveData } = data;
 
@@ -111,9 +112,18 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
             },
         });
 
+        await repositoryPasteurizador.delete({ curva: { id: id } });
+        await repositoryEnfriador.delete({ curva: { id: id } });
+
+        const responsePasteurizador: PasteurizadorEntity[] = [];
+        const responseEnfriador: EnfriadorEntity[] = [];
+
         for (const item of pasteurizadores) {
             const savedItem = await repositoryPasteurizador.save({
-                ...item,
+                tiempo: item.tiempo,
+                frascoTestigo: item.frascoTestigo,
+                agua: item.agua,
+                muestra: item.muestra,
                 curva: {
                     id: response.id
                 }
@@ -123,7 +133,10 @@ export class CurvaPenetracionService extends BaseService<CurvaPenetracionEntity>
 
         for (const item of enfriadores) {
             const savedItem = await repositoryEnfriador.save({
-                ...item,
+                tiempo: item.tiempo,
+                frascoTestigo: item.frascoTestigo,
+                agua: item.agua,
+                muestra: item.muestra,
                 curva: {
                     id: response.id
                 }

@@ -23,7 +23,7 @@ export class PasteurizadorDTO {
     muestra!: number;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsOptional()
     curvaPenetracion!: number;
 }
 
