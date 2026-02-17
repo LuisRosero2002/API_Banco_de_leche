@@ -4,40 +4,43 @@ import { UsuariosDTO } from "../DTOs/usuarios.DTO";
 import { UsuariosEntity } from "../entities/usuarios.entity";
 import * as bcrypt from "bcrypt";
 
-export class UsuariosService extends BaseService<UsuariosEntity>{
-    constructor(){
+export class UsuariosService extends BaseService<UsuariosEntity> {
+    constructor() {
         super(UsuariosEntity);
     }
 
-    async CreateUser(body:UsuariosDTO):Promise<UsuariosEntity>{
+    async CreateUser(body: UsuariosDTO): Promise<UsuariosEntity> {
         const newUser = (await this.execRepository).create(body);
-        const hash = await bcrypt.hash(newUser.password,10);
+        const hash = await bcrypt.hash(newUser.password, 10);
         newUser.password = hash;
         const repository = await this.execRepository;
         return repository.save(newUser);
     }
 
-    async DeleteUser(id:string):Promise<UpdateResult>{
+    async DeleteUser(id: string): Promise<UpdateResult> {
         const repository = await this.execRepository;
-        return repository.update(id,{activo:0});
+        return repository.update(id, { activo: 0 });
     }
 
-    async FindUserbyUsername(usuario:string):Promise<UsuariosEntity | undefined | null>{
+    async FindUserbyUsername(usuario: string): Promise<UsuariosEntity | undefined | null> {
         const repository = await this.execRepository;
         const user = repository.createQueryBuilder("user")
-        .addSelect("user.password")
-        .where({usuario})
-        .getOne();
+            .addSelect("user.password")
+            .where({ usuario })
+            .getOne();
         return user;
     }
 
-    async FindAll():Promise<UsuariosEntity[]>{
+    async FindAll(): Promise<UsuariosEntity[]> {
         const repository = await this.execRepository;
         return repository.find();
     }
 
-    async FindUserByID(id:number):Promise<UsuariosEntity | undefined | null>{
+    async FindUserByID(id: number): Promise<UsuariosEntity | undefined | null> {
         const repository = await this.execRepository;
-        return repository.findOneBy({id:id});
+        return repository.findOne({
+            where: { id: id },
+            relations: ['rolUsuario', 'rolUsuario.rol']
+        });
     }
 }

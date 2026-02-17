@@ -6,18 +6,18 @@ import { UsuariosEntity } from "../../entities/usuarios.entity";
 import { BaseService } from "../../config/base.service";
 import { SessionEntity } from "../../entities/sessions.entity";
 
-export class AuthService extends BaseService<UsuariosEntity>{
+export class AuthService extends BaseService<UsuariosEntity> {
     constructor(
         private readonly userServices: UsuariosService = new UsuariosService(),
         private readonly jwtServices = jwt
-    ){
+    ) {
         super(UsuariosEntity)
     }
 
-    async ValidateUser(usuario:string,  password:string):Promise<UsuariosEntity | undefined | null>{
+    async ValidateUser(usuario: string, password: string): Promise<UsuariosEntity | undefined | null> {
         const userByUsername = await this.userServices.FindUserbyUsername(usuario);
-        if(userByUsername){
-            const isMatch = await bcrypt.compare(password,userByUsername.password);
+        if (userByUsername) {
+            const isMatch = await bcrypt.compare(password, userByUsername.password);
             if (isMatch) {
                 return userByUsername;
             }
@@ -25,21 +25,29 @@ export class AuthService extends BaseService<UsuariosEntity>{
         return null;
     }
 
-    sing(payload:jwt.JwtPayload,secret:any){
-        return this.jwtServices.sign(payload,secret);
+    sing(payload: jwt.JwtPayload, secret: any) {
+        return this.jwtServices.sign(payload, secret);
     }
 
-    async generateJWT(user:UsuariosEntity):Promise<{accessToken:string; user:UsuariosEntity}>{
+    async generateJWT(user: UsuariosEntity): Promise<{ accessToken: string; user: UsuariosEntity }> {
         const userConsult = await this.userServices.FindUserByID(user.id);
+
+        // Obtener el primer rol del usuario (asumiendo que un usuario tiene solo un rol activo)
+        const rol = userConsult?.rolUsuario && userConsult.rolUsuario.length > 0
+            ? userConsult.rolUsuario[0].rol.descripcion
+            : 'SIN_ROL';
+
         const payload = {
-            sub: userConsult!.id.toString()
+            sub: userConsult!.id.toString(),
+            usuario: userConsult!.usuario,
+            rol: rol
         }
-        if(userConsult){
+        if (userConsult) {
             user.password = "Not permision";
         }
         return {
-            accessToken: this.sing(payload,this.getEnviroment('JWT_SECRET')),
+            accessToken: this.sing(payload, this.getEnviroment('JWT_SECRET')),
             user
         }
-    }  
+    }
 }
