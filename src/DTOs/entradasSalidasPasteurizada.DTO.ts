@@ -4,13 +4,17 @@ export class EntradasSalidasPasteurizadaDTO {
 
     @IsOptional()
     id!: number;
+
     @IsNotEmpty()
     gaveta!: number;
+
     @IsNotEmpty()
-    responsableEntrada!: { id: number };
+    responsableEntrada!: number;
+
     @IsOptional()
-    responsableSalida!: { id: number };
+    responsableSalida!: number | null;
+
     @IsOptional()
-    fechaSalida!: Date;
+    fechaSalida!: Date | null;
 
 }
