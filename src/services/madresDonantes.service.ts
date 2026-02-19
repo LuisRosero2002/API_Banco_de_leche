@@ -76,17 +76,17 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 await medicamentosData.save(newMedicamentos);
             }
 
-            if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
-                await repoMain.update(body.madreDonante.id, body.madreDonante);
-                await gestacionData.update(body.gestacion.id, newGestacion);
-                await examenesData.update(body.examenPrenatal.id, newExamen);
-                await medicamentosData.update(body.medicamento.id, newMedicamentos);
-            } else {
-                newMadre.madreDonante = await repoMain.save(body.madreDonante);
-                await gestacionData.save(newGestacion);
-                await examenesData.save(newExamen);
-                await medicamentosData.save(newMedicamentos);
-            }
+            // if (body.madreDonante.id !== undefined && body.madreDonante.id !== null) {
+            //     await repoMain.update(body.madreDonante.id, body.madreDonante);
+            //     await gestacionData.update(body.gestacion.id, newGestacion);
+            //     await examenesData.update(body.examenPrenatal.id, newExamen);
+            //     await medicamentosData.update(body.medicamento.id, newMedicamentos);
+            // } else {
+            //     newMadre.madreDonante = await repoMain.save(body.madreDonante);
+            //     await gestacionData.save(newGestacion);
+            //     await examenesData.save(newExamen);
+            //     await medicamentosData.save(newMedicamentos);
+            // }
 
             if (body.madreDonante.donanteApta === 1) {
                 await madrePotencialData.update(body.madreDonante.madrePotencial, { donante_efectiva: 1 });
@@ -179,8 +179,8 @@ export class MadresDonantesServices extends BaseService<MadresDonantesEntity> {
                 'im.telefono AS telefono',
                 'im.celular AS celular',
             ])
-            .where('md.donante_apta = 1')
-            .andWhere('md.tipo_donante = "externa"')
+            // .where('md.donante_apta = 1')
+            .where('md.tipo_donante = "externa"')
             .getRawMany();
     }
 
