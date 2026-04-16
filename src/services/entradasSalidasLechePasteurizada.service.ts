@@ -45,11 +45,19 @@ export class EntradasSalidasLechePasteurizadaService extends BaseService<Entrada
 
     async putEntradaSalidaLechePasteurizada(id: number, entradaSalida: EntradasSalidasPasteurizadaDTO) {
         const repository = await this.execRepository;
-        return await repository.update(id, {
+
+        const updateData: any = {
             gaveta: entradaSalida.gaveta,
-            fechaSalida: entradaSalida.fechaSalida,
-            responsableEntrada: entradaSalida.responsableEntrada,
-            responsableSalida: entradaSalida.responsableSalida
-        });
+            responsableEntrada: entradaSalida.responsableEntrada
+                ? { id: entradaSalida.responsableEntrada }
+                : undefined,
+        };
+
+        updateData.fechaSalida = entradaSalida.fechaSalida ?? null;
+        updateData.responsableSalida = entradaSalida.responsableSalida
+            ? { id: entradaSalida.responsableSalida }
+            : null;
+
+        return await repository.update(id, updateData);
     }
-}   
+}
