@@ -139,7 +139,10 @@ Definidos en `package.json`:
 
 ### Requisitos Previos
 *   Servidor MySQL corriendo.
-*   Archivo `.env` configurado con credenciales de BD y claves secretas JWT.
+*   Para entornos de desarrollo, crear un archivo `.env` y configurarlo con credenciales de BD y claves secretas JWT.
+*   Para entornos de producción, crear un archivo `.production.env` y configurarlo con credenciales de BD y claves secretas JWT.
+*   El archivo `.env.example` tiene un ejemplo de como debe ser el archivo .env.
+
 
 ## Construcción y Ejecución
 
